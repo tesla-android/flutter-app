@@ -323,7 +323,7 @@ packages:
       path: "."
       ref: a26af905a855cfd08f80228ed0fe0c5028b4dbb6
       resolved-ref: a26af905a855cfd08f80228ed0fe0c5028b4dbb6
-      url: "git@github.com:tesla-android/flutter-plugin-janus-client.git"
+      url: "https://github.com/tesla-android/flutter-plugin-janus-client.git"
     source: git
     version: "2.2.0"
   js:

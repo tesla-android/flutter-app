@@ -1,4 +1,4 @@
-name: Deploy released version
+name: Build released version
 
 on:
   push:
@@ -17,3 +17,5 @@ jobs:
       - run: flutter pub get
       - run: flutter packages pub run build_runner build --delete-conflicting-outputs
       - uses: bluefireteam/flutter-gh-pages@v7
+        with:
+          targetBranch: release
