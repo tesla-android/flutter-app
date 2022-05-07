@@ -1,3 +1,5 @@
+admin/
+pihole/
 # Miscellaneous
 *.class
 *.log

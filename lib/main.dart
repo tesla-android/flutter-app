@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:tesla_android/common/di/ta_locator.dart';
 import 'package:tesla_android/common/navigation/ta_page_factory.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await configureTADependencies();
+  setUrlStrategy(const HashUrlStrategy());
   runApp(const TeslaAndroid());
 }
 
