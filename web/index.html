@@ -107,7 +107,7 @@
 <script>
 			var socketURL = 'ws://3.3.3.50:8080/soundTest';
 			var lastEventDate = Date.now();
-			var playbackTimeout = 500;
+			var playbackTimeout = 1500;
 			var player;
 
 			function createWebSocket() {
@@ -128,7 +128,6 @@
 					}
 				}, playbackTimeout);
 			};
-			createWebSocket();
 			window.addEventListener('click', function(e) {
 				if (typeof player == "undefined") {
 					player = new PCMPlayer({
@@ -137,6 +136,7 @@
 						sampleRate: 44100,
 						flushTime: 50,
 					});
+					createWebSocket();
 				}
 			});
 		</script>
