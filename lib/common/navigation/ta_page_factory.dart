@@ -5,9 +5,8 @@ import 'package:tesla_android/common/di/ta_locator.dart';
 import 'package:tesla_android/common/navigation/ta_page.dart';
 import 'package:tesla_android/view/androidViewer/android_viewer_page.dart';
 import 'package:tesla_android/view/androidViewer/virtualTouchscreen/cubit/virtual_touchscreen_cubit.dart';
-import 'package:tesla_android/view/donation_dialog/widget/donation_dialog.dart';
+import 'package:tesla_android/view/donationDialog/widget/donation_dialog.dart';
 import 'package:tesla_android/view/releaseNotes/widget/release_notes_page.dart';
-import 'package:tesla_android/view/splash/cubit/splash_navigation_handler.dart';
 import 'package:tesla_android/view/splash/widget/splash_page.dart';
 
 @injectable

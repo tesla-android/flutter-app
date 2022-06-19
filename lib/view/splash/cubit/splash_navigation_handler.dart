@@ -15,7 +15,7 @@ class SplashNavigationHandler {
   SplashNavigationHandler(this._sharedPreferences) : super();
 
   void onPageLoad(BuildContext context) async {
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       if (_sharedPreferences.getBool(_sharedPreferencesReleaseNotesKey) ??
           true) {
         _sharedPreferences.setBool(_sharedPreferencesReleaseNotesKey, false);

@@ -13,10 +13,6 @@ dependencies:
     sdk: flutter
   pointer_interceptor: ^0.9.0+1
   http: ^0.13.4
-  janus_client:
-    git:
-      url: https://github.com/tesla-android/flutter-plugin-janus-client.git
-      ref: a26af905a855cfd08f80228ed0fe0c5028b4dbb6
   web_socket_channel: ^2.2.0
   get_it: ^7.0.0
   injectable: ^1.5.3

@@ -4,7 +4,7 @@ import 'package:tesla_android/common/navigation/ta_navigator.dart';
 import 'package:tesla_android/common/navigation/ta_page.dart';
 import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
 import 'package:tesla_android/common/ui/constants/ta_timing.dart';
-import 'package:tesla_android/view/androidViewer/janus/widget/janus_video_player.dart';
+import 'package:tesla_android/view/androidViewer/displayViewer/display_viewer.dart';
 import 'package:tesla_android/view/androidViewer/virtualTouchscreen/cubit/virtual_touchscreen_cubit.dart';
 
 import 'virtualTouchscreen/virtual_touchscreen_view.dart';
@@ -39,8 +39,8 @@ class AndroidViewerPage extends StatelessWidget {
                   scaffoldMessenger.hideCurrentSnackBar();
                 }
               },
-              child: const JanusVideoPlayer(
-                  touchScreenView: VirtualTouchScreenView()),
+              child:
+                  const DisplayViewer(touchScreenView: VirtualTouchScreenView()),
             ),
           ),
           _versionBanner(context),

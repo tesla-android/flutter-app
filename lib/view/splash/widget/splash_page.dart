@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tesla_android/common/di/ta_locator.dart';
 import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
+import 'package:tesla_android/view/iframe/iframe_view.dart';
 import 'package:tesla_android/view/splash/cubit/splash_navigation_handler.dart';
 
 class SplashPage extends StatelessWidget {
@@ -22,7 +23,7 @@ class SplashPage extends StatelessWidget {
                 height: TADimens.splashPageLogoHeight,
               ),
             ),
-            const CircularProgressIndicator()
+            const CircularProgressIndicator(),
           ],
         ),
       ),

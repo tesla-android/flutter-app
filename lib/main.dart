@@ -22,7 +22,7 @@ class _TeslaAndroidState extends State<TeslaAndroid> {
 
   @override
   Widget build(BuildContext context) {
-    MediaQueryData windowData = MediaQueryData.fromWindow(WidgetsBinding.instance!.window);
+    MediaQueryData windowData = MediaQueryData.fromWindow(WidgetsBinding.instance.window);
     return MediaQuery(
       data: windowData.copyWith(textScaleFactor: 1.5),
       child: MaterialApp(

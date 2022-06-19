@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Player</title>
+</head>
+<style>
+    html, body {
+        width:  100%;
+        height: 100%;
+        margin: 0;
+    }
+    </style>
+<body>
+<canvas id="player">
+</canvas>
+</body>
+<script src="mjpeg.js"></script>
+<script>
+    var player = new MJPEG.Player("player", "http://3.3.3.1:8001/stream");
+    player.start();
+  </script>
+</html>

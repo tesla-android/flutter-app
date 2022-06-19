@@ -91,5 +91,44 @@
       loadMainDartJs();
     }
   </script>
+  <script src="pcmplayer.js"></script>
+  <script>
+    var socketURL = 'ws://3.3.3.50:8080/soundTest';
+    var lastEventDate = Date.now();
+    var playbackTimeout = 500;
+	var player;
+
+      function createWebSocket() {
+      	var ws = new WebSocket(socketURL);
+      	ws.binaryType = 'arraybuffer';
+      	ws.addEventListener('message', function (event) {
+      	    if (typeof player != "undefined") {
+              player.feed(event.data);
+            }
+        	lastEventDate = Date.now();
+      	});
+      	var intervalId = window.setInterval(function(){
+  		  const diffTime = Math.abs(lastEventDate - Date.now());
+  		  if(diffTime > playbackTimeout) {
+  		  	ws.close();
+  		  	clearInterval(intervalId);
+  		  	createWebSocket();
+  		  }
+	  	}, playbackTimeout);
+      };
+      createWebSocket();
+      window.addEventListener('click', function (e) {
+        if (typeof player == "undefined") {
+              player = new PCMPlayer({
+    	inputCodec: 'Int16',
+    	channels: 2,
+    	sampleRate: 44100,
+    	flushTime: 50,
+      });
+            }
+
+      });
+
+  </script>
 </body>
 </html>
