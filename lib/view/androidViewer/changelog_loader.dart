@@ -3,16 +3,15 @@ import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tesla_android/common/navigation/ta_navigator.dart';
 import 'package:tesla_android/common/navigation/ta_page.dart';
-import 'package:tesla_android/common/ui/constants/ta_timing.dart';
 
 @injectable
-class SplashNavigationHandler {
+class ChangelogLoader {
   final SharedPreferences _sharedPreferences;
 
   static const _sharedPreferencesReleaseNotesKey =
-      "SplashCubit_showReleaseNotes";
+      "ChangelogLoader_showReleaseNotes";
 
-  SplashNavigationHandler(this._sharedPreferences) : super();
+  const ChangelogLoader(this._sharedPreferences);
 
   void onPageLoad(BuildContext context) async {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
@@ -21,8 +20,6 @@ class SplashNavigationHandler {
         _sharedPreferences.setBool(_sharedPreferencesReleaseNotesKey, false);
         await TANavigator.push(context: context, page: TAPage.releaseNotes);
       }
-      await Future.delayed(TATiming.splashPageTransitionDuration,
-          () => TANavigator.push(context: context, page: TAPage.androidViewer));
     });
   }
 }

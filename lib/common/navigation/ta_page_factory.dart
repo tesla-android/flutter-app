@@ -7,11 +7,10 @@ import 'package:tesla_android/view/androidViewer/android_viewer_page.dart';
 import 'package:tesla_android/view/androidViewer/virtualTouchscreen/cubit/virtual_touchscreen_cubit.dart';
 import 'package:tesla_android/view/donationDialog/widget/donation_dialog.dart';
 import 'package:tesla_android/view/releaseNotes/widget/release_notes_page.dart';
-import 'package:tesla_android/view/splash/widget/splash_page.dart';
 
 @injectable
 class TAPageFactory {
-  String initialRoute = TAPage.splash.route;
+  String initialRoute = TAPage.androidViewer.route;
 
   Map<String, Widget Function(BuildContext context)> getRoutes() {
     return {
@@ -22,12 +21,10 @@ class TAPageFactory {
   Widget Function(BuildContext context) buildPage(TAPage page) {
     return (context) {
       switch (page) {
-        case TAPage.splash:
-          return const SplashPage();
         case TAPage.androidViewer:
           return BlocProvider.value(
             value: getIt<VirtualTouchscreenCubit>(),
-            child: const AndroidViewerPage(),
+            child: AndroidViewerPage(),
           );
         case TAPage.releaseNotes:
           return const ReleaseNotesPage();

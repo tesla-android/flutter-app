@@ -11,12 +11,6 @@ class TAPage {
     required this.type,
   });
 
-  static const splash = TAPage(
-    title: "Splash",
-    route: "/splash",
-    type: TAPageType.standard,
-  );
-
   static const empty = TAPage(
     title: "Empty",
     route: "/empty",
@@ -42,6 +36,6 @@ class TAPage {
   );
 
   static List<TAPage> get availablePages {
-    return const [splash, empty, androidViewer];
+    return const [empty, androidViewer];
   }
 }

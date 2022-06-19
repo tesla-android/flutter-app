@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
@@ -15,7 +13,8 @@ class VirtualTouchscreenCubit extends Cubit<bool> {
     _maintainWebSocketConnection();
   }
 
-  void dispatchTouchEvent(int index, Offset offset, bool isBeingTouched, BoxConstraints constraints) {
+  void dispatchTouchEvent(int index, Offset offset, bool isBeingTouched,
+      BoxConstraints constraints) {
     final scaleX = touchScreenMaxX / constraints.maxWidth;
     final scaleY = touchScreenMaxY / constraints.maxHeight;
 
@@ -42,10 +41,9 @@ class VirtualTouchscreenCubit extends Cubit<bool> {
     _transport.connectWebSocket();
     _transport.connectionStateSubject.stream.listen((connectionState) {
       emit(connectionState);
-      if(!connectionState) {
+      if (!connectionState) {
         Future.delayed(TATiming.timeoutDuration, _maintainWebSocketConnection);
       }
     });
   }
 }
-

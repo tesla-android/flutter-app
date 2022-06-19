@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tesla_android/common/di/ta_locator.dart';
 import 'package:tesla_android/common/navigation/ta_navigator.dart';
 import 'package:tesla_android/common/navigation/ta_page.dart';
 import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
 import 'package:tesla_android/common/ui/constants/ta_timing.dart';
+import 'package:tesla_android/view/androidViewer/changelog_loader.dart';
 import 'package:tesla_android/view/androidViewer/displayViewer/display_viewer.dart';
 import 'package:tesla_android/view/androidViewer/virtualTouchscreen/cubit/virtual_touchscreen_cubit.dart';
 
 import 'virtualTouchscreen/virtual_touchscreen_view.dart';
 
 class AndroidViewerPage extends StatelessWidget {
-  const AndroidViewerPage({Key? key}) : super(key: key);
+  final ChangelogLoader _changelogLoader;
+
+  AndroidViewerPage({Key? key})
+      : _changelogLoader = getIt<ChangelogLoader>(),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    _changelogLoader.onPageLoad(context);
     final bloc = BlocProvider.of<VirtualTouchscreenCubit>(context);
     return Scaffold(
       body: Stack(
@@ -39,8 +46,8 @@ class AndroidViewerPage extends StatelessWidget {
                   scaffoldMessenger.hideCurrentSnackBar();
                 }
               },
-              child:
-                  const DisplayViewer(touchScreenView: VirtualTouchScreenView()),
+              child: const DisplayViewer(
+                  touchScreenView: VirtualTouchScreenView()),
             ),
           ),
           _versionBanner(context),
