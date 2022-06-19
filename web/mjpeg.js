@@ -8,7 +8,7 @@ var MJPEG = (function(module) {
     var autoStart = args.autoStart || false;
 
     self.url = args.url;
-    self.refreshRate = args.refreshRate || 33;
+    self.refreshRate = args.refreshRate || 16;
     self.onStart = args.onStart || null;
     self.onFrame = args.onFrame || null;
     self.onStop = args.onStop || null;
