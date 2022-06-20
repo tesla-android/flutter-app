@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
-import 'package:tesla_android/view/iframe/iframe_view.dart';
+import 'package:tesla_android/view/androidViewer/displayViewer/iframe/iframe_view.dart';
 
 class DisplayViewer extends StatelessWidget {
   final Widget touchScreenView;
