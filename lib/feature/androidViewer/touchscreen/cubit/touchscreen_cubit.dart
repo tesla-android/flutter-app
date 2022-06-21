@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:tesla_android/common/ui/constants/ta_timing.dart';
-import 'package:tesla_android/view/androidViewer/virtualTouchscreen/model/pointer_state.dart';
-import 'package:tesla_android/view/androidViewer/virtualTouchscreen/transport/virtual_touchscreen_transport.dart';
+import 'package:tesla_android/feature/androidViewer/touchscreen/model/pointer_state.dart';
+import 'package:tesla_android/feature/androidViewer/touchscreen/transport/touchscreen_transport.dart';
 
 @injectable
-class VirtualTouchscreenCubit extends Cubit<bool> {
-  final VirtualTouchScreenTransport _transport;
+class TouchscreenCubit extends Cubit<bool> {
+  final TouchScreenTransport _transport;
 
-  VirtualTouchscreenCubit(this._transport) : super(false) {
+  TouchscreenCubit(this._transport) : super(false) {
     _maintainWebSocketConnection();
   }
 

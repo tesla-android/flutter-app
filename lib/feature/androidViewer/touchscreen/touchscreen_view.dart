@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tesla_android/view/androidViewer/virtualTouchscreen/cubit/virtual_touchscreen_cubit.dart';
+import 'package:tesla_android/feature/androidViewer/touchscreen/cubit/touchscreen_cubit.dart';
 
-class VirtualTouchScreenView extends StatelessWidget {
-  const VirtualTouchScreenView({
+class TouchScreenView extends StatelessWidget {
+  const TouchScreenView({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final cubit = BlocProvider.of<VirtualTouchscreenCubit>(context);
+    final cubit = BlocProvider.of<TouchscreenCubit>(context);
     return LayoutBuilder(builder: (context, constraints) {
       return Listener(
         onPointerDown: (event) => cubit.dispatchTouchEvent(

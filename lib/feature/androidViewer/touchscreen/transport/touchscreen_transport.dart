@@ -5,17 +5,17 @@ import 'package:rxdart/rxdart.dart';
 import 'package:web_socket_channel/html.dart';
 
 @injectable
-class VirtualTouchScreenTransport {
+class TouchScreenTransport {
   final Flavor flavor;
   final Uri webSocketUri;
   final BehaviorSubject<bool> connectionStateSubject =
       BehaviorSubject.seeded(false);
 
-  static const String tag = "VirtualTouchScreenTransport: ";
+  static const String tag = "TouchScreenTransport: ";
 
-  VirtualTouchScreenTransport(this.flavor)
+  TouchScreenTransport(this.flavor)
       : webSocketUri = Uri.parse(flavor.getString(
-          "virtualTouchscreenWebSocket",
+          "touchscreenWebSocket",
         )!);
 
   HtmlWebSocketChannel? _webSocketChannel;

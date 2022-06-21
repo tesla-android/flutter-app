@@ -3,10 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:tesla_android/common/di/ta_locator.dart';
 import 'package:tesla_android/common/navigation/ta_page.dart';
-import 'package:tesla_android/view/androidViewer/android_viewer_page.dart';
-import 'package:tesla_android/view/androidViewer/virtualTouchscreen/cubit/virtual_touchscreen_cubit.dart';
-import 'package:tesla_android/view/donationDialog/widget/donation_dialog.dart';
-import 'package:tesla_android/view/releaseNotes/widget/release_notes_page.dart';
+import 'package:tesla_android/feature/androidViewer/android_viewer_page.dart';
+import 'package:tesla_android/feature/androidViewer/display/cubit/display_cubit.dart';
+import 'package:tesla_android/feature/androidViewer/touchscreen/cubit/touchscreen_cubit.dart';
+import 'package:tesla_android/feature/donations/widget/donation_dialog.dart';
+import 'package:tesla_android/feature/releaseNotes/widget/release_notes_page.dart';
 
 @injectable
 class TAPageFactory {
@@ -22,8 +23,16 @@ class TAPageFactory {
     return (context) {
       switch (page) {
         case TAPage.androidViewer:
-          return BlocProvider.value(
-            value: getIt<VirtualTouchscreenCubit>(),
+          return MultiBlocProvider(
+            key: const ValueKey(TAPage.androidViewer),
+            providers: [
+              BlocProvider.value(
+                value: getIt<TouchscreenCubit>(),
+              ),
+              BlocProvider.value(
+                value: getIt<DisplayCubit>(),
+              ),
+            ],
             child: AndroidViewerPage(),
           );
         case TAPage.releaseNotes:

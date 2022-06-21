@@ -1,4 +1,4 @@
-import 'package:tesla_android/view/releaseNotes/model/changelog_item.dart';
+import 'package:tesla_android/feature/releaseNotes/model/changelog_item.dart';
 
 class VersionListItem {
   final String versionName;

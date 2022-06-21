@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:tesla_android/common/di/ta_locator.dart';
 import 'package:tesla_android/common/navigation/ta_page_factory.dart';
-import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +22,8 @@ class _TeslaAndroidState extends State<TeslaAndroid> {
 
   @override
   Widget build(BuildContext context) {
-    MediaQueryData windowData = MediaQueryData.fromWindow(WidgetsBinding.instance.window);
+    MediaQueryData windowData =
+        MediaQueryData.fromWindow(WidgetsBinding.instance.window);
     return MediaQuery(
       data: windowData.copyWith(textScaleFactor: 1.5),
       child: MaterialApp(

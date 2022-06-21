@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
-import 'package:tesla_android/view/releaseNotes/model/version_list_item.dart';
-import 'package:tesla_android/view/releaseNotes/widget/release_notes_changelog_item_card.dart';
+import 'package:tesla_android/feature/releaseNotes/model/version_list_item.dart';
+import 'package:tesla_android/feature/releaseNotes/widget/release_notes_changelog_item_card.dart';
 
 class ReleaseNotesVersionsList extends StatelessWidget {
   final List<VersionListItem> versions;

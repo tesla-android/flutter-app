@@ -5,13 +5,13 @@ import 'package:tesla_android/common/navigation/ta_navigator.dart';
 import 'package:tesla_android/common/navigation/ta_page.dart';
 
 @injectable
-class ChangelogLoader {
+class ReleaseNotesLoader {
   final SharedPreferences _sharedPreferences;
 
   static const _sharedPreferencesReleaseNotesKey =
-      "ChangelogLoader_showReleaseNotes";
+      "ReleaseNotesLoader_showReleaseNotes";
 
-  const ChangelogLoader(this._sharedPreferences);
+  const ReleaseNotesLoader(this._sharedPreferences);
 
   void onPageLoad(BuildContext context) async {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {

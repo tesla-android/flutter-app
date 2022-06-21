@@ -3,10 +3,10 @@ import 'package:tesla_android/common/navigation/ta_navigator.dart';
 import 'package:tesla_android/common/navigation/ta_page.dart';
 import 'package:tesla_android/common/ui/components/ta_bottom_sheet.dart';
 import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
-import 'package:tesla_android/view/releaseNotes/model/changelog_item.dart';
-import 'package:tesla_android/view/releaseNotes/model/version_list_item.dart';
-import 'package:tesla_android/view/releaseNotes/widget/release_notes_changelog_item_details_view.dart';
-import 'package:tesla_android/view/releaseNotes/widget/release_notes_versions_list.dart';
+import 'package:tesla_android/feature/releaseNotes/model/changelog_item.dart';
+import 'package:tesla_android/feature/releaseNotes/model/version_list_item.dart';
+import 'package:tesla_android/feature/releaseNotes/widget/release_notes_changelog_item_details_view.dart';
+import 'package:tesla_android/feature/releaseNotes/widget/release_notes_versions_list.dart';
 
 class ReleaseNotesPage extends StatelessWidget {
   const ReleaseNotesPage({Key? key}) : super(key: key);

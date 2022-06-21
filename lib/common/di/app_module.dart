@@ -11,11 +11,8 @@ abstract class AppModule {
         color: Colors.red,
         name: 'ALPHA',
         properties: {
-          'virtualTouchscreenWebSocket': 'ws://3.3.3.50:9999',
-          'janusWebSocket': 'ws://3.3.3.1:8002/janus/ws',
-          'janusTurnUsername': 'test',
-          'janusTurnPassword': 'test123',
-          'janusTurnUrl': 'turn:3.3.3.1:3478',
+          'touchscreenWebSocket': 'ws://3.3.3.50:9999',
+          'ustreamerBaseUrl' : 'http://3.3.3.1:8001/'
         },
       );
 
