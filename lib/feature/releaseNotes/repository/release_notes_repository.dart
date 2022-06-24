@@ -6,11 +6,17 @@ import 'package:tesla_android/feature/releaseNotes/model/version.dart';
 @injectable
 class ReleaseNotesRepository {
   static const ReleaseNotes _releaseNotes = ReleaseNotes(versions: [
-    // Version(
-    //   versionName: "2022.25.1",
-    //   changelogItems: [
-    //   ],
-    // ),
+    Version(
+      versionName: "2022.25.1",
+      changelogItems: [
+        ChangelogItem(
+          title: "",
+          shortDescription: "",
+          descriptionMarkdown:
+          "",
+        ),
+      ],
+    ),
     Version(
       versionName: "2022.18.1",
       changelogItems: [

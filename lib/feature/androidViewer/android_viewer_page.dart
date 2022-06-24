@@ -9,6 +9,7 @@ import 'package:tesla_android/feature/releaseNotes/widget/release_notes_loader.d
 import 'package:tesla_android/feature/androidViewer/display/widget/display_view.dart';
 import 'package:tesla_android/feature/androidViewer/touchscreen/cubit/touchscreen_cubit.dart';
 import 'package:tesla_android/feature/androidViewer/touchscreen/touchscreen_view.dart';
+import 'package:tesla_android/feature/releaseNotes/widget/versionRibbon/version_ribbon.dart';
 
 
 class AndroidViewerPage extends StatelessWidget {
@@ -50,29 +51,8 @@ class AndroidViewerPage extends StatelessWidget {
                   touchScreenView: TouchScreenView()),
             ),
           ),
-          _versionBanner(context),
+          const VersionRibbon()
         ],
-      ),
-    );
-  }
-
-  Widget _versionBanner(BuildContext context) {
-    return GestureDetector(
-      onTap: () => TANavigator.push(
-        context: context,
-        page: TAPage.releaseNotes,
-      ),
-      child: Directionality(
-        textDirection: TextDirection.ltr,
-        child: Banner(
-          location: BannerLocation.topStart,
-          message: '2022.18.1',
-          child: Container(
-            width: TADimens.versionBannerTouchAreaSize,
-            height: TADimens.versionBannerTouchAreaSize,
-            color: Colors.transparent,
-          ),
-        ),
       ),
     );
   }
