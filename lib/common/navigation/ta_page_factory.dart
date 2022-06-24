@@ -7,6 +7,7 @@ import 'package:tesla_android/feature/androidViewer/android_viewer_page.dart';
 import 'package:tesla_android/feature/androidViewer/display/cubit/display_cubit.dart';
 import 'package:tesla_android/feature/androidViewer/touchscreen/cubit/touchscreen_cubit.dart';
 import 'package:tesla_android/feature/donations/widget/donation_dialog.dart';
+import 'package:tesla_android/feature/releaseNotes/cubit/release_notes_cubit.dart';
 import 'package:tesla_android/feature/releaseNotes/widget/release_notes_page.dart';
 
 @injectable
@@ -36,7 +37,11 @@ class TAPageFactory {
             child: AndroidViewerPage(),
           );
         case TAPage.releaseNotes:
-          return const ReleaseNotesPage();
+          return BlocProvider.value(
+            key: const ValueKey(TAPage.releaseNotes),
+            value: getIt<ReleaseNotesCubit>(),
+            child: const ReleaseNotesPage(),
+          );
         case TAPage.donationDialog:
           return const DonationDialog();
         case TAPage.empty:

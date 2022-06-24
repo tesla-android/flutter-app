@@ -27,9 +27,11 @@ class UstreamerStateResolution {
 
   @override
   bool operator ==(Object other) {
-    // TODO: implement ==
     return (other is UstreamerStateResolution) &&
         width == other.width &&
         height == other.height;
   }
+
+  @override
+  int get hashCode => Object.hash(width, height);
 }

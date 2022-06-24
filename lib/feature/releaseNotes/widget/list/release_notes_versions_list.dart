@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
-import 'package:tesla_android/feature/releaseNotes/model/version_list_item.dart';
-import 'package:tesla_android/feature/releaseNotes/widget/release_notes_changelog_item_card.dart';
+import 'package:tesla_android/feature/releaseNotes/model/changelog_item.dart';
+import 'package:tesla_android/feature/releaseNotes/model/version.dart';
+import 'package:tesla_android/feature/releaseNotes/widget/card/release_notes_changelog_item_card.dart';
 
-class ReleaseNotesVersionsList extends StatelessWidget {
-  final List<VersionListItem> versions;
+class ReleaseNotesVersionList extends StatelessWidget {
+  final List<Version> versions;
+  final Version selectedVersion;
+  final ChangelogItem selectedChangelogItem;
 
-  const ReleaseNotesVersionsList({
+  const ReleaseNotesVersionList({
     Key? key,
     required this.versions,
+    required this.selectedVersion,
+    required this.selectedChangelogItem,
   }) : super(key: key);
 
   @override
@@ -40,7 +45,11 @@ class ReleaseNotesVersionsList extends StatelessWidget {
           ),
         ),
         ...version.changelogItems.map(
-          (e) => ReleaseNotesChangelogItemCard(changelogItem: e),
+          (e) => ReleaseNotesChangelogItemCard(
+            changelogItem: e,
+            version: version,
+            isActive: e == selectedChangelogItem,
+          ),
         ),
       ],
     );
