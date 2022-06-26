@@ -3,16 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:tesla_android/common/di/ta_locator.dart';
 import 'package:tesla_android/common/navigation/ta_page.dart';
-import 'package:tesla_android/view/androidViewer/android_viewer_page.dart';
-import 'package:tesla_android/view/androidViewer/virtualTouchscreen/cubit/virtual_touchscreen_cubit.dart';
-import 'package:tesla_android/view/donation_dialog/widget/donation_dialog.dart';
-import 'package:tesla_android/view/releaseNotes/widget/release_notes_page.dart';
-import 'package:tesla_android/view/splash/cubit/splash_navigation_handler.dart';
-import 'package:tesla_android/view/splash/widget/splash_page.dart';
+import 'package:tesla_android/feature/androidViewer/android_viewer_page.dart';
+import 'package:tesla_android/feature/androidViewer/display/cubit/display_cubit.dart';
+import 'package:tesla_android/feature/androidViewer/touchscreen/cubit/touchscreen_cubit.dart';
+import 'package:tesla_android/feature/donations/widget/donation_dialog.dart';
+import 'package:tesla_android/feature/releaseNotes/cubit/release_notes_cubit.dart';
+import 'package:tesla_android/feature/releaseNotes/widget/release_notes_page.dart';
 
 @injectable
 class TAPageFactory {
-  String initialRoute = TAPage.splash.route;
+  String initialRoute = TAPage.androidViewer.route;
 
   Map<String, Widget Function(BuildContext context)> getRoutes() {
     return {
@@ -23,15 +23,25 @@ class TAPageFactory {
   Widget Function(BuildContext context) buildPage(TAPage page) {
     return (context) {
       switch (page) {
-        case TAPage.splash:
-          return const SplashPage();
         case TAPage.androidViewer:
-          return BlocProvider.value(
-            value: getIt<VirtualTouchscreenCubit>(),
-            child: const AndroidViewerPage(),
+          return MultiBlocProvider(
+            key: const ValueKey(TAPage.androidViewer),
+            providers: [
+              BlocProvider.value(
+                value: getIt<TouchscreenCubit>(),
+              ),
+              BlocProvider.value(
+                value: getIt<DisplayCubit>(),
+              ),
+            ],
+            child: AndroidViewerPage(),
           );
         case TAPage.releaseNotes:
-          return const ReleaseNotesPage();
+          return BlocProvider.value(
+            key: const ValueKey(TAPage.releaseNotes),
+            value: getIt<ReleaseNotesCubit>(),
+            child: const ReleaseNotesPage(),
+          );
         case TAPage.donationDialog:
           return const DonationDialog();
         case TAPage.empty:

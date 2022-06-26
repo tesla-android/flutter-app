@@ -2,12 +2,10 @@
 <html>
 <head>
   <base href="$FLUTTER_BASE_HREF">
-
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="">
   <title>Tesla Android</title>
-
   <link rel="apple-touch-icon" sizes="57x57" href="icons/apple-icon-57x57.png">
   <link rel="apple-touch-icon" sizes="60x60" href="icons/apple-icon-60x60.png">
   <link rel="apple-touch-icon" sizes="72x72" href="icons/apple-icon-72x72.png">
@@ -17,7 +15,7 @@
   <link rel="apple-touch-icon" sizes="144x144" href="icons/apple-icon-144x144.png">
   <link rel="apple-touch-icon" sizes="152x152" href="icons/apple-icon-152x152.png">
   <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-icon-180x180.png">
-  <link rel="icon" type="image/png" sizes="192x192"  href="icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/android-icon-192x192.png">
   <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="96x96" href="icons/favicon-96x96.png">
   <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
@@ -25,71 +23,122 @@
   <meta name="msapplication-TileColor" content="#ffffff">
   <meta name="msapplication-TileImage" content="icons/ms-icon-144x144.png">
   <meta name="theme-color" content="#ffffff">
+  <script>
+			// The value below is injected by flutter build, do not touch.
+			var serviceWorkerVersion = null;
+		</script>
+  <!-- This script adds the flutter initialization JS code -->
+  <script src="flutter.js" defer></script>
 </head>
 <body>
-  <script>
-    var serviceWorkerVersion = null;
-    var scriptLoaded = false;
-    function loadMainDartJs() {
-      if (scriptLoaded) {
-        return;
-      }
-      scriptLoaded = true;
-      var scriptTag = document.createElement('script');
-      scriptTag.src = 'main.dart.js';
-      scriptTag.type = 'application/javascript';
-      document.body.append(scriptTag);
-    }
+<div id="loading">
+  <style>
+				body {
+					inset: 0;
+					overflow: hidden;
+					margin: 0;
+					padding: 0;
+					position: fixed;
+				}
 
-    if ('serviceWorker' in navigator) {
-      // Service workers are supported. Use them.
-      window.addEventListener('load', function () {
-        // Wait for registration to finish before dropping the <script> tag.
-        // Otherwise, the browser will load the script multiple times,
-        // potentially different versions.
-        var serviceWorkerUrl = 'flutter_service_worker.js?v=' + serviceWorkerVersion;
-        navigator.serviceWorker.register(serviceWorkerUrl)
-          .then((reg) => {
-            function waitForActivation(serviceWorker) {
-              serviceWorker.addEventListener('statechange', () => {
-                if (serviceWorker.state == 'activated') {
-                  console.log('Installed new service worker.');
-                  loadMainDartJs();
-                }
-              });
-            }
-            if (!reg.active && (reg.installing || reg.waiting)) {
-              // No active web worker and we have installed or are installing
-              // one for the first time. Simply wait for it to activate.
-              waitForActivation(reg.installing || reg.waiting);
-            } else if (!reg.active.scriptURL.endsWith(serviceWorkerVersion)) {
-              // When the app updates the serviceWorkerVersion changes, so we
-              // need to ask the service worker to update.
-              console.log('New service worker available.');
-              reg.update();
-              waitForActivation(reg.installing);
-            } else {
-              // Existing service worker is still good.
-              console.log('Loading app from service worker.');
-              loadMainDartJs();
-            }
-          });
+				#loading {
+					align-items: center;
+					display: flex;
+					height: 100%;
+					justify-content: center;
+					width: 100%;
+				}
 
-        // If service worker doesn't succeed in a reasonable amount of time,
-        // fallback to plaint <script> tag.
-        setTimeout(() => {
-          if (!scriptLoaded) {
-            console.warn(
-              'Failed to load app from service worker. Falling back to plain <script> tag.',
-            );
-            loadMainDartJs();
-          }
-        }, 4000);
-      });
-    } else {
-      // Service workers not supported. Just drop the <script> tag.
-      loadMainDartJs();
-    }
-  </script>
+				#loading img {
+					animation: 1s ease-in-out 0s infinite alternate breathe;
+					transition: opacity .4s;
+				}
+
+				#loading.init_done img {
+					animation: .33s ease-in-out 0s 1 forwards zooooom;
+					opacity: .05;
+				}
+
+				@keyframes breathe {
+					from {
+						transform: scale(1)
+					}
+
+					to {
+						transform: scale(0.95)
+					}
+				}
+
+				@keyframes zooooom {
+					from {
+						transform: scale(1)
+					}
+
+					to {
+						transform: scale(10)
+					}
+				}
+			</style>
+  <img src="icons/android-icon-192x192.png" alt="Loading indicator..." />
+</div>
+<script>
+			window.addEventListener('load', function() {
+				var loading = document.querySelector('#loading');
+				_flutter.loader.loadEntrypoint({
+					serviceWorker: {
+						serviceWorkerVersion: serviceWorkerVersion,
+					}
+				}).then(function(engineInitializer) {
+					loading.classList.add('main_done');
+					return engineInitializer.initializeEngine();
+				}).then(function(appRunner) {
+					loading.classList.add('init_done');
+					return appRunner.runApp();
+				}).then(function(app) {
+					// Wait a few milliseconds so users can see the "zoooom" animation
+					// before getting rid of the "loading" div.
+					window.setTimeout(function() {
+						loading.remove();
+					}, 200);
+				});
+			});
+		</script>
+<script src="pcmplayer.js"></script>
+<script>
+			var socketURL = 'ws://3.3.3.50:8080/sound';
+			var lastEventDate = Date.now();
+			var playbackTimeout = 1500;
+			var player;
+
+			function createWebSocket() {
+				var ws = new WebSocket(socketURL);
+				ws.binaryType = 'arraybuffer';
+				ws.addEventListener('message', function(event) {
+					if (typeof player != "undefined") {
+						player.feed(event.data);
+					}
+					lastEventDate = Date.now();
+				});
+				var intervalId = window.setInterval(function() {
+					const diffTime = Math.abs(lastEventDate - Date.now());
+					if (diffTime > playbackTimeout) {
+						ws.close();
+						clearInterval(intervalId);
+						createWebSocket();
+					}
+				}, playbackTimeout);
+			};
+			window.addEventListener('click', function(e) {
+				if (typeof player == "undefined") {
+					player = new PCMPlayer({
+						inputCodec: 'Int16',
+						channels: 2,
+						sampleRate: 44100,
+						flushTime: 50,
+					});
+					createWebSocket();
+				}
+			});
+		</script>
 </body>
 </html>
