@@ -12,7 +12,7 @@ flutter packages pub run build_runner build --delete-conflicting-outputs
 flutter build web
 ```
 
-In order to build this project for debugging make sure to disable cors in Chrome and conenct to Tesla Android Wi-Fi network
+In order to build this project for debugging make sure to disable cors in Chrome and connect to Tesla Android Wi-Fi network
 
 #### Please consider supporting the project: 
 
