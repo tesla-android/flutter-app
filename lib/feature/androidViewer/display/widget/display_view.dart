@@ -1,9 +1,10 @@
+import 'package:flavor/flavor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
+import 'package:tesla_android/common/di/ta_locator.dart';
 import 'package:tesla_android/feature/androidViewer/display/cubit/display_cubit.dart';
 import 'package:tesla_android/feature/androidViewer/display/cubit/display_state.dart';
-import 'package:tesla_android/feature/androidViewer/display/model/ustreamer_state_resolution.dart';
 import 'package:tesla_android/feature/androidViewer/display/widget/iframe_view.dart';
 
 class DisplayView extends StatelessWidget {
@@ -14,15 +15,12 @@ class DisplayView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DisplayCubit, DisplayState>(
-        builder: (context, state) {
+    return BlocBuilder<DisplayCubit, DisplayState>(builder: (context, state) {
       switch (state) {
         case DisplayState.initial:
           return _displayStateInitialFragment();
         case DisplayState.unreachable:
           return _displayStateUnreachableFragment();
-        case DisplayState.waitingForBoot:
-          return _displayStateWaitingForBootFragment();
         case DisplayState.normal:
           return _displayStateNormalFragment();
       }
@@ -34,10 +32,11 @@ class DisplayView extends StatelessWidget {
   }
 
   Widget _displayStateNormalFragment() {
+    final flavor = getIt<Flavor>();
     return Center(
       child: AspectRatio(
-        aspectRatio: UstreamerStateResolution.normalStreamWidth /
-            UstreamerStateResolution.normalStreamHeight,
+        aspectRatio: (flavor.getInt("virtualDisplayWidth") ?? 1) /
+            (flavor.getInt("virtualDisplayHeight") ?? 1),
         child: Stack(
           children: [
             _iframe(),
@@ -45,12 +44,6 @@ class DisplayView extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _displayStateWaitingForBootFragment() {
-    return Center(
-      child: _iframe(),
     );
   }
 

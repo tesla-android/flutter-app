@@ -1,14 +1,15 @@
+import 'dart:typed_data';
+
 import 'package:injectable/injectable.dart';
-import 'package:tesla_android/common/network/ustreamer_status_service.dart';
-import 'package:tesla_android/feature/androidViewer/display/model/ustreamer_state.dart';
+import 'package:tesla_android/common/network/mjpg_streamer_status_service.dart';
 
 @injectable
 class DisplayViewerRepository {
-  final UstreamerStatusService _ustreamerStatusService;
+  final MjpgStreamerStatusService _mjpgStreamerStatusService;
 
-  DisplayViewerRepository(this._ustreamerStatusService);
+  DisplayViewerRepository(this._mjpgStreamerStatusService);
 
-  Future<UstreamerState> getUstreamerState() {
-    return _ustreamerStatusService.getState();
+  Future<Uint8List> getSnapshot() {
+    return _mjpgStreamerStatusService.getAction("snapshot").then((value) => Uint8List.fromList(value));
   }
 }

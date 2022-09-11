@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:tesla_android/common/di/ta_locator.dart';
 import 'package:tesla_android/common/navigation/ta_page_factory.dart';
+import 'package:web_socket_channel/html.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

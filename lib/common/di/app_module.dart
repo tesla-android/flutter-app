@@ -7,12 +7,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 abstract class AppModule {
   @singleton
   Flavor get provideFlavor => Flavor.create(
-        Environment.alpha,
+        Environment.production,
         color: Colors.red,
-        name: 'ALPHA',
         properties: {
-          'touchscreenWebSocket': 'ws://3.3.3.50:9999',
-          'ustreamerBaseUrl' : 'http://3.3.3.1:8001/'
+          'touchscreenWebSocket': 'ws://9.9.0.1:9999',
+          'mjpgStreamerBaseUrl' : 'http://9.9.0.1:9090/',
+          'virtualDisplayWidth': 944,
+          'virtualDisplayHeight': 720,
         },
       );
 
