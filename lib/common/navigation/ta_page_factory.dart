@@ -25,21 +25,19 @@ class TAPageFactory {
       switch (page) {
         case TAPage.androidViewer:
           return MultiBlocProvider(
-            key: const ValueKey(TAPage.androidViewer),
             providers: [
-              BlocProvider.value(
-                value: getIt<TouchscreenCubit>(),
+              BlocProvider(
+                create: (_) => getIt<TouchscreenCubit>(),
               ),
-              BlocProvider.value(
-                value: getIt<DisplayCubit>(),
+              BlocProvider(
+                create: (_) => getIt<DisplayCubit>(),
               ),
             ],
             child: AndroidViewerPage(),
           );
         case TAPage.releaseNotes:
-          return BlocProvider.value(
-            key: const ValueKey(TAPage.releaseNotes),
-            value: getIt<ReleaseNotesCubit>(),
+          return BlocProvider(
+            create: (_) => getIt<ReleaseNotesCubit>(),
             child: const ReleaseNotesPage(),
           );
         case TAPage.donationDialog:

@@ -5,7 +5,7 @@ import 'package:tesla_android/common/ui/constants/ta_timing.dart';
 import 'package:tesla_android/feature/androidViewer/touchscreen/model/pointer_state.dart';
 import 'package:tesla_android/feature/androidViewer/touchscreen/transport/touchscreen_transport.dart';
 
-@injectable
+@singleton
 class TouchscreenCubit extends Cubit<bool> {
   final TouchScreenTransport _transport;
 
