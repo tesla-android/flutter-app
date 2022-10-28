@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
@@ -5,12 +7,19 @@ import 'package:tesla_android/common/ui/constants/ta_timing.dart';
 import 'package:tesla_android/feature/androidViewer/touchscreen/model/pointer_state.dart';
 import 'package:tesla_android/feature/androidViewer/touchscreen/transport/touchscreen_transport.dart';
 
-@singleton
+@injectable
 class TouchscreenCubit extends Cubit<bool> {
   final TouchScreenTransport _transport;
+  StreamSubscription<bool>? _streamSubscription;
 
   TouchscreenCubit(this._transport) : super(false) {
     _maintainWebSocketConnection();
+  }
+
+  @override
+  Future<void> close() async {
+    await _streamSubscription?.cancel();
+    super.close();
   }
 
   void dispatchTouchEvent(int index, Offset offset, bool isBeingTouched,
@@ -39,8 +48,10 @@ class TouchscreenCubit extends Cubit<bool> {
 
   void _maintainWebSocketConnection() {
     _transport.connectWebSocket();
-    _transport.connectionStateSubject.stream.listen((connectionState) {
-      emit(connectionState);
+    _streamSubscription = _transport.connectionStateSubject.stream.listen((connectionState) {
+      if (!isClosed) {
+        emit(connectionState);
+      }
       if (!connectionState) {
         Future.delayed(TATiming.timeoutDuration, _maintainWebSocketConnection);
       }

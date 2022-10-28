@@ -18,12 +18,10 @@ class ReleaseNotesVersionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scrollbar(
-      child: ListView.builder(
-        padding: TADimens.basePaddingHorizontal,
-        itemCount: versions.length,
-        itemBuilder: _versionItemBuilder,
-      ),
+    return ListView.builder(
+      padding: TADimens.basePaddingHorizontal,
+      itemCount: versions.length,
+      itemBuilder: _versionItemBuilder,
     );
   }
 
