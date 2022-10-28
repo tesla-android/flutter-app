@@ -21,7 +21,10 @@ class ChangelogItem {
 
   @override
   bool operator ==(Object other) {
-    return (other is ChangelogItem) && title == other.title;
+    return (other is ChangelogItem) &&
+        title == other.title &&
+        shortDescription == other.shortDescription &&
+        descriptionMarkdown == other.descriptionMarkdown;
   }
 
   @override
