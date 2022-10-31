@@ -11,9 +11,9 @@ abstract class AppModule {
         color: Colors.red,
         properties: {
           'touchscreenWebSocket': 'ws://9.9.0.1:9999',
-          'mjpgStreamerBaseUrl' : 'http://9.9.0.1:9090/',
-          'virtualDisplayWidth': 944,
-          'virtualDisplayHeight': 720,
+          'videoLayerUrl' : 'http://9.9.0.1:9090/',
+          'virtualDisplayWidth': 1378,
+          'virtualDisplayHeight': 1050,
         },
       );
 
