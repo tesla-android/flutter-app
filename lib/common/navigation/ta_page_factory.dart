@@ -4,7 +4,6 @@ import 'package:injectable/injectable.dart';
 import 'package:tesla_android/common/di/ta_locator.dart';
 import 'package:tesla_android/common/navigation/ta_page.dart';
 import 'package:tesla_android/feature/androidViewer/android_viewer_page.dart';
-import 'package:tesla_android/feature/androidViewer/display/cubit/display_cubit.dart';
 import 'package:tesla_android/feature/androidViewer/touchscreen/cubit/touchscreen_cubit.dart';
 import 'package:tesla_android/feature/donations/widget/donation_dialog.dart';
 import 'package:tesla_android/feature/releaseNotes/cubit/release_notes_cubit.dart';
@@ -28,9 +27,6 @@ class TAPageFactory {
             providers: [
               BlocProvider(
                 create: (_) => getIt<TouchscreenCubit>(),
-              ),
-              BlocProvider(
-                create: (_) => getIt<DisplayCubit>(),
               ),
             ],
             child: AndroidViewerPage(),

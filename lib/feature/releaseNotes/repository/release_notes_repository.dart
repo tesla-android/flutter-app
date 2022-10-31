@@ -7,6 +7,53 @@ import 'package:tesla_android/feature/releaseNotes/model/version.dart';
 class ReleaseNotesRepository {
   static const ReleaseNotes _releaseNotes = ReleaseNotes(versions: [
     Version(
+      versionName: "2022.44.1",
+      changelogItems: [
+        ChangelogItem(
+          title: "Single Board stack",
+          shortDescription: "Hardware and setup improvements",
+          descriptionMarkdown:
+          "### Tesla Android does not need the hardware HDMI capture interface anymore. Updated video layer also uses less resources.",
+        ),
+        ChangelogItem(
+          title: "Single system image",
+          shortDescription: "Setup improvements",
+          descriptionMarkdown:
+          "### Starting with version 2022.44.1 there is a new way to install Tesla Android.\n### New single image setup process that does not need adb or fastboot. This change requires a 64GB(or larger) SD card.",
+        ),
+        ChangelogItem(
+          title: "LTE",
+          shortDescription: "Fixes for Huawei E3372",
+          descriptionMarkdown:
+          "### Previous release broke support for Huawei E3372. This issue is now resolved.",
+        ),
+        ChangelogItem(
+          title: "Android platform",
+          shortDescription: "Boot time improvements",
+          descriptionMarkdown:
+          "### Version 2022.44.1 includes multiple internal optimisations that allow for your Tesla Android to boot up faster after the car wakes from sleep.",
+        ),
+        ChangelogItem(
+          title: "Virtual display",
+          shortDescription: "Performance and quality improvements",
+          descriptionMarkdown:
+          "### Virtual display resolution has been increased to enable high fidelity Android experience in your Tesla.\n### The responsiveness is also improved thanks to internal changes in the video layer.",
+        ),
+        ChangelogItem(
+          title: "CarPlay",
+          shortDescription: "Performance improvements",
+          descriptionMarkdown:
+          "### Improvements in the video layer leave more performance for other components.\n### Decoding video stream from CarPlay is faster in version 2022.44.1.",
+        ),
+        ChangelogItem(
+          title: "Flutter Frontend",
+          shortDescription: "Stability improvements",
+          descriptionMarkdown:
+          "### Flutter frameworks has been updated in order to improve user experience.",
+        ),
+      ],
+    ),
+    Version(
       versionName: "2022.38.1",
       changelogItems: [
         ChangelogItem(

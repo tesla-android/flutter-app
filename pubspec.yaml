@@ -3,7 +3,7 @@ description: Tesla Android
 
 publish_to: 'none'
 
-version: 2022.38.1+1
+version: 2022.44.1+1
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
