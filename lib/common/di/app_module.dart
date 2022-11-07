@@ -12,8 +12,8 @@ abstract class AppModule {
         properties: {
           'touchscreenWebSocket': 'ws://9.9.0.1:9999',
           'videoLayerUrl' : 'http://9.9.0.1:9090/',
-          'virtualDisplayWidth': 1378,
-          'virtualDisplayHeight': 1050,
+          'virtualDisplayWidth': 1034,
+          'virtualDisplayHeight': 788,
         },
       );
 
