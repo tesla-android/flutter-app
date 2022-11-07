@@ -21,32 +21,11 @@ class AndroidViewerPage extends StatelessWidget {
     final bloc = BlocProvider.of<TouchscreenCubit>(context);
     return Scaffold(
       body: Stack(
-        children: [
+        children: const [
           Center(
-            child: BlocListener(
-              bloc: bloc,
-              listener: (BuildContext context, state) {
-                final scaffoldMessenger = ScaffoldMessenger.of(context);
-                if (state == false) {
-                  scaffoldMessenger.showSnackBar(
-                    SnackBar(
-                      content: const Text(
-                          'Virtual touchscreen is not active. Wait for Android to boot up.'),
-                      duration: TATiming.snackBarDuration,
-                      action: SnackBarAction(
-                        label: 'Dismiss',
-                        onPressed: scaffoldMessenger.hideCurrentSnackBar,
-                      ),
-                    ),
-                  );
-                } else {
-                  scaffoldMessenger.hideCurrentSnackBar();
-                }
-              },
-              child: const DisplayView(touchScreenView: TouchScreenView()),
-            ),
+            child: DisplayView(touchScreenView: TouchScreenView())
           ),
-          const VersionRibbon()
+          VersionRibbon()
         ],
       ),
     );
