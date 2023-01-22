@@ -1,1 +1,1 @@
-enum TAPageType { standard, dialog, modalBottomSheet }
+enum TAPageType { standard, dialog }

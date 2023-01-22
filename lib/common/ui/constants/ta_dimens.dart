@@ -67,4 +67,6 @@ class TADimens {
   static const donationDialogQRSize = 250.0;
 
   static const versionBannerTouchAreaSize = 50.0;
+
+  static const backendErrorIconSize = 80.0;
 }

@@ -16,8 +16,6 @@ class TANavigator {
         return Navigator.of(context).pushNamed(page.route);
       case TAPageType.dialog:
         return _pushDialog(context: context, page: page);
-      case TAPageType.modalBottomSheet:
-        return _pushModalBottomSheet(context: context, page: page);
     }
   }
 
@@ -27,21 +25,6 @@ class TANavigator {
   }) {
     return showDialog(
       context: context,
-      builder: (context) {
-        return _pageFactory.buildPage(page).call(context);
-      },
-    );
-  }
-
-  static Future _pushModalBottomSheet({
-    required BuildContext context,
-    required TAPage page,
-  }) {
-    return showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      enableDrag: true,
-      isDismissible: true,
       builder: (context) {
         return _pageFactory.buildPage(page).call(context);
       },

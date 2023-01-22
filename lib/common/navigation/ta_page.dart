@@ -17,16 +17,16 @@ class TAPage {
     type: TAPageType.standard,
   );
 
-  static const androidViewer = TAPage(
-    title: "Android viewer",
-    route: "/androidViewer",
+  static const home = TAPage(
+    title: "Home",
+    route: "/home",
     type: TAPageType.standard,
   );
 
   static const releaseNotes = TAPage(
     title: "Release Notes",
     route: "/releaseNotes",
-    type: TAPageType.modalBottomSheet,
+    type: TAPageType.standard,
   );
 
   static const donationDialog = TAPage(
@@ -36,6 +36,6 @@ class TAPage {
   );
 
   static List<TAPage> get availablePages {
-    return const [empty, androidViewer];
+    return const [empty, home, releaseNotes];
   }
 }

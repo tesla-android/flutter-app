@@ -3,15 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:tesla_android/common/di/ta_locator.dart';
 import 'package:tesla_android/common/navigation/ta_page.dart';
-import 'package:tesla_android/feature/androidViewer/android_viewer_page.dart';
-import 'package:tesla_android/feature/androidViewer/touchscreen/cubit/touchscreen_cubit.dart';
+import 'package:tesla_android/feature/connectivityCheck/cubit/connectivity_check_cubit.dart';
+import 'package:tesla_android/feature/display/cubit/display_cubit.dart';
 import 'package:tesla_android/feature/donations/widget/donation_dialog.dart';
+import 'package:tesla_android/feature/home/android_viewer_page.dart';
 import 'package:tesla_android/feature/releaseNotes/cubit/release_notes_cubit.dart';
 import 'package:tesla_android/feature/releaseNotes/widget/release_notes_page.dart';
+import 'package:tesla_android/feature/touchscreen/cubit/touchscreen_cubit.dart';
 
 @injectable
 class TAPageFactory {
-  String initialRoute = TAPage.androidViewer.route;
+  String initialRoute = TAPage.home.route;
 
   Map<String, Widget Function(BuildContext context)> getRoutes() {
     return {
@@ -22,14 +24,18 @@ class TAPageFactory {
   Widget Function(BuildContext context) buildPage(TAPage page) {
     return (context) {
       switch (page) {
-        case TAPage.androidViewer:
+        case TAPage.home:
           return MultiBlocProvider(
             providers: [
+              BlocProvider.value(
+                value: getIt<ConnectivityCheckCubit>(),
+              ),
               BlocProvider(
                 create: (_) => getIt<TouchscreenCubit>(),
               ),
+              BlocProvider(create: (_) => getIt<DisplayCubit>()),
             ],
-            child: AndroidViewerPage(),
+            child: HomePage(),
           );
         case TAPage.releaseNotes:
           return BlocProvider(

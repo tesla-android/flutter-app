@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tesla_android/feature/androidViewer/touchscreen/cubit/touchscreen_cubit.dart';
+import 'package:tesla_android/feature/touchscreen/cubit/touchscreen_cubit.dart';
 
 class TouchScreenView extends StatelessWidget {
   const TouchScreenView({
