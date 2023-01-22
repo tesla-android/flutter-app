@@ -162,13 +162,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.3"
-  dio:
-    dependency: "direct main"
-    description:
-      name: dio
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.0.4"
   fake_async:
     dependency: transitive
     description:
@@ -541,27 +534,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0"
-  quiver:
-    dependency: transitive
-    description:
-      name: quiver
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.1.0"
-  retrofit:
-    dependency: "direct main"
-    description:
-      name: retrofit
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.1+1"
-  retrofit_generator:
-    dependency: "direct dev"
-    description:
-      name: retrofit_generator
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.0.1"
   rxdart:
     dependency: "direct main"
     description:
@@ -714,13 +686,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
-  tuple:
-    dependency: transitive
-    description:
-      name: tuple
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   typed_data:
     dependency: transitive
     description:
@@ -749,6 +714,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.0"
+  web_socket_client:
+    dependency: "direct main"
+    description:
+      name: web_socket_client
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.0-dev.1"
   win32:
     dependency: transitive
     description:
@@ -771,5 +743,5 @@ packages:
     source: hosted
     version: "3.1.0"
 sdks:
-  dart: ">=2.17.0-0 <3.0.0"
+  dart: ">=2.18.0 <3.0.0"
   flutter: ">=2.10.0"

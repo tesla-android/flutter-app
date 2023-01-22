@@ -111,7 +111,7 @@
 <script src="pcmplayer.js"></script>
 <script>
             var hostname = window.location.hostname;
-			var socketURL = 'ws://' + hostname +':8080/sound';
+			var socketURL = 'ws://' + hostname +':8080';
 			var lastEventDate = Date.now();
 			var playbackTimeout = 1500;
 			var player;
@@ -137,9 +137,9 @@
 			window.addEventListener('click', function(e) {
 				if (typeof player == "undefined") {
 					player = new PCMPlayer({
-						inputCodec: 'Int16',
+						inputCodec: 'Float32',
 						channels: 1,
-						sampleRate: 44100,
+						sampleRate: 48000,
 						flushTime: 30,
 					});
 					createWebSocket();
