@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart' show BehaviorSubject;
-import 'package:tesla_android/feature/androidViewer/display/cubit/display_state.dart';
-import 'package:tesla_android/feature/androidViewer/display/transport/display_transport.dart';
+import 'package:tesla_android/feature/display/cubit/display_state.dart';
+import 'package:tesla_android/feature/display/transport/display_transport.dart';
 import 'package:web_socket_client/web_socket_client.dart';
 
 @singleton

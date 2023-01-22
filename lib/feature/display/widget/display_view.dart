@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:tesla_android/common/di/ta_locator.dart';
-import 'package:tesla_android/feature/androidViewer/display/cubit/display_cubit.dart';
-import 'package:tesla_android/feature/androidViewer/display/cubit/display_state.dart';
-import 'package:tesla_android/feature/androidViewer/display/widget/display_content_view.dart';
+import 'package:tesla_android/feature/display/cubit/display_cubit.dart';
+import 'package:tesla_android/feature/display/cubit/display_state.dart';
+import 'package:tesla_android/feature/display/widget/display_content_view.dart';
 
 class DisplayView extends StatelessWidget {
   final Widget touchScreenView;

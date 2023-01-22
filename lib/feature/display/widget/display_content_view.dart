@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tesla_android/feature/androidViewer/display/cubit/display_cubit.dart';
+import 'package:tesla_android/feature/display/cubit/display_cubit.dart';
 
 class DisplayContentView extends StatefulWidget {
   const DisplayContentView({Key? key}) : super(key: key);

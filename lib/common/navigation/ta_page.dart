@@ -17,9 +17,9 @@ class TAPage {
     type: TAPageType.standard,
   );
 
-  static const androidViewer = TAPage(
-    title: "Android viewer",
-    route: "/androidViewer",
+  static const home = TAPage(
+    title: "Home",
+    route: "/home",
     type: TAPageType.standard,
   );
 
@@ -36,6 +36,6 @@ class TAPage {
   );
 
   static List<TAPage> get availablePages {
-    return const [empty, androidViewer];
+    return const [empty, home];
   }
 }

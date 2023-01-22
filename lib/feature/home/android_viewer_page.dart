@@ -4,16 +4,16 @@ import 'package:tesla_android/common/di/ta_locator.dart';
 import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
 import 'package:tesla_android/feature/connectivityCheck/cubit/connectivity_check_cubit.dart';
 import 'package:tesla_android/feature/connectivityCheck/model/connectivity_state.dart';
+import 'package:tesla_android/feature/display/widget/display_view.dart';
 import 'package:tesla_android/feature/releaseNotes/widget/release_notes_loader.dart';
-import 'package:tesla_android/feature/androidViewer/display/widget/display_view.dart';
-import 'package:tesla_android/feature/androidViewer/touchscreen/cubit/touchscreen_cubit.dart';
-import 'package:tesla_android/feature/androidViewer/touchscreen/touchscreen_view.dart';
 import 'package:tesla_android/feature/releaseNotes/widget/versionRibbon/version_ribbon.dart';
+import 'package:tesla_android/feature/touchscreen/cubit/touchscreen_cubit.dart';
+import 'package:tesla_android/feature/touchscreen/touchscreen_view.dart';
 
-class AndroidViewerPage extends StatelessWidget {
+class HomePage extends StatelessWidget {
   final ReleaseNotesLoader _changelogLoader;
 
-  AndroidViewerPage({Key? key})
+  HomePage({Key? key})
       : _changelogLoader = getIt<ReleaseNotesLoader>(),
         super(key: key);
 

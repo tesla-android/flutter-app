@@ -5,7 +5,6 @@ import 'dart:typed_data';
 import 'package:flavor/flavor.dart';
 import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart' show BehaviorSubject;
-import 'package:web_socket_channel/status.dart';
 import 'package:web_socket_client/web_socket_client.dart';
 
 @injectable
