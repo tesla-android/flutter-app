@@ -63,9 +63,8 @@
       // 控制音量的 GainNode
       // https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/createGain
       this.gainNode = this.audioCtx.createGain();
-      var compressor = new DynamicsCompressorNode(this.audioCtx, {ratio: 20.0, threshold: -1, knee: 0, attack: 0.001, release: 0.1});
-      this.gainNode.gain.value = 1.5;
-      this.gainNode.connect(compressor).connect(this.audioCtx.destination);
+      this.gainNode.gain.value = 1.0;
+      this.gainNode.connect(this.audioCtx.destination);
       this.startTime = this.audioCtx.currentTime;
     }
 
