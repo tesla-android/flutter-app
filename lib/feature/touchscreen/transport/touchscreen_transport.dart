@@ -1,56 +1,40 @@
 import 'package:flavor/flavor.dart';
-import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
-import 'package:rxdart/rxdart.dart';
-import 'package:web_socket_channel/html.dart';
+import 'package:web_socket_client/web_socket_client.dart';
 
 @injectable
-class TouchScreenTransport {
+class TouchscreenTransport {
   final Flavor flavor;
   final Uri webSocketUri;
-  final BehaviorSubject<bool> connectionStateSubject =
-      BehaviorSubject.seeded(false);
 
   static const String tag = "TouchScreenTransport: ";
 
-  TouchScreenTransport(this.flavor)
+  TouchscreenTransport(this.flavor)
       : webSocketUri = Uri.parse(flavor.getString(
           "touchscreenWebSocket",
         )!);
 
-  HtmlWebSocketChannel? _webSocketChannel;
+  WebSocket? _webSocket;
 
-  var isConnecting = false;
+  Future<bool> connectWebSocket() async {
+    _webSocket = WebSocket(webSocketUri,
+        timeout: const Duration(seconds: 5),
+        backoff: const ConstantBackoff(Duration(seconds: 1)));
 
-  void connectWebSocket() {
-    if (!isConnecting) {
-      isConnecting = true;
-      _webSocketChannel = HtmlWebSocketChannel.connect(webSocketUri);
-      _webSocketChannel?.innerWebSocket.onOpen.listen((event) {
-        connectionStateSubject.add(true);
-        isConnecting = false;
-      });
-      _webSocketChannel?.stream.listen(
-        (dynamic message) {
-          debugPrint(tag + '$message');
-          connectionStateSubject.add(true);
-          isConnecting = false;
-        },
-        onDone: () {
-          debugPrint(tag + 'channel closed');
-          connectionStateSubject.add(false);
-          isConnecting = false;
-        },
-        onError: (error) {
-          debugPrint(tag + '$error');
-          connectionStateSubject.add(false);
-          isConnecting = false;
-        },
-      );
-    }
+    return _webSocket!.connection
+        .firstWhere((state) => state is Connected)
+        .timeout(const Duration(seconds: 5),
+            onTimeout: () => const Disconnected())
+        .then((value) => true)
+        .onError((error, stackTrace) => false);
+  }
+
+  void closeWebSocket() {
+    _webSocket?.close(1000);
+    _webSocket = null;
   }
 
   void sendMessage(String message) {
-    _webSocketChannel?.sink.add(message);
+    _webSocket?.send(message);
   }
 }

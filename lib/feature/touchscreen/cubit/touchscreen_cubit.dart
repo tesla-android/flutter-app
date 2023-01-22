@@ -9,16 +9,17 @@ import 'package:tesla_android/feature/touchscreen/transport/touchscreen_transpor
 
 @injectable
 class TouchscreenCubit extends Cubit<bool> {
-  final TouchScreenTransport _transport;
+  final TouchscreenTransport _transport;
   StreamSubscription<bool>? _streamSubscription;
 
   TouchscreenCubit(this._transport) : super(false) {
-    _maintainWebSocketConnection();
+    _connectWebSocket();
   }
 
   @override
   Future<void> close() async {
     await _streamSubscription?.cancel();
+    _transport.closeWebSocket();
     super.close();
   }
 
@@ -46,15 +47,7 @@ class TouchscreenCubit extends Cubit<bool> {
     _transport.sendMessage(newPointerState.toVirtualTouchScreenEvent());
   }
 
-  void _maintainWebSocketConnection() {
+  void _connectWebSocket() {
     _transport.connectWebSocket();
-    _streamSubscription = _transport.connectionStateSubject.stream.listen((connectionState) {
-      if (!isClosed) {
-        emit(connectionState);
-      }
-      if (!connectionState) {
-        Future.delayed(TATiming.timeoutDuration, _maintainWebSocketConnection);
-      }
-    });
   }
 }

@@ -10,14 +10,14 @@ import 'package:injectable/injectable.dart' as _i2;
 import 'package:shared_preferences/shared_preferences.dart' as _i5;
 
 import '../../feature/connectivityCheck/cubit/connectivity_check_cubit.dart'
-    as _i9;
+    as _i8;
 import '../../feature/display/cubit/display_cubit.dart' as _i13;
-import '../../feature/display/transport/display_transport.dart' as _i10;
-import '../../feature/releaseNotes/cubit/release_notes_cubit.dart' as _i11;
+import '../../feature/display/transport/display_transport.dart' as _i9;
+import '../../feature/releaseNotes/cubit/release_notes_cubit.dart' as _i10;
 import '../../feature/releaseNotes/repository/release_notes_repository.dart'
     as _i4;
-import '../../feature/releaseNotes/widget/release_notes_loader.dart' as _i12;
-import '../../feature/touchscreen/cubit/touchscreen_cubit.dart' as _i8;
+import '../../feature/releaseNotes/widget/release_notes_loader.dart' as _i11;
+import '../../feature/touchscreen/cubit/touchscreen_cubit.dart' as _i12;
 import '../../feature/touchscreen/transport/touchscreen_transport.dart' as _i7;
 import '../navigation/ta_page_factory.dart' as _i6;
 import 'app_module.dart' as _i14; // ignore_for_file: unnecessary_lambdas
@@ -34,20 +34,20 @@ Future<_i1.GetIt> $initGetIt(_i1.GetIt get,
       () => appModule.sharedPreferences,
       preResolve: true);
   gh.factory<_i6.TAPageFactory>(() => _i6.TAPageFactory());
-  gh.factory<_i7.TouchScreenTransport>(
-      () => _i7.TouchScreenTransport(get<_i3.Flavor>()));
-  gh.factory<_i8.TouchscreenCubit>(
-      () => _i8.TouchscreenCubit(get<_i7.TouchScreenTransport>()));
-  gh.singleton<_i9.ConnectivityCheckCubit>(
-      _i9.ConnectivityCheckCubit(get<_i3.Flavor>()));
-  gh.factory<_i10.DisplayTransport>(
-      () => _i10.DisplayTransport(get<_i3.Flavor>()));
-  gh.factory<_i11.ReleaseNotesCubit>(
-      () => _i11.ReleaseNotesCubit(get<_i4.ReleaseNotesRepository>()));
-  gh.factory<_i12.ReleaseNotesLoader>(
-      () => _i12.ReleaseNotesLoader(get<_i5.SharedPreferences>()));
+  gh.factory<_i7.TouchscreenTransport>(
+      () => _i7.TouchscreenTransport(get<_i3.Flavor>()));
+  gh.singleton<_i8.ConnectivityCheckCubit>(
+      _i8.ConnectivityCheckCubit(get<_i3.Flavor>()));
+  gh.factory<_i9.DisplayTransport>(
+      () => _i9.DisplayTransport(get<_i3.Flavor>()));
+  gh.factory<_i10.ReleaseNotesCubit>(
+      () => _i10.ReleaseNotesCubit(get<_i4.ReleaseNotesRepository>()));
+  gh.factory<_i11.ReleaseNotesLoader>(
+      () => _i11.ReleaseNotesLoader(get<_i5.SharedPreferences>()));
+  gh.factory<_i12.TouchscreenCubit>(
+      () => _i12.TouchscreenCubit(get<_i7.TouchscreenTransport>()));
   gh.singleton<_i13.DisplayCubit>(
-      _i13.DisplayCubit(get<_i10.DisplayTransport>()));
+      _i13.DisplayCubit(get<_i9.DisplayTransport>()));
   return get;
 }
 
