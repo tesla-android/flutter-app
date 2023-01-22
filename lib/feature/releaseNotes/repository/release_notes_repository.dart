@@ -6,6 +6,36 @@ import 'package:tesla_android/feature/releaseNotes/model/version.dart';
 @injectable
 class ReleaseNotesRepository {
   static const ReleaseNotes _releaseNotes = ReleaseNotes(versions: [
+    Version(versionName: "2022.45.1", changelogItems: [
+      ChangelogItem(
+          title: "Android 13",
+          shortDescription: "Stability improvements",
+          descriptionMarkdown:
+              "### The Android version has been updated to 13, and this change improves the stability of Tesla Android. Security patches have also been merged up to October 2022. The Android base for Raspberry Pi used by Tesla Android(Glodroid Project) has also been updated to the newest release, and it comes packed with improvements around the kernel, display drivers, and much more.\n### The entire Tesla Android codebase has been refactored in order to make feature Android Platform updates easier; this is an essential step towards making the project more maintainable."),
+      ChangelogItem(
+          title: "H264 hardware acceleration",
+          shortDescription: "Performance improvements",
+          descriptionMarkdown:
+              "### Version 2022.4.1 adds support for hardware accelerated encoder and decoder for the H264 format. Playback of specific files can contain a small number of artifacts. This is a known issue that will be addressed in the future Tesla Android update. The current implementation of hardware acceleration is based on v4l2_codec2 and will be replaced with an alternative that supports more video formats."),
+      ChangelogItem(
+          title: "Virtual display",
+          shortDescription: "Stability improvements",
+          descriptionMarkdown:
+              "### The virtual display has been updated to use WebSockets for transport."),
+      ChangelogItem(
+          title: "Virtual touchscreen",
+          shortDescription: "Stability improvements",
+          descriptionMarkdown:
+              "### This version contains a fix for a problem with not being able to process input data after reloading the Flutter App."),
+      ChangelogItem(
+          title: "Audio playback",
+          shortDescription: "Stability improvements",
+          descriptionMarkdown:
+              "### The Audio Capture app that used to provide audio from Android to the Browser has been replaced with a new low-level implementation that integrates directly with the Android framework responsible for generating the audio stream before it’s broadcasted to the actual hardware(HDMI, headphone jack, etc.). This new approach brings in a lot of other improvements:\n### * Increased audio quality (stereo PCM 48kHz - Lossless Audio)\n### * Support for DRM content (streaming services)\n### * Support for volume control in Android (available in the Android Settings app)"),
+      ChangelogItem(title: "Flutter app", shortDescription: "Stability improvements", descriptionMarkdown: "### The Flutter App has been refactored to improve stability. Here are some of the changes:\n### * WebSockets handling for Tesla Android services has been improved.\n### * Thanks to the new transport layer, the Virtual Display component is now powered by Flutter. This significantly improves stability when compared to the previously used Iframe-based approach.\n### * The connectivity state observer component has been introduced. The app will notify you when it wouldn’t be able to access Tesla Android services. This change ensures you will not have to manually reload the app when your car returns from sleep or the hardware itself restarts.\n### * Flutter Framework has been updated to version 3.3.10"),
+      ChangelogItem(title: "USB tethering for iOS", shortDescription: "Connectivity improvements", descriptionMarkdown: "### Version 2023.4.1 adds support for sharing the internet from iOS devices via USB. Connect your phone, enable tethering and accept the USB access permission request on your iPhone."),
+      ChangelogItem(title: "LTE Modem support", shortDescription: "Connectivity improvements", descriptionMarkdown: "### This update introduces a new Android system service. The Tesla Android USB Networking Initializer simplifies how USB Modems are initialized and allows the use of per-device configuration scripts. This change resolved issues with some variants of Alcatel devices and added support for more Huawei modems."),
+    ]),
     Version(
       versionName: "2022.45.1",
       changelogItems: [
@@ -13,55 +43,55 @@ class ReleaseNotesRepository {
           title: "Google Apps",
           shortDescription: "Usability improvements",
           descriptionMarkdown:
-          "Version 2022.45.1 brings back Google Play Store and other Google Services that were removed in 2022.25.1. Device ID registration for Google Play is not longer required. Not all apps can be installed using Google Play Store due to lack of device certification, they need to be installed manually.",
+              "### Version 2022.45.1 brings back Google Play Store and other Google Services that were removed in 2022.25.1. Device ID registration for Google Play is not longer required. Not all apps can be installed using Google Play Store due to lack of device certification, they need to be installed manually.",
         ),
         ChangelogItem(
           title: "Android Platform",
           shortDescription: "Stability improvements",
           descriptionMarkdown:
-          "Tesla Android system services initialisation has been improved, all components(web server, touchscreen, display etc.) will automatically restart on failure. In previous versions a full system reboot would be needed in this scenario.",
+              "### Tesla Android system services initialisation has been improved, all components(web server, touchscreen, display etc.) will automatically restart on failure. In previous versions a full system reboot would be needed in this scenario.",
         ),
         ChangelogItem(
           title: "Virtual display",
           shortDescription: "DRM playback",
           descriptionMarkdown:
-          "Version 2022.45.1 fixes DRM video playback and enables access to secure layers that are usually blacked out in screen capture.",
+              "### Version 2022.45.1 fixes DRM video playback and enables access to secure layers that are usually blacked out in screen capture.",
         ),
         ChangelogItem(
           title: "CarPlay",
           shortDescription: "Visual improvements",
           descriptionMarkdown:
-          "Three row layout for CarPlay is now selected as default.",
+              "### Three row layout for CarPlay is now selected as default.",
         ),
         ChangelogItem(
           title: "Virtual touchscreen",
           shortDescription: "Stability improvements",
           descriptionMarkdown:
-          "Flutter app no longer displays information about virtual touchscreen initialisation, it is irrelevant for the single board stack and should have been removed earlier.",
+              "### Flutter app no longer displays information about virtual touchscreen initialisation, it is irrelevant for the single board stack and should have been removed earlier.",
         ),
         ChangelogItem(
           title: "Bluetooth",
           shortDescription: "Stability improvements",
           descriptionMarkdown:
-          "Restarting the system after disabling Bluetooth is no longer required.",
+              "### Restarting the system after disabling Bluetooth is no longer required.",
         ),
         ChangelogItem(
           title: "Internet access",
           shortDescription: "USB tethering for Android",
           descriptionMarkdown:
-          "USB tethering from Android phones is now supported in Tesla Android. No configuration is required to enable this feature. Your Android phone will be detected as an external ethernet interface when you enable tethering.",
+              "### USB tethering from Android phones is now supported in Tesla Android. No configuration is required to enable this feature. Your Android phone will be detected as an external ethernet interface when you enable tethering.",
         ),
         ChangelogItem(
           title: "Internet access",
           shortDescription: "LTE modem support",
           descriptionMarkdown:
-          "2022.45.1 introduces support for USB network devices using the cdc_ncm driver - it has been validated and works without any additional steps from the user. Experimental changes that might enable support for cdc_mbim and rndis_host drivers are also included. Previous versions supported only the cdc_ether driver.",
+              "### 2022.45.1 introduces support for USB network devices using the cdc_ncm driver - it has been validated and works without any additional steps from the user. Experimental changes that might enable support for cdc_mbim and rndis_host drivers are also included. Previous versions supported only the cdc_ether driver.",
         ),
         ChangelogItem(
           title: "Internet access",
           shortDescription: "Support for external routers",
           descriptionMarkdown:
-          "Tesla Android webserver and other services can now be accessed externally using ethernet. This can be used to access the device in your home network or in the car with an external router.",
+              "### Tesla Android webserver and other services can now be accessed externally using ethernet. This can be used to access the device in your home network or in the car with an external router.",
         ),
       ],
     ),
@@ -72,43 +102,43 @@ class ReleaseNotesRepository {
           title: "Single Board stack",
           shortDescription: "Hardware and setup improvements",
           descriptionMarkdown:
-          "### Tesla Android does not need the hardware HDMI capture interface anymore. Updated video layer also uses less resources.",
+              "### Tesla Android does not need the hardware HDMI capture interface anymore. Updated video layer also uses less resources.",
         ),
         ChangelogItem(
           title: "Single system image",
           shortDescription: "Setup improvements",
           descriptionMarkdown:
-          "### Starting with version 2022.44.1 there is a new way to install Tesla Android.\n### New single image setup process that does not need adb or fastboot. This change requires a 64GB(or larger) SD card.",
+              "### Starting with version 2022.44.1 there is a new way to install Tesla Android.\n### New single image setup process that does not need adb or fastboot. This change requires a 64GB(or larger) SD card.",
         ),
         ChangelogItem(
           title: "LTE",
           shortDescription: "Fixes for Huawei E3372",
           descriptionMarkdown:
-          "### Previous release broke support for Huawei E3372. This issue is now resolved.",
+              "### Previous release broke support for Huawei E3372. This issue is now resolved.",
         ),
         ChangelogItem(
           title: "Android platform",
           shortDescription: "Boot time improvements",
           descriptionMarkdown:
-          "### Version 2022.44.1 includes multiple internal optimisations that allow for your Tesla Android to boot up faster after the car wakes from sleep.",
+              "### Version 2022.44.1 includes multiple internal optimisations that allow for your Tesla Android to boot up faster after the car wakes from sleep.",
         ),
         ChangelogItem(
           title: "Virtual display",
           shortDescription: "Performance and quality improvements",
           descriptionMarkdown:
-          "### Virtual display resolution has been increased to enable high fidelity Android experience in your Tesla.\n### The responsiveness is also improved thanks to internal changes in the video layer.",
+              "### Virtual display resolution has been increased to enable high fidelity Android experience in your Tesla.\n### The responsiveness is also improved thanks to internal changes in the video layer.",
         ),
         ChangelogItem(
           title: "CarPlay",
           shortDescription: "Performance improvements",
           descriptionMarkdown:
-          "### Improvements in the video layer leave more performance for other components.\n### Decoding video stream from CarPlay is faster in version 2022.44.1.",
+              "### Improvements in the video layer leave more performance for other components.\n### Decoding video stream from CarPlay is faster in version 2022.44.1.",
         ),
         ChangelogItem(
           title: "Flutter Frontend",
           shortDescription: "Stability improvements",
           descriptionMarkdown:
-          "### Flutter frameworks has been updated in order to improve user experience.",
+              "### Flutter frameworks has been updated in order to improve user experience.",
         ),
       ],
     ),
