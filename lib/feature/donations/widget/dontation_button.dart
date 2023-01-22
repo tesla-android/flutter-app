@@ -9,7 +9,7 @@ class DonationButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: TADimens.basePaddingHorizontal,
+      padding: TADimens.basePadding,
       child: MaterialButton(
         color: Colors.red.shade700,
         onPressed: () => TANavigator.push(

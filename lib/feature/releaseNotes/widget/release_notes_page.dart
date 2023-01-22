@@ -19,8 +19,11 @@ class ReleaseNotesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     BlocProvider.of<ReleaseNotesCubit>(context).loadReleaseNotes();
 
-    return TABottomSheet(
-        title: TAPage.releaseNotes.title,
+    return Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(TAPage.releaseNotes.title),
+        ),
         body: BlocBuilder<ReleaseNotesCubit, ReleaseNotesState>(
             builder: (context, state) {
           if (state is ReleaseNotesStateLoading) {

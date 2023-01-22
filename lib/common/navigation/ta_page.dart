@@ -26,7 +26,7 @@ class TAPage {
   static const releaseNotes = TAPage(
     title: "Release Notes",
     route: "/releaseNotes",
-    type: TAPageType.modalBottomSheet,
+    type: TAPageType.standard,
   );
 
   static const donationDialog = TAPage(
@@ -36,6 +36,6 @@ class TAPage {
   );
 
   static List<TAPage> get availablePages {
-    return const [empty, home];
+    return const [empty, home, releaseNotes];
   }
 }
