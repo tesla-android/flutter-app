@@ -3,7 +3,7 @@ description: Tesla Android
 
 publish_to: 'none'
 
-version: 2023.4.1+1
+version: 2023.4.2+1
 
 environment:
   flutter: "3.3.10"
@@ -38,4 +38,9 @@ dev_dependencies:
 flutter:
   assets:
     - images/png/
+    - fonts/
   uses-material-design: true
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: fonts/Roboto-Regular.ttf

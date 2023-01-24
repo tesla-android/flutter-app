@@ -6,7 +6,25 @@ import 'package:tesla_android/feature/releaseNotes/model/version.dart';
 @injectable
 class ReleaseNotesRepository {
   static const ReleaseNotes _releaseNotes = ReleaseNotes(versions: [
-    Version(versionName: "2022.45.1", changelogItems: [
+    Version(versionName: "2023.4.2", changelogItems: [
+      ChangelogItem(
+          title: "Virtual display",
+          shortDescription: "Performance improvements",
+          descriptionMarkdown:
+              "### Version 2023.4.1 introduced a new transport layer to the virtual display. Unfortunately, it misbehaved in vehicles with Intel MCU, especially those with the Wi-Fi antenna placed outside the car. This version brings back the transport from 2022.45 and keeps other improvements like the connectivity check module."),
+      ChangelogItem(
+        title: "Audio playback",
+        shortDescription: "Usability improvements",
+        descriptionMarkdown:
+            "### The previous update introduced volume control in Android. However, default values were around 50%, confusing users. 2022.4.2 resolves this issue and sets the Android system volume to 100%.",
+      ),
+      ChangelogItem(
+          title: "Flutter App",
+          shortDescription: "Performance improvements",
+          descriptionMarkdown:
+              "### Version 2023.4.2 brings several improvements in performance to the Flutter app: \n### * Removed fade-in and fade-out transitions from the audio playback component on each buffer flush. This change makes the volume curve consistent.\n### * After introducing a workaround for offline PWA support, the rendering engine was changed from HTML to CanvasKit.\n### * Reduced the amount of ping/pong frames used by the WebSocket transport for the virtual touchscreen")
+    ]),
+    Version(versionName: "2023.4.1", changelogItems: [
       ChangelogItem(
           title: "Android 13",
           shortDescription: "Stability improvements",
@@ -32,9 +50,21 @@ class ReleaseNotesRepository {
           shortDescription: "Stability improvements",
           descriptionMarkdown:
               "### The Audio Capture app that used to provide audio from Android to the Browser has been replaced with a new low-level implementation that integrates directly with the Android framework responsible for generating the audio stream before it’s broadcasted to the actual hardware(HDMI, headphone jack, etc.). This new approach brings in a lot of other improvements:\n### * Increased audio quality (stereo PCM 48kHz - Lossless Audio)\n### * Support for DRM content (streaming services)\n### * Support for volume control in Android (available in the Android Settings app)"),
-      ChangelogItem(title: "Flutter app", shortDescription: "Stability improvements", descriptionMarkdown: "### The Flutter App has been refactored to improve stability. Here are some of the changes:\n### * WebSockets handling for Tesla Android services has been improved.\n### * Thanks to the new transport layer, the Virtual Display component is now powered by Flutter. This significantly improves stability when compared to the previously used Iframe-based approach.\n### * The connectivity state observer component has been introduced. The app will notify you when it wouldn’t be able to access Tesla Android services. This change ensures you will not have to manually reload the app when your car returns from sleep or the hardware itself restarts.\n### * Flutter Framework has been updated to version 3.3.10"),
-      ChangelogItem(title: "USB tethering for iOS", shortDescription: "Connectivity improvements", descriptionMarkdown: "### Version 2023.4.1 adds support for sharing the internet from iOS devices via USB. Connect your phone, enable tethering and accept the USB access permission request on your iPhone."),
-      ChangelogItem(title: "LTE Modem support", shortDescription: "Connectivity improvements", descriptionMarkdown: "### This update introduces a new Android system service. The Tesla Android USB Networking Initializer simplifies how USB Modems are initialized and allows the use of per-device configuration scripts. This change resolved issues with some variants of Alcatel devices and added support for more Huawei modems."),
+      ChangelogItem(
+          title: "Flutter app",
+          shortDescription: "Stability improvements",
+          descriptionMarkdown:
+              "### The Flutter App has been refactored to improve stability. Here are some of the changes:\n### * WebSockets handling for Tesla Android services has been improved.\n### * Thanks to the new transport layer, the Virtual Display component is now powered by Flutter. This significantly improves stability when compared to the previously used Iframe-based approach.\n### * The connectivity state observer component has been introduced. The app will notify you when it wouldn’t be able to access Tesla Android services. This change ensures you will not have to manually reload the app when your car returns from sleep or the hardware itself restarts.\n### * Flutter Framework has been updated to version 3.3.10"),
+      ChangelogItem(
+          title: "USB tethering for iOS",
+          shortDescription: "Connectivity improvements",
+          descriptionMarkdown:
+              "### Version 2023.4.1 adds support for sharing the internet from iOS devices via USB. Connect your phone, enable tethering and accept the USB access permission request on your iPhone."),
+      ChangelogItem(
+          title: "LTE Modem support",
+          shortDescription: "Connectivity improvements",
+          descriptionMarkdown:
+              "### This update introduces a new Android system service. The Tesla Android USB Networking Initializer simplifies how USB Modems are initialized and allows the use of per-device configuration scripts. This change resolved issues with some variants of Alcatel devices and added support for more Huawei modems."),
     ]),
     Version(
       versionName: "2022.45.1",
