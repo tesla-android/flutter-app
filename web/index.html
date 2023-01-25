@@ -23,12 +23,6 @@
   <meta name="msapplication-TileColor" content="#ffffff">
   <meta name="msapplication-TileImage" content="icons/ms-icon-144x144.png">
   <meta name="theme-color" content="#ffffff">
-  <script type="text/javascript">
-    window.flutterWebRenderer = "canvaskit";
-    window.flutterConfiguration = {
-    	canvasKitBaseUrl: "/canvaskit/"
-  	};
-  </script>
   <script>
 			// The value below is injected by flutter build, do not touch.
 			var serviceWorkerVersion = null;
@@ -96,7 +90,7 @@
 					}
 				}).then(function(engineInitializer) {
 					loading.classList.add('main_done');
-					return engineInitializer.initializeEngine();
+					return engineInitializer.initializeEngine({canvasKitBaseUrl: "/canvaskit/", renderer: "canvaskit"});
 				}).then(function(appRunner) {
 					loading.classList.add('init_done');
 					return appRunner.runApp();
