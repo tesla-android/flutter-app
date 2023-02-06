@@ -21,7 +21,7 @@ class VersionRibbon extends StatelessWidget {
               child: Directionality(
                 textDirection: TextDirection.ltr,
                 child: Banner(
-                  location: BannerLocation.topStart,
+                  location: BannerLocation.topEnd,
                   message: snapshot.data?.version ?? "",
                   child: Container(
                     width: TADimens.versionBannerTouchAreaSize,
