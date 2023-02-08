@@ -37,7 +37,7 @@ class HomePage extends StatelessWidget {
                   children: const [
                     Center(
                         child: DisplayView(touchScreenView: TouchScreenView())),
-                    VersionRibbon()
+                    Positioned(right:0, top: 0, child: VersionRibbon())
                   ],
                 )
               : _backendConnectionLostWidget());
