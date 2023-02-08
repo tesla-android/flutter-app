@@ -10,11 +10,11 @@ class ReleaseNotesRepository {
       ChangelogItem(
           title: "Android Platform",
           shortDescription: "Stability improvements",
-          descriptionMarkdown: "### Android has been updated to Android 13.0.0_r24 with the latest available security patches. Tesla Android ships with fewer debug features by default(switch from userdebug to user builds). This change should improve boot time marginally, and further improvements are planned for future software updates."),
+          descriptionMarkdown: "### Android has been updated to Android 13.0.0_r24 with the latest available security patches."),
       ChangelogItem(
           title: "Android Platform",
           shortDescription: "Support for OTA updates",
-          descriptionMarkdown: "### Version 2023.6.1 adds support for OTA updates. Navigate to Settings -> System -> Updater to update your Tesla Android. \n### Updates are not incremental; you can skip a few versions and update directly to the newest build. \n### Only online updates are available in this release; connect your Raspberry Pi to your home router with an Ethernet cable to avoid data charges. Each update weighs around 1 GB. Support for updating with a USB drive will be added in a future software update. \n### All OTA updates are signed, and Android Verified Boot is enabled; installing updates without proper signatures is impossible."),
+          descriptionMarkdown: "### Version 2023.6.1 adds support for OTA updates. Navigate to Settings -> System -> Updater to update your Tesla Android. \n### Updates are not incremental; you can skip a few versions and update directly to the newest build. \n### Only online updates are available in this release; connect your Raspberry Pi to your home router with an Ethernet cable to avoid data charges. Each update weighs around 1 GB. Support for updating with a USB drive will be added in a future software update."),
       ChangelogItem(
           title: "H264 hardware acceleration",
           shortDescription: "Stability improvements",
