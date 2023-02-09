@@ -14,7 +14,7 @@ abstract class AppModule {
         properties: {
           'touchscreenWebSocket': 'ws://' + (window.location.hostname ?? "9.9.0.1") + ':9999',
           'displayWebSocket' : 'ws://' + (window.location.hostname ?? "9.9.0.1") + ':9090/',
-          'connectivityCheck' : 'http://' + (window.location.hostname ?? "9.9.0.1") + '/online/status.html',
+          'connectivityCheck' : 'http://' + (window.location.hostname ?? "9.9.0.1") + '/online/connectivity_check.txt',
           'virtualDisplayWidth': 1034,
           'virtualDisplayHeight': 788,
         },
