@@ -108,7 +108,7 @@
             var hostname = window.location.hostname;
 			var socketURL = 'ws://' + hostname +':8080';
 			var lastEventDate = Date.now();
-			var playbackTimeout = 1500;
+			var playbackTimeout = 15000;
 			var player;
 
 			function createWebSocket() {
