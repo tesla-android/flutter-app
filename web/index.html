@@ -106,28 +106,23 @@
 <script src="pcmplayer.js"></script>
 <script>
             var hostname = window.location.hostname;
-			var socketURL = 'ws://' + hostname +':8080';
-			var lastEventDate = Date.now();
-			var playbackTimeout = 15000;
-			var player;
+            var socketURL = 'ws://' + hostname +':8080';
+            var player;
 
 			function createWebSocket() {
 				var ws = new WebSocket(socketURL);
 				ws.binaryType = 'arraybuffer';
+                ws.addEventListener('error', function(event) {
+                    setTimeout(createWebSocket(), 500);
+				});
+				ws.addEventListener('close', function(event) {
+                    setTimeout(createWebSocket(), 500);
+				});
 				ws.addEventListener('message', function(event) {
 					if (typeof player != "undefined" && event.data instanceof ArrayBuffer) {
 						player.feed(event.data);
 					}
-					lastEventDate = Date.now();
 				});
-				var intervalId = window.setInterval(function() {
-					const diffTime = Math.abs(lastEventDate - Date.now());
-					if (diffTime > playbackTimeout) {
-						ws.close();
-						clearInterval(intervalId);
-						createWebSocket();
-					}
-				}, playbackTimeout);
 			};
 			window.addEventListener('click', function(e) {
 				if (typeof player == "undefined") {
@@ -135,7 +130,7 @@
 						inputCodec: 'Float32',
 						channels: 2,
 						sampleRate: 48000,
-						flushTime: 100,
+						flushTime: 150,
 					});
 					createWebSocket();
 				}
