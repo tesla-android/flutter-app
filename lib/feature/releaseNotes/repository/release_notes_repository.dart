@@ -6,19 +6,19 @@ import 'package:tesla_android/feature/releaseNotes/model/version.dart';
 @injectable
 class ReleaseNotesRepository {
   static const ReleaseNotes _releaseNotes = ReleaseNotes(versions: [
-    Version(versionName: "2023.6.1", changelogItems: [
+    Version(versionName: "2023.7.1", changelogItems: [
       ChangelogItem(
           title: "Android Platform",
           shortDescription: "Stability improvements",
-          descriptionMarkdown: "### Android has been updated to Android 13.0.0_r24 with the latest available security patches."),
-      ChangelogItem(
-          title: "Android Platform",
-          shortDescription: "Support for OTA updates",
-          descriptionMarkdown: "### Version 2023.6.1 adds support for OTA updates. Navigate to Settings -> System -> Updater to update your Tesla Android. \n### Updates are not incremental; you can skip a few versions and update directly to the newest build. \n### Only online updates are available in this release; connect your Raspberry Pi to your home router with an Ethernet cable to avoid data charges. Each update weighs around 1 GB. Support for updating with a USB drive will be added in a future software update."),
+          descriptionMarkdown: "### Android has been updated to Android 13.0.0_r31 with the latest available security patches."),
+//       ChangelogItem(
+//           title: "Android Platform",
+//           shortDescription: "Support for OTA updates",
+//           descriptionMarkdown: "### Version 2023.7.1 adds support for OTA updates. Navigate to Settings -> System -> Updater to update your Tesla Android. \n### Updates are not incremental; you can skip a few versions and update directly to the newest build. \n### Only online updates are available in this release; connect your Raspberry Pi to your home router with an Ethernet cable to avoid data charges. Each update weighs around 1 GB. Support for updating with a USB drive will be added in a future software update."),
       ChangelogItem(
           title: "H264 hardware acceleration",
           shortDescription: "Stability improvements",
-          descriptionMarkdown: "### Version 2023.6.1 improves the stability of the playback and solves issues with artifacts present in the previous version."),
+          descriptionMarkdown: "### Version 2023.7.1 improves the stability of the playback and solves issues with artifacts present in the previous version."),
       ChangelogItem(
           title: "H265 hardware acceleration",
           shortDescription: "Usability improvements",
@@ -26,11 +26,11 @@ class ReleaseNotesRepository {
       ChangelogItem(
           title: "Software audio decoders",
           shortDescription: "Usability improvements",
-          descriptionMarkdown: "### 2023.6.1 adds software audio decoders exposed by ffmpeg_codec2 for the following file formats: \n### * aac  \n### * ac3  \n### * alac  \n### * flac  \n### * mp2  \n### * mp3  \n### * vorbis  \n### Most of the formats were previously supported by software decoders included with Android. The ffmpeg-powered replacements tend to consume fewer CPU resources."),
+          descriptionMarkdown: "### 2023.7.1 adds software audio decoders exposed by ffmpeg_codec2 for the following file formats: \n### * aac  \n### * ac3  \n### * alac  \n### * flac  \n### * mp2  \n### * mp3  \n### * vorbis  \n### Most of the formats were previously supported by software decoders included with Android. The ffmpeg-powered replacements tend to consume fewer CPU resources."),
       ChangelogItem(
           title: "Software video decoders",
           shortDescription: "Usability improvements",
-          descriptionMarkdown: "### 2023.6.1 adds software video decoders exposed by ffmpeg_codec2 for the following file formats: \n### * h263  \n### *mpeg2  \n### *mpeg4  \n### * vp8  \n### *vp9  \n### Most of the formats were previously supported by software decoders included with Android. The ffmpeg-powered replacements tend to consume fewer CPU resources."),
+          descriptionMarkdown: "### 2023.7.1 adds software video decoders exposed by ffmpeg_codec2 for the following file formats: \n### * h263  \n### *mpeg2  \n### *mpeg4  \n### * vp8  \n### *vp9  \n### Most of the formats were previously supported by software decoders included with Android. The ffmpeg-powered replacements tend to consume fewer CPU resources."),
       ChangelogItem(
           title: "Flutter App",
           shortDescription: "Stability improvements",
