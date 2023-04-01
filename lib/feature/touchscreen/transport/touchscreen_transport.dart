@@ -32,17 +32,17 @@ class TouchScreenTransport {
       });
       _webSocketChannel?.stream.listen(
         (dynamic message) {
-          debugPrint(tag + '$message');
+          debugPrint('$tag$message');
           connectionStateSubject.add(true);
           isConnecting = false;
         },
         onDone: () {
-          debugPrint(tag + 'channel closed');
+          debugPrint('${tag}channel clos«ed');
           connectionStateSubject.add(false);
           isConnecting = false;
         },
         onError: (error) {
-          debugPrint(tag + '$error');
+          debugPrint('$tag$error');
           connectionStateSubject.add(false);
           isConnecting = false;
         },

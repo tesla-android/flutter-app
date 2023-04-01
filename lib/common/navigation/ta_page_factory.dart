@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:tesla_android/common/di/ta_locator.dart';
 import 'package:tesla_android/common/navigation/ta_page.dart';
+import 'package:tesla_android/feature/audio/cubit/audio_cubit.dart';
 import 'package:tesla_android/feature/connectivityCheck/cubit/connectivity_check_cubit.dart';
 import 'package:tesla_android/feature/donations/widget/donation_dialog.dart';
 import 'package:tesla_android/feature/home/android_viewer_page.dart';
@@ -31,6 +32,9 @@ class TAPageFactory {
               ),
               BlocProvider(
                 create: (_) => getIt<TouchscreenCubit>(),
+              ),
+              BlocProvider(
+                create: (_) => getIt<AudioCubit>(),
               ),
             ],
             child: HomePage(),
