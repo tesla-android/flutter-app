@@ -14,36 +14,49 @@ class TouchScreenView extends StatelessWidget {
     final audioCubit = BlocProvider.of<AudioCubit>(context);
     return LayoutBuilder(builder: (context, constraints) {
       return Listener(
-        onPointerDown: (event) => _handlePointerEvent(
+        onPointerDown: (event) {
+          _handlePointerEvent(
             cubit: cubit,
             audioCubit: audioCubit,
             index: event.pointer,
             offset: event.localPosition,
             isBeingTouched: true,
-            constraints: constraints),
-        onPointerMove: (event) => _handlePointerEvent(
+            constraints: constraints,
+          );
+        },
+        onPointerMove: (event) {
+          _handlePointerEvent(
             cubit: cubit,
             audioCubit: audioCubit,
             index: event.pointer,
             offset: event.localPosition,
             isBeingTouched: true,
-            constraints: constraints),
-        onPointerCancel: (event) => _handlePointerEvent(
+            constraints: constraints,
+          );
+        },
+        onPointerCancel: (event) {
+          _handlePointerEvent(
             cubit: cubit,
             audioCubit: audioCubit,
             index: event.pointer,
             offset: event.localPosition,
             isBeingTouched: false,
-            constraints: constraints),
-        onPointerUp: (event) => _handlePointerEvent(
+            constraints: constraints,
+          );
+        },
+        onPointerUp: (event) {
+          _handlePointerEvent(
             cubit: cubit,
             audioCubit: audioCubit,
             index: event.pointer,
             offset: event.localPosition,
             isBeingTouched: false,
-            constraints: constraints),
+            constraints: constraints,
+          );
+        },
         child: Container(color: Colors.transparent),
       );
+
     });
   }
 

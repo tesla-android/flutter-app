@@ -22,33 +22,82 @@ class TouchscreenCubit extends Cubit<bool> {
     super.close();
   }
 
+  final Map<int, PointerState> _activePointers = {};
+  static const int _maxSlots = 10;
+  int _slotCounter = -1;
+
   void dispatchTouchEvent(int index, Offset offset, bool isBeingTouched,
       BoxConstraints constraints) {
-    final scaleX = touchScreenMaxX / constraints.maxWidth;
-    final scaleY = touchScreenMaxY / constraints.maxHeight;
+    if (isBeingTouched) {
+      if (!_activePointers.containsKey(index)) {
+        _slotCounter = (_slotCounter + 1) % _maxSlots;
+        final newPointerState = PointerState(
+          trackingId: _slotCounter,
+          position: offset,
+          isBeingTouched: isBeingTouched,
+          multiTouchSlot: _slotCounter,
+        );
+        _activePointers[index] = newPointerState;
+      }
 
-    var scaledOffset = offset.scale(scaleX, scaleY);
+      final scaleX = touchScreenMaxX / constraints.maxWidth;
+      final scaleY = touchScreenMaxY / constraints.maxHeight;
 
-    if (scaledOffset.dx.isNegative) {
-      scaledOffset = Offset(0, scaledOffset.dy);
+      var scaledOffset = offset.scale(scaleX, scaleY);
+
+      if (scaledOffset.dx.isNegative) {
+        scaledOffset = Offset(0, scaledOffset.dy);
+      }
+
+      if (scaledOffset.dy.isNegative) {
+        scaledOffset = Offset(scaledOffset.dx, 0);
+      }
+
+      _activePointers[index] = _activePointers[index]!.copyWith(
+        position: scaledOffset,
+      );
+    } else {
+      final pointerState = _activePointers.remove(index);
+      if (pointerState != null) {
+        final deactivatedPointerState = pointerState.copyWith(
+          isBeingTouched: false,
+          position: pointerState.position,
+        );
+        _transport
+            .sendMessage(deactivatedPointerState.toVirtualTouchScreenEvent());
+      }
+    }
+    _sendActivePointers(index, isBeingTouched);
+  }
+
+  void _sendActivePointers([int? index, bool? isBeingTouched]) {
+    if (index != null) {
+      final pointerState = _activePointers[index];
+      if (pointerState != null) {
+        _transport.sendMessage(pointerState.toVirtualTouchScreenEvent());
+      }
+    } else {
+      for (var pointerState in _activePointers.values) {
+        _transport.sendMessage(pointerState.toVirtualTouchScreenEvent());
+      }
     }
 
-    if (scaledOffset.dy.isNegative) {
-      scaledOffset = Offset(scaledOffset.dx, 0);
+    if (index != null && isBeingTouched != null && !isBeingTouched) {
+      final deactivatedPointerState = PointerState(
+        trackingId: _activePointers[index]?.trackingId ?? 0,
+        position: Offset.zero,
+        isBeingTouched: false,
+        multiTouchSlot: _activePointers[index]?.multiTouchSlot ?? 0,
+      );
+      _transport
+          .sendMessage(deactivatedPointerState.toVirtualTouchScreenEvent());
     }
-
-    final newPointerState = PointerState(
-      trackingId: index,
-      position: scaledOffset,
-      isBeingTouched: isBeingTouched,
-    );
-
-    _transport.sendMessage(newPointerState.toVirtualTouchScreenEvent());
   }
 
   void _maintainWebSocketConnection() {
     _transport.connectWebSocket();
-    _streamSubscription = _transport.connectionStateSubject.stream.listen((connectionState) {
+    _streamSubscription =
+        _transport.connectionStateSubject.stream.listen((connectionState) {
       if (!isClosed) {
         emit(connectionState);
       }

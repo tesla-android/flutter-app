@@ -10,7 +10,7 @@ class PointerState {
   Offset position;
 
   PointerState(
-      {required this.trackingId, this.multiTouchSlot = 0, required this.isBeingTouched, required this.position});
+      {required this.trackingId, required this.multiTouchSlot, required this.isBeingTouched, required this.position});
 
   @override
   String toString() {
@@ -31,5 +31,19 @@ class PointerState {
 
   int get _positionY {
     return position.dy.toInt();
+  }
+
+  PointerState copyWith({
+    int? trackingId,
+    Offset? position,
+    bool? isBeingTouched,
+    int? multiTouchSlot,
+  }) {
+    return PointerState(
+      trackingId: trackingId ?? this.trackingId,
+      position: position ?? this.position,
+      isBeingTouched: isBeingTouched ?? this.isBeingTouched,
+      multiTouchSlot: multiTouchSlot ?? this.multiTouchSlot,
+    );
   }
 }
