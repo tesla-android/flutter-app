@@ -18,9 +18,7 @@ class TouchScreenView extends StatelessWidget {
           _handlePointerEvent(
             cubit: cubit,
             audioCubit: audioCubit,
-            index: event.pointer,
-            offset: event.localPosition,
-            isBeingTouched: true,
+            event: event,
             constraints: constraints,
           );
         },
@@ -28,9 +26,7 @@ class TouchScreenView extends StatelessWidget {
           _handlePointerEvent(
             cubit: cubit,
             audioCubit: audioCubit,
-            index: event.pointer,
-            offset: event.localPosition,
-            isBeingTouched: true,
+            event: event,
             constraints: constraints,
           );
         },
@@ -38,9 +34,7 @@ class TouchScreenView extends StatelessWidget {
           _handlePointerEvent(
             cubit: cubit,
             audioCubit: audioCubit,
-            index: event.pointer,
-            offset: event.localPosition,
-            isBeingTouched: false,
+            event: event,
             constraints: constraints,
           );
         },
@@ -48,9 +42,7 @@ class TouchScreenView extends StatelessWidget {
           _handlePointerEvent(
             cubit: cubit,
             audioCubit: audioCubit,
-            index: event.pointer,
-            offset: event.localPosition,
-            isBeingTouched: false,
+            event: event,
             constraints: constraints,
           );
         },
@@ -63,11 +55,16 @@ class TouchScreenView extends StatelessWidget {
   void _handlePointerEvent(
       {required TouchscreenCubit cubit,
       required AudioCubit audioCubit,
-      required int index,
-      required Offset offset,
-      required bool isBeingTouched,
-      required BoxConstraints constraints}) {
+        required BoxConstraints constraints,
+        required dynamic event,
+      }) {
     audioCubit.initialiseAudioPlayerIfNeeded();
-    cubit.dispatchTouchEvent(index, offset, isBeingTouched, constraints);
+    if(event is PointerDownEvent) {
+      cubit.handlePointerDownEvent(event, constraints);
+    } else if(event is PointerMoveEvent) {
+      cubit.handlePointerMoveEvent(event, constraints);
+    } else if(event is PointerCancelEvent || event is PointerUpEvent) {
+      cubit.handlePointerUpEvent(event, constraints);
+    }
   }
 }
