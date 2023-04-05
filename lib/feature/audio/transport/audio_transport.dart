@@ -4,6 +4,7 @@ import 'package:flavor/flavor.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:web_socket_channel/html.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 @injectable
@@ -20,7 +21,7 @@ class AudioTransport {
     "audioWebSocket",
   )!);
 
-  WebSocketChannel? _webSocketChannel;
+  HtmlWebSocketChannel? _webSocketChannel;
 
   bool _keepConnectionAlive = false;
 
@@ -31,8 +32,10 @@ class AudioTransport {
 
   void _connect() {
     if(_keepConnectionAlive) {
-      _webSocketChannel = WebSocketChannel.connect(webSocketUri);
-      connectionStateSubject.add(true);
+        _webSocketChannel = HtmlWebSocketChannel.connect(webSocketUri);
+        _webSocketChannel?.innerWebSocket.onOpen.listen((event) {
+          connectionStateSubject.add(true);
+        });
       _webSocketChannel?.stream.listen(
             (dynamic message) {
           pcmDataSubject.add(message);
