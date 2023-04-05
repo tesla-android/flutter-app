@@ -6,7 +6,7 @@ import 'package:tesla_android/common/navigation/ta_page.dart';
 import 'package:tesla_android/feature/audio/cubit/audio_cubit.dart';
 import 'package:tesla_android/feature/connectivityCheck/cubit/connectivity_check_cubit.dart';
 import 'package:tesla_android/feature/donations/widget/donation_dialog.dart';
-import 'package:tesla_android/feature/home/android_viewer_page.dart';
+import 'package:tesla_android/feature/home/home_page.dart';
 import 'package:tesla_android/feature/releaseNotes/cubit/release_notes_cubit.dart';
 import 'package:tesla_android/feature/releaseNotes/widget/release_notes_page.dart';
 import 'package:tesla_android/feature/touchscreen/cubit/touchscreen_cubit.dart';
