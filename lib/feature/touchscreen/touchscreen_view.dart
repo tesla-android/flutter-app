@@ -14,47 +14,57 @@ class TouchScreenView extends StatelessWidget {
     final audioCubit = BlocProvider.of<AudioCubit>(context);
     return LayoutBuilder(builder: (context, constraints) {
       return Listener(
-        onPointerDown: (event) => _handlePointerEvent(
+        onPointerDown: (event) {
+          _handlePointerEvent(
             cubit: cubit,
             audioCubit: audioCubit,
-            index: event.pointer,
-            offset: event.localPosition,
-            isBeingTouched: true,
-            constraints: constraints),
-        onPointerMove: (event) => _handlePointerEvent(
+            event: event,
+            constraints: constraints,
+          );
+        },
+        onPointerMove: (event) {
+          _handlePointerEvent(
             cubit: cubit,
             audioCubit: audioCubit,
-            index: event.pointer,
-            offset: event.localPosition,
-            isBeingTouched: true,
-            constraints: constraints),
-        onPointerCancel: (event) => _handlePointerEvent(
+            event: event,
+            constraints: constraints,
+          );
+        },
+        onPointerCancel: (event) {
+          _handlePointerEvent(
             cubit: cubit,
             audioCubit: audioCubit,
-            index: event.pointer,
-            offset: event.localPosition,
-            isBeingTouched: false,
-            constraints: constraints),
-        onPointerUp: (event) => _handlePointerEvent(
+            event: event,
+            constraints: constraints,
+          );
+        },
+        onPointerUp: (event) {
+          _handlePointerEvent(
             cubit: cubit,
             audioCubit: audioCubit,
-            index: event.pointer,
-            offset: event.localPosition,
-            isBeingTouched: false,
-            constraints: constraints),
+            event: event,
+            constraints: constraints,
+          );
+        },
         child: Container(color: Colors.transparent),
       );
+
     });
   }
 
   void _handlePointerEvent(
       {required TouchscreenCubit cubit,
       required AudioCubit audioCubit,
-      required int index,
-      required Offset offset,
-      required bool isBeingTouched,
-      required BoxConstraints constraints}) {
+        required BoxConstraints constraints,
+        required dynamic event,
+      }) {
     audioCubit.initialiseAudioPlayerIfNeeded();
-    cubit.dispatchTouchEvent(index, offset, isBeingTouched, constraints);
+    if(event is PointerDownEvent) {
+      cubit.handlePointerDownEvent(event, constraints);
+    } else if(event is PointerMoveEvent) {
+      cubit.handlePointerMoveEvent(event, constraints);
+    } else if(event is PointerCancelEvent || event is PointerUpEvent) {
+      cubit.handlePointerUpEvent(event, constraints);
+    }
   }
 }
