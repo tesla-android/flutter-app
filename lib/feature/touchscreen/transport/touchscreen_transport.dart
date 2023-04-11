@@ -4,7 +4,7 @@ import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:web_socket_channel/html.dart';
 
-@injectable
+@singleton
 class TouchScreenTransport {
   final Flavor flavor;
   final Uri webSocketUri;

@@ -10,18 +10,18 @@ typedef CreateAudioContextFunc = dynamic Function();
 @JS('createAudioContext')
 external CreateAudioContextFunc _createAudioContext();
 
-@injectable
+@lazySingleton
 class PcmAudioPlayer {
   dynamic _audioContext;
   dynamic _sourceNode;
   dynamic _gainNode;
   bool _isContextReady = false;
   Float32List _samples = Float32List(0);
-  Timer? _interval;
 
   final int _sampleRate = 48000;
   final int _numChannels = 2;
   final int _bitsPerSample = 16;
+  final Duration _flushInterval = const Duration(milliseconds: 250);
 
   // This method should be called after user interaction
   Future<void> initialize() async {
@@ -36,8 +36,7 @@ class PcmAudioPlayer {
     callMethod(
         _gainNode, 'connect', [getProperty(_audioContext, 'destination')]);
 
-    _interval = Timer.periodic(
-        const Duration(milliseconds: 150), (Timer t) => _flush());
+    Timer.periodic(_flushInterval, (Timer t) => _flush());
   }
 
   bool get isContextReady => _isContextReady;
@@ -89,27 +88,6 @@ class PcmAudioPlayer {
   void setVolume(double volume) {
     if (_gainNode != null) {
       setProperty(getProperty(_gainNode, 'gain'), 'value', volume);
-    }
-  }
-
-  void destroy() {
-    if (_audioContext != null) {
-      if (_sourceNode != null) {
-        callMethod(_sourceNode, 'stop', []);
-        callMethod(_sourceNode, 'disconnect', []);
-        _sourceNode = null;
-      }
-      if (_gainNode != null) {
-        callMethod(_gainNode, 'disconnect', []);
-        _gainNode = null;
-      }
-      callMethod(_audioContext, 'close', []);
-      _audioContext = null;
-      _isContextReady = false;
-    }
-    if (_interval != null) {
-      _interval!.cancel();
-      _interval = null;
     }
   }
 }

@@ -15,8 +15,8 @@ class ConnectivityCheckCubit extends Cubit<ConnectivityState> {
     _observeBackendAccessibility();
   }
 
-  static const _connectivityTimeoutDuration = Duration(seconds: 30);
-  static const _requestTimeoutDuration = Duration(seconds: 180);
+  static const _connectivityTimeoutDuration = Duration(seconds: 5);
+  static const _requestTimeoutDuration = Duration(seconds: 10);
 
   void _observeBackendAccessibility() {
     _checkConnectivity();

@@ -16,9 +16,9 @@ class VersionRibbon extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return GestureDetector(
-              onTap: () => TANavigator.push(
+              onTap: () => TANavigator.pushReplacement(
                 context: context,
-                page: TAPage.releaseNotes,
+                page: TAPage.about,
               ),
               child: Directionality(
                 textDirection: TextDirection.ltr,

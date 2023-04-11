@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tesla_android/common/navigation/ta_page.dart';
-import 'package:tesla_android/common/ui/components/ta_bottom_sheet.dart';
-import 'package:tesla_android/feature/donations/widget/dontation_button.dart';
+import 'package:tesla_android/common/ui/components/ta_bottom_navigation_bar.dart';
 import 'package:tesla_android/feature/releaseNotes/cubit/release_notes_cubit.dart';
 import 'package:tesla_android/feature/releaseNotes/cubit/release_notes_state.dart';
 import 'package:tesla_android/feature/releaseNotes/model/changelog_item.dart';
@@ -21,8 +20,11 @@ class ReleaseNotesPage extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
-          centerTitle: true,
           title: Text(TAPage.releaseNotes.title),
+          automaticallyImplyLeading: false,
+        ),
+        bottomNavigationBar: const TaBottomNavigationBar(
+          currentIndex: 2,
         ),
         body: BlocBuilder<ReleaseNotesCubit, ReleaseNotesState>(
             builder: (context, state) {
@@ -46,31 +48,22 @@ class ReleaseNotesPage extends StatelessWidget {
 
   Widget _errorStateWidget() {
     return const Center(
-        child: Text(
-            "Error loading release notes. Please try again later."));
+        child: Text("Error loading release notes. Please try again later."));
   }
 
-  Widget _loadedStateWidget(BuildContext context, ReleaseNotesStateLoaded state) {
+  Widget _loadedStateWidget(
+      BuildContext context, ReleaseNotesStateLoaded state) {
     final ReleaseNotes releaseNotes = state.releaseNotes;
     final Version selectedVersion = state.selectedVersion;
-    final ChangelogItem selectedChangelogItem =
-        state.selectedChangelogItem;
+    final ChangelogItem selectedChangelogItem = state.selectedChangelogItem;
     return Row(
       children: [
         SizedBox(
           width: MediaQuery.of(context).size.width * 0.30,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                  child: ReleaseNotesVersionList(
-                    versions: releaseNotes.versions,
-                    selectedVersion: selectedVersion,
-                    selectedChangelogItem: selectedChangelogItem,
-                  )),
-              const DonationButton()
-            ],
+          child: ReleaseNotesVersionList(
+            versions: releaseNotes.versions,
+            selectedVersion: selectedVersion,
+            selectedChangelogItem: selectedChangelogItem,
           ),
         ),
         Expanded(

@@ -1,27 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tesla_android/common/di/ta_locator.dart';
 import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
 import 'package:tesla_android/feature/connectivityCheck/cubit/connectivity_check_cubit.dart';
 import 'package:tesla_android/feature/connectivityCheck/model/connectivity_state.dart';
 import 'package:tesla_android/feature/display/widget/display_view.dart';
-import 'package:tesla_android/feature/releaseNotes/widget/release_notes_loader.dart';
 import 'package:tesla_android/feature/releaseNotes/widget/versionRibbon/version_ribbon.dart';
-import 'package:tesla_android/feature/touchscreen/cubit/touchscreen_cubit.dart';
 import 'package:tesla_android/feature/touchscreen/touchscreen_view.dart';
 
 class HomePage extends StatelessWidget {
-  final ReleaseNotesLoader _changelogLoader;
-
-  HomePage({Key? key})
-      : _changelogLoader = getIt<ReleaseNotesLoader>(),
-        super(key: key);
+  HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    _changelogLoader.onPageLoad(context);
-    final bloc = BlocProvider.of<TouchscreenCubit>(context);
-    final cubit = BlocProvider.of<ConnectivityCheckCubit>(context);
     return BlocBuilder<ConnectivityCheckCubit, ConnectivityState>(
         builder: (context, state) {
       if (state == ConnectivityState.initial) {
@@ -37,7 +27,7 @@ class HomePage extends StatelessWidget {
                   children: const [
                     Center(
                         child: DisplayView(touchScreenView: TouchScreenView())),
-                    Positioned(right:0, top: 0, child: VersionRibbon())
+                    Positioned(right: 0, top: 0, child: VersionRibbon())
                   ],
                 )
               : _backendConnectionLostWidget());

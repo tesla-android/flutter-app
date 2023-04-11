@@ -5,9 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:web_socket_channel/html.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 
-@injectable
+@singleton
 class AudioTransport {
   final Flavor flavor;
   final Uri webSocketUri;
@@ -56,6 +55,7 @@ class AudioTransport {
   }
 
   void disconnect() {
+    _keepConnectionAlive = false;
     _webSocketChannel?.sink.close();
     _webSocketChannel = null;
   }
