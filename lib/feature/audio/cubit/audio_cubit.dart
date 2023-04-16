@@ -41,6 +41,7 @@ class AudioCubit extends Cubit<AudioState> {
 
   void disableAudio() {
     _audioTransport.disconnect();
+    _audioTransportPcmDataStreamSubscription?.cancel();
     _sharedPreferences.setBool(
       _sharedPreferencesKey,
       false,
