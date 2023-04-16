@@ -21,7 +21,8 @@ class PcmAudioPlayer {
   final int _sampleRate = 48000;
   final int _numChannels = 2;
   final int _bitsPerSample = 16;
-  final Duration _flushInterval = const Duration(milliseconds: 250);
+  final Duration _flushInterval = const Duration(milliseconds: 200);
+  dynamic _startTime;
 
   // This method should be called after user interaction
   Future<void> initialize() async {
@@ -35,6 +36,8 @@ class PcmAudioPlayer {
     setProperty(getProperty(_gainNode, 'gain'), 'value', 1.0);
     callMethod(
         _gainNode, 'connect', [getProperty(_audioContext, 'destination')]);
+
+    _startTime = getProperty(_audioContext, 'currentTime');
 
     Timer.periodic(_flushInterval, (Timer t) => _flush());
   }
@@ -80,8 +83,16 @@ class PcmAudioPlayer {
     _sourceNode = callMethod(_audioContext, 'createBufferSource', []);
     setProperty(_sourceNode, 'buffer', audioBuffer);
     callMethod(_sourceNode, 'connect', [_gainNode]);
-    callMethod(_sourceNode, 'start', []);
 
+    double duration = bufferLength / _sampleRate;
+    double startTime = getProperty(_audioContext, 'currentTime');
+    if (startTime < _startTime) {
+      startTime = _startTime;
+    }
+
+    callMethod(_sourceNode, 'start', [startTime, 0, duration]);
+
+    _startTime = startTime + duration;
     _samples = Float32List(0);
   }
 
