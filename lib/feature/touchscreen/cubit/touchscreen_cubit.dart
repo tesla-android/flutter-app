@@ -78,7 +78,7 @@ class TouchscreenCubit extends Cubit<bool> {
     slot.position = scaledPointerPosition;
 
     debugPrint(
-        "Pointer down, matched slot ${slot.slotIndex}, trackingId ${slot.trackingId}");
+        "Pointer move, matched slot ${slot.slotIndex}, trackingId ${slot.trackingId}");
 
     final command = VirtualTouchScreenCommand(
         absMtSlot: slot.slotIndex,

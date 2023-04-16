@@ -26,7 +26,7 @@ class VirtualTouchScreenCommand {
     }
     if (absMtPositionX != null) command += 'X $absMtPositionX\n';
     if (absMtPositionY != null) command += 'Y $absMtPositionY\n';
-    if (synReport) command += 'S 0\n';
+    if (synReport) command += 'e 0\nS 0\n';
     return command;
   }
 }
