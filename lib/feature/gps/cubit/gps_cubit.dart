@@ -89,11 +89,9 @@ class GpsCubit extends Cubit<GpsState> {
   }
 
   void disableGPS() {
-    if (state is GpsStateActive) {
-      _locationUpdatesStreamSubscription?.cancel();
-      _locationUpdatesStreamSubscription = null;
-      _sharedPreferences.setBool(_sharedPreferencesKey, false);
-      emit(GpsStateManuallyDisabled());
-    }
+    _locationUpdatesStreamSubscription?.cancel();
+    _locationUpdatesStreamSubscription = null;
+    _sharedPreferences.setBool(_sharedPreferencesKey, false);
+    emit(GpsStateManuallyDisabled());
   }
 }
