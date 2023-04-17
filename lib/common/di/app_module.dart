@@ -1,12 +1,13 @@
-import 'dart:html';
+import 'dart:html' hide Location;
 
 import 'package:flavor/flavor.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart' hide Environment;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:location/location.dart';
 
-const bool _enableIpOverride = false;
-const String _ipOverride = '192.168.0.xxx';
+const bool _enableIpOverride = true;
+const String _ipOverride = '192.168.0.116';
 
 @module
 abstract class AppModule {
@@ -30,4 +31,7 @@ abstract class AppModule {
   @singleton
   @preResolve
   Future<SharedPreferences> get sharedPreferences => SharedPreferences.getInstance();
+
+  @singleton
+  Location get location => Location();
 }

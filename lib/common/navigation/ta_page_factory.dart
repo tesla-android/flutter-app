@@ -7,6 +7,7 @@ import 'package:tesla_android/feature/about/about_page.dart';
 import 'package:tesla_android/feature/audio/cubit/audio_cubit.dart';
 import 'package:tesla_android/feature/connectivityCheck/cubit/connectivity_check_cubit.dart';
 import 'package:tesla_android/feature/donations/widget/donation_page.dart';
+import 'package:tesla_android/feature/gps/cubit/gps_cubit.dart';
 import 'package:tesla_android/feature/home/home_page.dart';
 import 'package:tesla_android/feature/releaseNotes/cubit/release_notes_cubit.dart';
 import 'package:tesla_android/feature/releaseNotes/widget/release_notes_page.dart';
@@ -61,6 +62,9 @@ class TAPageFactory {
         ),
         BlocProvider.value(
           value: getIt<AudioCubit>(),
+        ),
+        BlocProvider.value(
+          value: getIt<GpsCubit>(),
         ),
       ],
       child: child,
