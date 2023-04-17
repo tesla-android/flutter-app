@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
 import 'package:tesla_android/feature/audio/cubit/audio_cubit.dart';
 import 'package:tesla_android/feature/audio/cubit/audio_state.dart';
+import 'package:tesla_android/feature/settings/widget/settings_header.dart';
 import 'package:tesla_android/feature/settings/widget/settings_tile.dart';
 
 class SoundSettings extends StatelessWidget {
@@ -12,12 +14,16 @@ class SoundSettings extends StatelessWidget {
     return BlocBuilder<AudioCubit, AudioState>(
       builder: (context, state) {
         return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SettingsHeader(
+              title: 'Browser audio',
+            ),
             SettingsTile(
                 icon: Icons.speaker,
-                title: 'Browser audio',
+                title: 'State',
                 subtitle:
-                'Disable browser audio if you intend to use Bluetooth, HDMI or the headphone jack',
+                'Disable if you intend to use Bluetooth audio, HDMI or the headphone jack',
                 trailing: Switch(
                     value: state.isEnabled,
                     onChanged: (value) {
@@ -40,6 +46,14 @@ class SoundSettings extends StatelessWidget {
                         value);
                   },
                 )),
+            const Padding(
+              padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
+              child: Text('If you plan to use browser audio continuously in conjunction with video playback, it\'s essential to note that it can be bandwidth-intensive. To optimize your experience, you may want to consider pairing your car with the Tesla Android device over Bluetooth, particularly if your Tesla is equipped with MCU2.'),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
+              child: Text('In case you encounter a situation where the browser in your Tesla fails to produce sound, a simple reboot of the vehicle should resolve the issue. Please note that this is a known issue with the browser itself.'),
+            ),
           ],
         );
       },
