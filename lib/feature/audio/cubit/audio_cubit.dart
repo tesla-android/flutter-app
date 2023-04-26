@@ -19,8 +19,6 @@ class AudioCubit extends Cubit<AudioState> {
 
   static const _sharedPreferencesKey = 'AudioCubit_isEnabled';
 
-  bool get _isAudioPlayerInitialised => _pcmAudioPlayer.isContextReady;
-
   AudioCubit(
     this._audioTransport,
     this._pcmAudioPlayer,
@@ -49,23 +47,14 @@ class AudioCubit extends Cubit<AudioState> {
     emit(state.copyWith(isEnabled: false));
   }
 
-  void initialiseAudioPlayerIfNeeded() async {
-    if(_isAudioPlayerInitialised) {
-      return;
-    }
-      await _pcmAudioPlayer.initialize();
-      setVolume(state.volume);
-  }
-
   void setVolume(double volume) {
     emit(state.copyWith(volume: volume));
-    if (_isAudioPlayerInitialised) {
-      _pcmAudioPlayer.setVolume(volume);
-    }
+    _pcmAudioPlayer.setVolume(volume);
   }
 
   void _setInitialState() {
-    final shouldEnable = _sharedPreferences.getBool(_sharedPreferencesKey) ?? true;
+    final shouldEnable =
+        _sharedPreferences.getBool(_sharedPreferencesKey) ?? true;
     if (shouldEnable) {
       enableAudio();
     } else {
@@ -84,14 +73,12 @@ class AudioCubit extends Cubit<AudioState> {
     _audioTransport.maintainConnection();
     _audioTransportPcmDataStreamSubscription =
         _audioTransport.pcmDataSubject.listen((data) {
-      if (_isAudioPlayerInitialised) {
-        _feedAudioPlayer(data);
-      }
+      _feedAudioPlayer(data);
       emit(state.copyWith(isWebSocketConnectionActive: true));
     });
   }
 
-  void _feedAudioPlayer(Uint8List pcmData) {
+  void _feedAudioPlayer(pcmData) {
     _pcmAudioPlayer.feed(pcmData);
   }
 }
