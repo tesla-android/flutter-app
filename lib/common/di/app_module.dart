@@ -22,8 +22,8 @@ abstract class AppModule {
         'displayWebSocket' : 'ws://$ipAddress:9090/',
         'audioWebSocket' : 'ws://$ipAddress:8080/',
         'connectivityCheck' : 'http://$ipAddress/online/connectivity_check.txt',
-        'virtualDisplayWidth': 1056,
-        'virtualDisplayHeight': 768,
+        'virtualDisplayWidth': 1088,
+        'virtualDisplayHeight': 832,
       },
     );
   }
