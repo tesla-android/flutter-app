@@ -6,7 +6,7 @@ import 'package:injectable/injectable.dart' hide Environment;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:location/location.dart';
 
-const bool _enableIpOverride = true;
+const bool _enableIpOverride = false;
 const String _ipOverride = '192.168.0.116';
 
 @module
