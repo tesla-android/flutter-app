@@ -58,7 +58,6 @@ class TouchScreenView extends StatelessWidget {
         required BoxConstraints constraints,
         required dynamic event,
       }) {
-    audioCubit.initialiseAudioPlayerIfNeeded();
     if(event is PointerDownEvent) {
       cubit.handlePointerDownEvent(event, constraints);
     } else if(event is PointerMoveEvent) {

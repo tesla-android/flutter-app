@@ -108,5 +108,30 @@
 				});
 			});
 		</script>
+        <script src="pcmplayer.js"></script>
+        <script>
+            var player;
+		    window.addEventListener('click', function(e) {
+				if (typeof player == "undefined") {
+					player = new PCMPlayer({
+						inputCodec: 'Float32',
+						channels: 2,
+						sampleRate: 48000,
+						flushTime: 150,
+					});
+				}
+			});
+			function feedPlayer(data) {
+			  if (typeof player != "undefined") {
+                player.feed(data);
+			  }
+			};
+			function setPlayerVolume(volume) {
+			  if (typeof player != "undefined") {
+                player.volume(volume);
+			  }
+			};
+		</script>
+
 </body>
 </html>
