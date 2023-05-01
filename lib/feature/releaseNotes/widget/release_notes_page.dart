@@ -57,6 +57,8 @@ class ReleaseNotesPage extends StatelessWidget {
     final Version selectedVersion = state.selectedVersion;
     final ChangelogItem selectedChangelogItem = state.selectedChangelogItem;
     return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
           width: MediaQuery.of(context).size.width * 0.30,

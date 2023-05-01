@@ -38,7 +38,7 @@ class _TeslaAndroidState extends State<TeslaAndroid> {
     );
 
     return MediaQuery(
-      data: windowData.copyWith(textScaleFactor: 1.25),
+      data: windowData.copyWith(textScaleFactor: 1.5),
       child: MaterialApp(
         useInheritedMediaQuery: true,
         debugShowCheckedModeBanner: false,
