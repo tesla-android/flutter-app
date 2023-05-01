@@ -23,7 +23,7 @@ class SoundSettings extends StatelessWidget {
                 icon: Icons.speaker,
                 title: 'State',
                 subtitle:
-                'Disable if you intend to use Bluetooth audio, HDMI or the headphone jack',
+                'Disable if you intend to use Bluetooth audio',
                 trailing: Switch(
                     value: state.isEnabled,
                     onChanged: (value) {
