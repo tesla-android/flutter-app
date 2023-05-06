@@ -6,101 +6,127 @@ import 'package:tesla_android/feature/releaseNotes/model/version.dart';
 @injectable
 class ReleaseNotesRepository {
   static const ReleaseNotes _releaseNotes = ReleaseNotes(versions: [
+    Version(versionName: "2023.18.2", changelogItems: [
+      ChangelogItem(
+        title: "Virtual display",
+        shortDescription: "Performance improvements",
+        descriptionMarkdown:
+            "Variable refresh rate mechanism introduced in 2023.18.1 is disabled due to its negative impact on the input latency and animation smoothness.",
+      ),
+      ChangelogItem(
+          title: "Android Platform",
+          shortDescription: "Stability improvements",
+          descriptionMarkdown:
+              "Android has been updated to Android 13 release 43 with the latest security patches."),
+      ChangelogItem(
+          title: "Web server",
+          shortDescription: "Usability improvements",
+          descriptionMarkdown:
+              "Cache settings are now less aggressive. You should not need to clear browser data after every Tesla Android update."),
+    ]),
     Version(versionName: "2023.18.1", changelogItems: [
       ChangelogItem(
           title: "Virtual display",
           shortDescription: "Performance improvements",
-          descriptionMarkdown: "The virtual display is now hardware accelerated via the V4L2 API. As a result, this solution behaves consistently regardless of CPU usage (gaming, video playback).\n\nThe capture mechanism has also been replaced. The new solution sends data to the browser less frequently if nothing is happening on the display. As a result, overall resource usage of the front end is significantly reduced in typical use.\n\nInternally the refresh rate of the headless operation mode in drm_hwcomposer is now capped at 30Hz. The SufraceFlinger is not able to provide more frames to the virtual display(buffer allocation related).\n\nSystem animation duration is now reduced to improve performance.\n\nVirtual display window scaling has been modified to slightly increase text size in system apps; it makes them more easily readable when driving."),
-
+          descriptionMarkdown:
+              "The virtual display is now hardware accelerated via the V4L2 API. As a result, this solution behaves consistently regardless of CPU usage (gaming, video playback).\n\nThe capture mechanism has also been replaced. The new solution sends data to the browser less frequently if nothing is happening on the display. As a result, overall resource usage of the front end is significantly reduced in typical use.\n\nInternally the refresh rate of the headless operation mode in drm_hwcomposer is now capped at 30Hz. The SufraceFlinger is not able to provide more frames to the virtual display(buffer allocation related).\n\nSystem animation duration is now reduced to improve performance.\n\nVirtual display window scaling has been modified to slightly increase text size in system apps; it makes them more easily readable when driving."),
       ChangelogItem(
           title: "Browser audio",
           shortDescription: "Usability improvements",
-          descriptionMarkdown: "Version 2023.18.1 adds the ability to control the sound settings in the Flutter app. The feature can be disabled if you intend to use Bluetooth Audio or other peripherals."),
-
-
+          descriptionMarkdown:
+              "Version 2023.18.1 adds the ability to control the sound settings in the Flutter app. The feature can be disabled if you intend to use Bluetooth Audio or other peripherals."),
       ChangelogItem(
           title: "Virtual touchscreen",
           shortDescription: "Multitouch support",
-          descriptionMarkdown: "Multitouch support is now available in Tesla Android. The overall stability of the component has been increased."),
-
+          descriptionMarkdown:
+              "Multitouch support is now available in Tesla Android. The overall stability of the component has been increased."),
       ChangelogItem(
           title: "Android Platform",
           shortDescription: "Boot time optimization",
-          descriptionMarkdown: "Version 2023.18.1 takes ~2/3x less time to boot when compared to other Android 13 releases."),
-
+          descriptionMarkdown:
+              "Version 2023.18.1 takes ~2/3x less time to boot when compared to other Android 13 releases."),
       ChangelogItem(
           title: "Android Platform",
           shortDescription: "Support for OTA updates",
-          descriptionMarkdown: "Version 2023.18.1 adds support for OTA updates. A/B (Seamless) mechanism ensures a safe installation with a rollback to the previous build in case of failure. The process takes place in the background; you can use Tesla Android when the update is being installed.\n\nNavigate to Settings -> System -> Updater to check update availability in the future.\n\nUpdates are not incremental. You can skip a few versions and update directly to the newest build.\n\nOnly online updates are available in this release; connect your Raspberry Pi to your home router with an Ethernet cable to avoid data charges. Each update weighs around 1 GB."),
-
+          descriptionMarkdown:
+              "Version 2023.18.1 adds support for OTA updates. A/B (Seamless) mechanism ensures a safe installation with a rollback to the previous build in case of failure. The process takes place in the background; you can use Tesla Android when the update is being installed.\n\nNavigate to Settings -> System -> Updater to check update availability in the future.\n\nUpdates are not incremental. You can skip a few versions and update directly to the newest build.\n\nOnly online updates are available in this release; connect your Raspberry Pi to your home router with an Ethernet cable to avoid data charges. Each update weighs around 1 GB."),
       ChangelogItem(
           title: "Single image install",
           shortDescription: "Usability improvements",
-          descriptionMarkdown: "The bootloader has been updated to support the single-image install process better. In addition, the filesystem will now expand to take advantage of the entire SD Card on the first boot(similar to how Raspbian behaves).\n\nAny SD Card over 16GB will work with Tesla Android, but 64GB is recommended.\n\nThe download size has been significantly reduced, and the manual installation procedure has been deprecated and removed from the website. "),
-
+          descriptionMarkdown:
+              "The bootloader has been updated to support the single-image install process better. In addition, the filesystem will now expand to take advantage of the entire SD Card on the first boot(similar to how Raspbian behaves).\n\nAny SD Card over 16GB will work with Tesla Android, but 64GB is recommended.\n\nThe download size has been significantly reduced, and the manual installation procedure has been deprecated and removed from the website. "),
       ChangelogItem(
           title: "Bluetooth",
           shortDescription: "Usability improvements",
-          descriptionMarkdown: "Version 2023.18.1 fixes problems with Bluetooth Low Energy. You can now use wireless game controllers, OBD interfaces, and more. Bluetooth Audio stability is also improved."),
-
+          descriptionMarkdown:
+              "Version 2023.18.1 fixes problems with Bluetooth Low Energy. You can now use wireless game controllers, OBD interfaces, and more. Bluetooth Audio stability is also improved."),
       ChangelogItem(
           title: "Android Platform",
           shortDescription: "Stability improvements",
-          descriptionMarkdown: "Android has been updated to Android 13 release 41 with the latest security patches. The platform is now in sync with the latest GloDroidCommunity AOSP base. All the board-related changes have been sent upstream, and Tesla Android was migrated to a new build mechanism to make future Android platform updates faster."),
-
+          descriptionMarkdown:
+              "Android has been updated to Android 13 release 41 with the latest security patches. The platform is now in sync with the latest GloDroidCommunity AOSP base. All the board-related changes have been sent upstream, and Tesla Android was migrated to a new build mechanism to make future Android platform updates faster."),
       ChangelogItem(
           title: "Flutter App",
           shortDescription: "Usability improvements",
-          descriptionMarkdown: "The has been reorganized to make room for new modules. Tapping the version ribbon takes you to the screen with multiple tabs. One of them is the new Settings module, where you can control the browser audio."),
-
+          descriptionMarkdown:
+              "The has been reorganized to make room for new modules. Tapping the version ribbon takes you to the screen with multiple tabs. One of them is the new Settings module, where you can control the browser audio."),
       ChangelogItem(
           title: "Video playback",
           shortDescription: "Performance improvements",
-          descriptionMarkdown: "Version 2023.18.1 adds AV1 decoding via ffmpeg_codec2. The new component takes advantage of multiple cores and performs better."),
-
+          descriptionMarkdown:
+              "Version 2023.18.1 adds AV1 decoding via ffmpeg_codec2. The new component takes advantage of multiple cores and performs better."),
       ChangelogItem(
           title: "Connectivity",
           shortDescription: "Usability improvements",
-          descriptionMarkdown: "Version 2023.18.1 adds support for Huawei(Brovi) E3372-325. The device is available in the European market."),
-
+          descriptionMarkdown:
+              "Version 2023.18.1 adds support for Huawei(Brovi) E3372-325. The device is available in the European market."),
       ChangelogItem(
           title: "Compute Module 4",
           shortDescription: "Hardware improvements",
-          descriptionMarkdown: "Version 2023.18.1 adds support for the Raspberry Pi Compute Module 4 and was tested with both EMMC(32GB) and SD Card-equipped variants. The external Wi-Fi antenna is selected by default."),
+          descriptionMarkdown:
+              "Version 2023.18.1 adds support for the Raspberry Pi Compute Module 4 and was tested with both EMMC(32GB) and SD Card-equipped variants. The external Wi-Fi antenna is selected by default."),
       ChangelogItem(
           title: "PWM fan support",
           shortDescription: "Hardware improvements",
-          descriptionMarkdown: "PWM is now enabled on GPIO 18. Supported coolers will only turn on if necessary. You can change the settings in config.txt on the boot partition of the SDCard."),
+          descriptionMarkdown:
+              "PWM is now enabled on GPIO 18. Supported coolers will only turn on if necessary. You can change the settings in config.txt on the boot partition of the SDCard."),
     ]),
     Version(versionName: "2023.7.1", changelogItems: [
       ChangelogItem(
           title: "Android Platform",
           shortDescription: "Stability improvements",
-          descriptionMarkdown: "Android has been updated to Android 13.0.0_r31 with the latest available security patches."),
+          descriptionMarkdown:
+              "Android has been updated to Android 13.0.0_r31 with the latest available security patches."),
       ChangelogItem(
           title: "H264 hardware acceleration",
           shortDescription: "Stability improvements",
-          descriptionMarkdown: "Version 2023.7.1 improves the stability of the playback and solves issues with artifacts present in the previous version."),
+          descriptionMarkdown:
+              "Version 2023.7.1 improves the stability of the playback and solves issues with artifacts present in the previous version."),
       ChangelogItem(
           title: "H265 hardware acceleration",
           shortDescription: "Usability improvements",
-          descriptionMarkdown: "This version adds support for hardware-accelerated H265 video playback via ffmpeg_codec2."),
+          descriptionMarkdown:
+              "This version adds support for hardware-accelerated H265 video playback via ffmpeg_codec2."),
       ChangelogItem(
           title: "Software audio decoders",
           shortDescription: "Usability improvements",
-          descriptionMarkdown: "2023.7.1 adds software audio decoders exposed by ffmpeg_codec2 for the following file formats: \n• aac  \n• ac3  \n• alac  \n• flac  \n• mp2  \n• mp3  \n• vorbis  \n\nMost of the formats were previously supported by software decoders included with Android. The ffmpeg-powered replacements tend to consume fewer CPU resources."),
+          descriptionMarkdown:
+              "2023.7.1 adds software audio decoders exposed by ffmpeg_codec2 for the following file formats: \n• aac  \n• ac3  \n• alac  \n• flac  \n• mp2  \n• mp3  \n• vorbis  \n\nMost of the formats were previously supported by software decoders included with Android. The ffmpeg-powered replacements tend to consume fewer CPU resources."),
       ChangelogItem(
           title: "Software video decoders",
           shortDescription: "Usability improvements",
-          descriptionMarkdown: "2023.7.1 adds software video decoders exposed by ffmpeg_codec2 for the following file formats: \n• h263  \n• mpeg2  \n• mpeg4  \n• vp8  \n• vp9  \n\nMost of the formats were previously supported by software decoders included with Android. The ffmpeg-powered replacements tend to consume fewer CPU resources."),
+          descriptionMarkdown:
+              "2023.7.1 adds software video decoders exposed by ffmpeg_codec2 for the following file formats: \n• h263  \n• mpeg2  \n• mpeg4  \n• vp8  \n• vp9  \n\nMost of the formats were previously supported by software decoders included with Android. The ffmpeg-powered replacements tend to consume fewer CPU resources."),
       ChangelogItem(
           title: "Flutter App",
           shortDescription: "Stability improvements",
-          descriptionMarkdown: "Flutter App received various improvements in this update: \n• The framework has been updated to version 3.7. \n• Version ribbon has been repositioned to the upper right corner. \n• Reverted changes in touchscreen transport that were introduced in 2023.4.1. The previous implementation was more stable.\n• The reliability of the connectivity checker module was improved by removing the ability to cache static HTML content in Lighttpd. The browser used to cache the health check response for a while after Tesla Android services became unavailable."),
+          descriptionMarkdown:
+              "Flutter App received various improvements in this update: \n• The framework has been updated to version 3.7. \n• Version ribbon has been repositioned to the upper right corner. \n• Reverted changes in touchscreen transport that were introduced in 2023.4.1. The previous implementation was more stable.\n• The reliability of the connectivity checker module was improved by removing the ability to cache static HTML content in Lighttpd. The browser used to cache the health check response for a while after Tesla Android services became unavailable."),
       ChangelogItem(
           title: "Audio playback",
           shortDescription: "Stability improvements",
-          descriptionMarkdown: "This version increases the audio playback buffer flush interval from 30 to 100 milliseconds with the hope of decreasing stuttering in cases where the MCU is not able to process the data from WebSocket transport in time."),
+          descriptionMarkdown:
+              "This version increases the audio playback buffer flush interval from 30 to 100 milliseconds with the hope of decreasing stuttering in cases where the MCU is not able to process the data from WebSocket transport in time."),
     ]),
     Version(versionName: "2023.4.2", changelogItems: [
       ChangelogItem(
