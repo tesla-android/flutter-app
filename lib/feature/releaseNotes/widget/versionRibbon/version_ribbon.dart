@@ -1,5 +1,7 @@
+import 'package:flavor/flavor.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:tesla_android/common/di/ta_locator.dart';
 import 'package:tesla_android/common/navigation/ta_navigator.dart';
 import 'package:tesla_android/common/navigation/ta_page.dart';
 import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
@@ -14,13 +16,14 @@ class VersionRibbon extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return GestureDetector(
-              onTap: () => TANavigator.push(
+              onTap: () => TANavigator.pushReplacement(
                 context: context,
-                page: TAPage.releaseNotes,
+                page: TAPage.about,
               ),
               child: Directionality(
                 textDirection: TextDirection.ltr,
                 child: Banner(
+                  color: getIt<Flavor>().color ?? Colors.red,
                   location: BannerLocation.topEnd,
                   message: snapshot.data?.version ?? "",
                   child: Container(

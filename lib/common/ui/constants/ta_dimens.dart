@@ -64,9 +64,13 @@ class TADimens {
   static const splashPageLogoHeight = 200.0;
   static const splashPageRadius = 25.0;
 
-  static const donationDialogQRSize = 250.0;
+  static const donationTextWidth = 300.0;
+  static const donationQRSize = 250.0;
 
   static const versionBannerTouchAreaSize = 50.0;
 
   static const backendErrorIconSize = 80.0;
+
+  static const settingsTileTrailingWidth = 200.0;
+  static const settingsPageTableMaxWidth = 800.0;
 }

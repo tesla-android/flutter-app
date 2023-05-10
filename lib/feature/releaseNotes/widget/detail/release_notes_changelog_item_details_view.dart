@@ -16,9 +16,10 @@ class ReleaseNotesChangelogItemDetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: TADimens.basePaddingHorizontal,
-      child: Markdown(
-        data: changelogItem.descriptionMarkdown,
+      padding: TADimens.basePadding,
+      child: Text(
+        changelogItem.descriptionMarkdown,
+        style: Theme.of(context).textTheme.bodyLarge,
       ),
     );
   }

@@ -19,7 +19,7 @@ class TAPage {
 
   static const home = TAPage(
     title: "Home",
-    route: "/home",
+    route: "/",
     type: TAPageType.standard,
   );
 
@@ -29,13 +29,25 @@ class TAPage {
     type: TAPageType.standard,
   );
 
-  static const donationDialog = TAPage(
-    title: "Support the project",
+  static const donations = TAPage(
+    title: "Donations",
     route: "/donate",
-    type: TAPageType.dialog,
+    type: TAPageType.standard,
+  );
+
+  static const about = TAPage(
+    title: "About",
+    route: "/about",
+    type: TAPageType.standard,
+  );
+
+  static const settings = TAPage(
+    title: "Settings",
+    route: "/settings",
+    type: TAPageType.standard,
   );
 
   static List<TAPage> get availablePages {
-    return const [empty, home, releaseNotes];
+    return const [empty, home, releaseNotes, about, settings];
   }
 }

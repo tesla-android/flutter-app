@@ -22,6 +22,21 @@ class _TeslaAndroidState extends State<TeslaAndroid> {
   Widget build(BuildContext context) {
     MediaQueryData windowData =
         MediaQueryData.fromWindow(WidgetsBinding.instance.window);
+
+    final switchTheme = SwitchThemeData(
+      trackColor:
+          MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+        return Colors.red.withOpacity(.40);
+      }),
+      thumbColor:
+          MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+        if (states.contains(MaterialState.disabled)) {
+          return Colors.red.withOpacity(.60);
+        }
+        return Colors.red;
+      }),
+    );
+
     return MediaQuery(
       data: windowData.copyWith(textScaleFactor: 1.5),
       child: MaterialApp(
@@ -32,10 +47,14 @@ class _TeslaAndroidState extends State<TeslaAndroid> {
         theme: ThemeData(
             brightness: Brightness.light,
             primarySwatch: Colors.red,
+            switchTheme: switchTheme,
             fontFamily: 'Roboto'),
         darkTheme: ThemeData(
             brightness: Brightness.dark,
             primarySwatch: Colors.red,
+            switchTheme: switchTheme,
+            bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+                selectedItemColor: Colors.red),
             fontFamily: 'Roboto'),
         themeMode: ThemeMode.system,
         initialRoute: _pageFactory.initialRoute,

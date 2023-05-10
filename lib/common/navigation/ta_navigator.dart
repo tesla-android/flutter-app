@@ -31,14 +31,28 @@ class TANavigator {
     );
   }
 
-  static void pushReplacement({
-    required BuildContext context,
-    required TAPage page,
-  }) {
+  static void pushReplacement(
+      {required BuildContext context,
+      required TAPage page,
+      bool animated = true}) {
     if (page.type != TAPageType.standard) {
-      throw UnsupportedError("only regular pages can be used in pushReplacement");
+      throw UnsupportedError(
+          "only regular pages can be used in pushReplacement");
     }
-    Navigator.of(context).pushReplacementNamed(page.route);
+    if (animated) {
+      Navigator.of(context).pushReplacementNamed(page.route);
+    } else {
+      Navigator.of(context).pushReplacement(
+        PageRouteBuilder(
+          pageBuilder: (context, animation1, animation2) {
+            return getIt<TAPageFactory>().buildPage(page).call(context);
+          },
+          transitionDuration: Duration.zero,
+          reverseTransitionDuration: Duration.zero,
+          settings: RouteSettings(name: page.route)
+        ),
+      );
+    }
   }
 
   static void pop({

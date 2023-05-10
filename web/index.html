@@ -24,9 +24,14 @@
   <meta name="msapplication-TileImage" content="icons/ms-icon-144x144.png">
   <meta name="theme-color" content="#ffffff">
   <script>
-			// The value below is injected by flutter build, do not touch.
-			var serviceWorkerVersion = null;
-		</script>
+  // The value below is injected by flutter build, do not touch.
+  var serviceWorkerVersion = null;
+  </script>
+  <script>
+  function createAudioContext() {
+      return new (window.AudioContext || window.webkitAudioContext)();
+  }
+  </script>
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
 </head>
@@ -103,28 +108,10 @@
 				});
 			});
 		</script>
-<script src="pcmplayer.js"></script>
-<script>
-            var hostname = window.location.hostname;
-            var socketURL = 'ws://' + hostname +':8080';
+        <script src="pcmplayer.js"></script>
+        <script>
             var player;
-
-			function createWebSocket() {
-				var ws = new WebSocket(socketURL);
-				ws.binaryType = 'arraybuffer';
-                ws.addEventListener('error', function(event) {
-                    setTimeout(createWebSocket(), 500);
-				});
-				ws.addEventListener('close', function(event) {
-                    setTimeout(createWebSocket(), 500);
-				});
-				ws.addEventListener('message', function(event) {
-					if (typeof player != "undefined" && event.data instanceof ArrayBuffer) {
-						player.feed(event.data);
-					}
-				});
-			};
-			window.addEventListener('click', function(e) {
+		    window.addEventListener('click', function(e) {
 				if (typeof player == "undefined") {
 					player = new PCMPlayer({
 						inputCodec: 'Float32',
@@ -132,9 +119,19 @@
 						sampleRate: 48000,
 						flushTime: 150,
 					});
-					createWebSocket();
 				}
 			});
+			function feedPlayer(data) {
+			  if (typeof player != "undefined") {
+                player.feed(data);
+			  }
+			};
+			function setPlayerVolume(volume) {
+			  if (typeof player != "undefined") {
+                player.volume(volume);
+			  }
+			};
 		</script>
+
 </body>
 </html>

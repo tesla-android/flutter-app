@@ -3,11 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:tesla_android/common/di/ta_locator.dart';
 import 'package:tesla_android/common/navigation/ta_page.dart';
+import 'package:tesla_android/feature/about/about_page.dart';
+import 'package:tesla_android/feature/audio/cubit/audio_cubit.dart';
 import 'package:tesla_android/feature/connectivityCheck/cubit/connectivity_check_cubit.dart';
-import 'package:tesla_android/feature/donations/widget/donation_dialog.dart';
-import 'package:tesla_android/feature/home/android_viewer_page.dart';
+import 'package:tesla_android/feature/donations/widget/donation_page.dart';
+import 'package:tesla_android/feature/home/home_page.dart';
 import 'package:tesla_android/feature/releaseNotes/cubit/release_notes_cubit.dart';
 import 'package:tesla_android/feature/releaseNotes/widget/release_notes_page.dart';
+import 'package:tesla_android/feature/settings/widget/settings_page.dart';
 import 'package:tesla_android/feature/touchscreen/cubit/touchscreen_cubit.dart';
 
 @injectable
@@ -24,15 +27,7 @@ class TAPageFactory {
     return (context) {
       switch (page) {
         case TAPage.home:
-          return MultiBlocProvider(
-            providers: [
-              BlocProvider.value(
-                value: getIt<ConnectivityCheckCubit>(),
-              ),
-              BlocProvider(
-                create: (_) => getIt<TouchscreenCubit>(),
-              ),
-            ],
+          return _injectAndroidViewerDependencies(
             child: HomePage(),
           );
         case TAPage.releaseNotes:
@@ -40,12 +35,35 @@ class TAPageFactory {
             create: (_) => getIt<ReleaseNotesCubit>(),
             child: const ReleaseNotesPage(),
           );
-        case TAPage.donationDialog:
-          return const DonationDialog();
+        case TAPage.about:
+          return const AboutPage();
+        case TAPage.donations:
+          return const DonationPage();
+        case TAPage.settings:
+          return _injectAndroidViewerDependencies(
+            child: const SettingsPage(),
+          );
         case TAPage.empty:
         default:
           return const SizedBox();
       }
     };
+  }
+
+  Widget _injectAndroidViewerDependencies({required Widget child}) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(
+          value: getIt<ConnectivityCheckCubit>(),
+        ),
+        BlocProvider.value(
+          value: getIt<TouchscreenCubit>(),
+        ),
+        BlocProvider.value(
+          value: getIt<AudioCubit>(),
+        ),
+      ],
+      child: child,
+    );
   }
 }
