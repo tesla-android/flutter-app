@@ -51,7 +51,7 @@ class TeslaAndroid extends StatelessWidget {
       child: MaterialApp(
         useInheritedMediaQuery: true,
         debugShowCheckedModeBanner: false,
-        navigatorKey: GlobalKey<NavigatorState>(),
+        navigatorKey: getIt<GlobalKey<NavigatorState>>(),
         title: 'Tesla Android',
         theme: ThemeData(
             brightness: Brightness.light,
