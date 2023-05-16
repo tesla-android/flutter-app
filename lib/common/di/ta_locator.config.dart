@@ -50,7 +50,7 @@ extension GetItInjectableX on _i1.GetIt {
     );
     final networkModule = _$NetworkModule();
     final appModule = _$AppModule();
-    gh.singleton<_i3.Dio>(networkModule.provideDio);
+    gh.singleton<_i3.Dio>(networkModule.dio);
     gh.singleton<_i4.Flavor>(appModule.provideFlavor);
     gh.lazySingleton<_i5.GlobalKey<_i5.NavigatorState>>(
         () => appModule.navigatorKey);
