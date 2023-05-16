@@ -7,6 +7,8 @@ import 'package:tesla_android/feature/settings/widget/settings_header.dart';
 import 'package:tesla_android/feature/settings/widget/settings_tile.dart';
 
 class SoundSettings extends StatelessWidget {
+  const SoundSettings({super.key});
+
   @override
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<AudioCubit>(context);

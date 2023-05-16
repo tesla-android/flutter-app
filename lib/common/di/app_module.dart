@@ -18,8 +18,9 @@ abstract class AppModule {
       color: _enableIpOverride ? Colors.green : Colors.red,
       properties: {
         'touchscreenWebSocket': 'ws://$ipAddress:9999',
-        'displayWebSocket' : 'ws://$ipAddress:9090/',
-        'audioWebSocket' : 'ws://$ipAddress:8080/',
+        'displayWebSocket' : 'ws://$ipAddress:9090',
+        'audioWebSocket' : 'ws://$ipAddress:8080',
+        'configurationApiBaseUrl' : 'http://$ipAddress:8081',
         'connectivityCheck' : 'http://$ipAddress/online/connectivity_check.txt',
         'virtualDisplayWidth': 1088,
         'virtualDisplayHeight': 832,
@@ -30,4 +31,7 @@ abstract class AppModule {
   @singleton
   @preResolve
   Future<SharedPreferences> get sharedPreferences => SharedPreferences.getInstance();
+
+  @lazySingleton
+  GlobalKey<NavigatorState> get navigatorKey => GlobalKey<NavigatorState>();
 }

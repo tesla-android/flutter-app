@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tesla_android/common/navigation/ta_page.dart';
 import 'package:tesla_android/common/ui/components/ta_bottom_navigation_bar.dart';
 import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
+import 'package:tesla_android/feature/settings/widget/hotspot_settings.dart';
 import 'package:tesla_android/feature/settings/widget/sound_settings.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -17,15 +18,19 @@ class SettingsPage extends StatelessWidget {
       bottomNavigationBar: const TaBottomNavigationBar(
         currentIndex: 4,
       ),
-      body: Center(
+      body: Align(
+        alignment: Alignment.topCenter,
         child: Container(
-          constraints: const BoxConstraints(maxWidth: TADimens.settingsPageTableMaxWidth),
+          constraints: const BoxConstraints(
+              maxWidth: TADimens.settingsPageTableMaxWidth),
           padding: const EdgeInsets.symmetric(
               horizontal: TADimens.baseContentMargin,
               vertical: TADimens.baseContentMargin),
           child: ListView(
-            children: <Widget>[
+            children: const <Widget>[
               SoundSettings(),
+              Divider(),
+              HotspotSettings(),
             ],
           ),
         ),
