@@ -26,12 +26,8 @@ class ConnectivityCheckCubit extends Cubit<ConnectivityState> {
 
   void _checkConnectivity() async {
     try {
-      final response = await _healthService.getHealthCheck();
-      if (response.statusCode != 200) {
-        _onRequestFailure();
-      } else {
-        _onRequestSuccess();
-      }
+      await _healthService.getHealthCheck();
+      _onRequestSuccess();
     } catch (_) {
       _onRequestFailure();
     }
