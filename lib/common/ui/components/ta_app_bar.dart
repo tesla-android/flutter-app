@@ -1,9 +1,7 @@
 import 'dart:html';
 
 import 'package:flutter/material.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class TaAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
