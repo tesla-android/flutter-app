@@ -46,4 +46,22 @@ abstract class ConfigurationService {
     "Content-Type": "text/plain",
   })
   Future setSoftApState(@Body() int isEnabledFlag);
+
+  @POST("/offlineModeState")
+  @Headers({
+    "Content-Type": "text/plain",
+  })
+  Future setOfflineModeState(@Body() int isEnabledFlag);
+
+  @POST("/offlineModeTelemetryState")
+  @Headers({
+    "Content-Type": "text/plain",
+  })
+  Future setOfflineModeTelemetryState(@Body() int isEnabledFlag);
+
+  @POST("/offlineModeTeslaFirmwareDownloads")
+  @Headers({
+    "Content-Type": "text/plain",
+  })
+  Future setOfflineModeTeslaFirmwareDownloads(@Body() int isEnabledFlag);
 }

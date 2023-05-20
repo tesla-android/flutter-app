@@ -27,4 +27,16 @@ class SystemConfigurationRepository {
   Future setSoftApState(int isEnabledFlag) {
     return _configurationService.setSoftApState(isEnabledFlag);
   }
+
+  Future setOfflineModeState(int isEnabledFlag) {
+    return _configurationService.setOfflineModeState(isEnabledFlag);
+  }
+
+  Future setOfflineModeTelemetryState(int isEnabledFlag) {
+    return _configurationService.setOfflineModeTelemetryState(isEnabledFlag);
+  }
+
+  Future setOfflineModeTeslaFirmwareDownloads(int isEnabledFlag) {
+    return _configurationService.setOfflineModeTeslaFirmwareDownloads(isEnabledFlag);
+  }
 }
