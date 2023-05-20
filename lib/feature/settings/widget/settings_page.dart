@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tesla_android/common/navigation/ta_page.dart';
+import 'package:tesla_android/common/ui/components/ta_app_bar.dart';
 import 'package:tesla_android/common/ui/components/ta_bottom_navigation_bar.dart';
 import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
 import 'package:tesla_android/feature/settings/widget/hotspot_settings.dart';
@@ -11,9 +12,8 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text(TAPage.settings.title),
+      appBar: TaAppBar(
+        title: TAPage.settings.title,
       ),
       bottomNavigationBar: const TaBottomNavigationBar(
         currentIndex: 4,

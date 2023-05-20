@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tesla_android/common/navigation/ta_page.dart';
+import 'package:tesla_android/common/ui/components/ta_app_bar.dart';
 import 'package:tesla_android/common/ui/components/ta_bottom_navigation_bar.dart';
 import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
 
@@ -10,9 +11,8 @@ class DonationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(TAPage.donations.title),
-        automaticallyImplyLeading: false,
+      appBar: TaAppBar(
+        title: TAPage.donations.title,
       ),
       bottomNavigationBar: const TaBottomNavigationBar(currentIndex: 3),
       body: Center(
