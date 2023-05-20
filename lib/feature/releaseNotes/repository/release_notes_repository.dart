@@ -8,34 +8,38 @@ class ReleaseNotesRepository {
   static const ReleaseNotes _releaseNotes = ReleaseNotes(versions: [
     Version(versionName: "2023.20.1", changelogItems: [
       ChangelogItem(
-        title: "Offline mode",
-        shortDescription: "Data usage reduction",
-        descriptionMarkdown:
-        "Version 2023.20.1 includes an updated offline mode. Your car will not send Telemetry data to Tesla, and the firmware updates will not download using the Tesla Android Wi-Fi network.\n\nThe ability to check if your car runs the latest Tesla firmware is not affected.\n\nKudos to Green and Soma for making this possible!",
-      ),
+          title: "Offline mode",
+          shortDescription: "Data usage reduction",
+          descriptionMarkdown:
+              "Version 2023.20.1 includes an updated offline mode that is configurable. You can disable sending Telemetry data to Tesla(important for FSD Beta users), and the firmware updates don't have to download using the Tesla Android Wi-Fi network.\n\nThe ability to check if your car runs the latest Tesla firmware is not affected.\n\nKudos to Green and Soma for making this possible!"),
       ChangelogItem(
-        title: "Fullscreen launcher",
+        title: "Full-Screen launcher",
         shortDescription: "Usability improvements",
         descriptionMarkdown:
-        "An early fullscreen frontend is now available at fullscreen.app.teslaandroid.com.\n\nThe Virtual Display still needs to fill the entire window, and there might be some minor UI issues in the Flutter App.",
+            "An early Full-Screen frontend is now available. You can access it using a new \"Go Full-Screen\" button in the Flutter App or by navigating to fullscreen.app.teslaandroid.com. \n\nThe Virtual Display still needs to fill the entire window, and there might be some minor UI issues in the Flutter App.",
       ),
       ChangelogItem(
         title: "Networking",
         shortDescription: "Routing improvements",
         descriptionMarkdown:
-        "You can access your Tesla Android by typing using app.teslaandroid.com instead of typing the IP address.\n\nThe DHCP server is no longer using a public IP range. Tesla Android switched to a Carrier-grade NAT range.",
+            "You can access your Tesla Android by typing using app.teslaandroid.com instead of typing the IP address.\n\nThe DHCP server is no longer using a public IP range. Tesla Android switched to a Carrier-grade NAT range.",
       ),
+      ChangelogItem(
+          title: "Android Platform",
+          shortDescription: "Boot time optimization",
+          descriptionMarkdown:
+              "Version 2023.20.1 takes ~10s less to boot when compared to 2023.18. This was made possible by changing the Wi-Fi network initialisation code."),
       ChangelogItem(
         title: "Wi-Fi",
         shortDescription: "Performance improvements",
         descriptionMarkdown:
-        "Version 2023.20.1 add support for 5GHz Wi-Fi. The new future can be manually enabled in Settings and should improve the network speed significantly.\n\nUsers with their own routers can now disable to Tesla Android Wi-Fi network altogether.",
+            "Version 2023.20.1 add support for 5GHz Wi-Fi. The new future can be manually enabled in Settings and should improve the network speed significantly.\n\nUsers with their own routers can now disable to Tesla Android Wi-Fi network altogether.",
       ),
       ChangelogItem(
         title: "Flutter App",
         shortDescription: "Stability improvements",
         descriptionMarkdown:
-        "Version 2023.20.1 improves the Connectivity Check module. The app is also fully integrated with a self-hosted instance of Sentry(Performance monitoring & Error Tracking).\n\nThe data is anonymised and no fingerprints are captured. Crash logs contain the version of firmware and display resolution. ",
+            "Version 2023.20.1 improves the Connectivity Check module. The app is also fully integrated with a self-hosted instance of Sentry(Performance monitoring & Error Tracking).\n\nThe data is anonymised and no fingerprints are captured. Crash logs contain the version of firmware and display resolution. ",
       ),
     ]),
     Version(versionName: "2023.18.2", changelogItems: [
