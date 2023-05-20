@@ -138,6 +138,78 @@ class _ConfigurationService implements ConfigurationService {
     return value;
   }
 
+  @override
+  Future<dynamic> setOfflineModeState(isEnabledFlag) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Content-Type': 'text/plain'};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = isEnabledFlag;
+    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'text/plain',
+    )
+        .compose(
+          _dio.options,
+          '/offlineModeState',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data;
+    return value;
+  }
+
+  @override
+  Future<dynamic> setOfflineModeTelemetryState(isEnabledFlag) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Content-Type': 'text/plain'};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = isEnabledFlag;
+    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'text/plain',
+    )
+        .compose(
+          _dio.options,
+          '/offlineModeTelemetryState',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data;
+    return value;
+  }
+
+  @override
+  Future<dynamic> setOfflineModeTeslaFirmwareDownloads(isEnabledFlag) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Content-Type': 'text/plain'};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = isEnabledFlag;
+    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'text/plain',
+    )
+        .compose(
+          _dio.options,
+          '/offlineModeTeslaFirmwareDownloads',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data;
+    return value;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

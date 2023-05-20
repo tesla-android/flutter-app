@@ -23,23 +23,61 @@ class SystemConfigurationStateSettingsModified
   final SystemConfigurationResponseBody currentConfiguration;
   final SoftApBandType newBandType;
   final bool isSoftApEnabled;
+  final bool isOfflineModeEnabled;
+  final bool isOfflineModeTelemetryEnabled;
+  final bool isOfflineModeTeslaFirmwareDownloadsEnabled;
 
   SystemConfigurationStateSettingsModified({
     required this.currentConfiguration,
     required this.newBandType,
     required this.isSoftApEnabled,
+    required this.isOfflineModeEnabled,
+    required this.isOfflineModeTelemetryEnabled,
+    required this.isOfflineModeTeslaFirmwareDownloadsEnabled,
   });
+
+  SystemConfigurationStateSettingsModified.fromCurrentConfiguration({
+    required this.currentConfiguration,
+    SoftApBandType? newBandType,
+    bool? isSoftApEnabled,
+    bool? isOfflineModeEnabled,
+    bool? isOfflineModeTelemetryEnabled,
+    bool? isOfflineModeTeslaFirmwareDownloadsEnabled,
+  })  : newBandType = newBandType ?? currentConfiguration.currentSoftApBandType,
+        isSoftApEnabled = isSoftApEnabled ??
+            (currentConfiguration.isEnabledFlag == 1 ? true : false),
+        isOfflineModeEnabled = isOfflineModeEnabled ??
+            (currentConfiguration.isOfflineModeEnabledFlag == 1 ? true : false),
+        isOfflineModeTelemetryEnabled = isOfflineModeTelemetryEnabled ??
+            (currentConfiguration.isOfflineModeTelemetryEnabledFlag == 1
+                ? true
+                : false),
+        isOfflineModeTeslaFirmwareDownloadsEnabled =
+            isOfflineModeTeslaFirmwareDownloadsEnabled ??
+                (currentConfiguration
+                            .isOfflineModeTeslaFirmwareDownloadsEnabledFlag ==
+                        1
+                    ? true
+                    : false);
 
   SystemConfigurationStateSettingsModified copyWith({
     SystemConfigurationResponseBody? currentConfiguration,
     SoftApBandType? newBandType,
     bool? isSoftApEnabled,
+    bool? isOfflineModeEnabled,
+    bool? isOfflineModeTelemetryEnabled,
+    bool? isOfflineModeTeslaFirmwareDownloadsEnabled,
   }) {
     return SystemConfigurationStateSettingsModified(
-      currentConfiguration: currentConfiguration ?? this.currentConfiguration,
-      newBandType: newBandType ?? this.newBandType,
-      isSoftApEnabled: isSoftApEnabled ?? this.isSoftApEnabled,
-    );
+        currentConfiguration: currentConfiguration ?? this.currentConfiguration,
+        newBandType: newBandType ?? this.newBandType,
+        isSoftApEnabled: isSoftApEnabled ?? this.isSoftApEnabled,
+        isOfflineModeEnabled: isOfflineModeEnabled ?? this.isOfflineModeEnabled,
+        isOfflineModeTelemetryEnabled:
+            isOfflineModeTelemetryEnabled ?? this.isOfflineModeTelemetryEnabled,
+        isOfflineModeTeslaFirmwareDownloadsEnabled:
+            isOfflineModeTeslaFirmwareDownloadsEnabled ??
+                this.isOfflineModeTeslaFirmwareDownloadsEnabled);
   }
 }
 

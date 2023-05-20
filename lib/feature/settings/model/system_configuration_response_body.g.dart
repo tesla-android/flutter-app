@@ -13,6 +13,14 @@ SystemConfigurationResponseBody _$SystemConfigurationResponseBodyFromJson(
       channel: json['persist.tesla-android.softap.channel'] as int,
       channelWidth: json['persist.tesla-android.softap.channel_width'] as int,
       isEnabledFlag: json['persist.tesla-android.softap.is_enabled'] as int,
+      isOfflineModeEnabledFlag:
+          json['persist.tesla-android.offline-mode.is_enabled'] as int,
+      isOfflineModeTelemetryEnabledFlag:
+          json['persist.tesla-android.offline-mode.telemetry.is_enabled']
+              as int,
+      isOfflineModeTeslaFirmwareDownloadsEnabledFlag:
+          json['persist.tesla-android.offline-mode.tesla-firmware-downloads']
+              as int,
     );
 
 Map<String, dynamic> _$SystemConfigurationResponseBodyToJson(
@@ -22,4 +30,10 @@ Map<String, dynamic> _$SystemConfigurationResponseBodyToJson(
       'persist.tesla-android.softap.channel': instance.channel,
       'persist.tesla-android.softap.channel_width': instance.channelWidth,
       'persist.tesla-android.softap.is_enabled': instance.isEnabledFlag,
+      'persist.tesla-android.offline-mode.is_enabled':
+          instance.isOfflineModeEnabledFlag,
+      'persist.tesla-android.offline-mode.telemetry.is_enabled':
+          instance.isOfflineModeTelemetryEnabledFlag,
+      'persist.tesla-android.offline-mode.tesla-firmware-downloads':
+          instance.isOfflineModeTeslaFirmwareDownloadsEnabledFlag,
     };
