@@ -59,7 +59,8 @@ pipeline {
         stage('Upload debug symbols to Sentry') {
             steps {
                 sh('sentry-cli releases new ' + SENTRY_RELEASE)
-                sh('sentry-cli releases files ' + SENTRY_RELEASE + ' upload-sourcemaps build/web --ext js')
+                sh('sentry-cli releases files ' + SENTRY_RELEASE + ' upload-sourcemaps . --ext dart')
+                sh('sentry-cli releases files ' + SENTRY_RELEASE + ' upload-sourcemaps "build/web" --ext map --ext js')
                 sh('sentry-cli releases finalize ' + SENTRY_RELEASE)
             }
         }
