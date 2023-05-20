@@ -35,7 +35,7 @@ class SystemConfigurationCubit extends Cubit<SystemConfigurationState> {
     }
     if (state is SystemConfigurationStateSettingsFetched) {
       emit(
-        SystemConfigurationStateSettingsModified(
+        SystemConfigurationStateSettingsModified.fromCurrentConfiguration(
           currentConfiguration:
               (state as SystemConfigurationStateSettingsFetched)
                   .currentConfiguration,
@@ -57,10 +57,64 @@ class SystemConfigurationCubit extends Cubit<SystemConfigurationState> {
           .currentConfiguration;
       final band = configuration.currentSoftApBandType;
       emit(
-        SystemConfigurationStateSettingsModified(
+        SystemConfigurationStateSettingsModified.fromCurrentConfiguration(
           currentConfiguration: configuration,
           newBandType: band,
           isSoftApEnabled: isEnabled,
+        ),
+      );
+    }
+    showConfigurationChangedBanner();
+  }
+
+  void updateOfflineModeState(bool isEnabled) {
+    if (state is SystemConfigurationStateSettingsModified) {
+      emit((state as SystemConfigurationStateSettingsModified)
+          .copyWith(isOfflineModeEnabled: isEnabled));
+    }
+    if (state is SystemConfigurationStateSettingsFetched) {
+      final configuration = (state as SystemConfigurationStateSettingsFetched)
+          .currentConfiguration;
+      emit(
+        SystemConfigurationStateSettingsModified.fromCurrentConfiguration(
+          currentConfiguration: configuration,
+          isOfflineModeEnabled: isEnabled,
+        ),
+      );
+    }
+    showConfigurationChangedBanner();
+  }
+
+  void updateOfflineModeTelemetryState(bool isEnabled) {
+    if (state is SystemConfigurationStateSettingsModified) {
+      emit((state as SystemConfigurationStateSettingsModified)
+          .copyWith(isOfflineModeTelemetryEnabled: isEnabled));
+    }
+    if (state is SystemConfigurationStateSettingsFetched) {
+      final configuration = (state as SystemConfigurationStateSettingsFetched)
+          .currentConfiguration;
+      emit(
+        SystemConfigurationStateSettingsModified.fromCurrentConfiguration(
+          currentConfiguration: configuration,
+          isOfflineModeTelemetryEnabled: isEnabled,
+        ),
+      );
+    }
+    showConfigurationChangedBanner();
+  }
+
+  void updateOfflineModeTeslaFirmwareDownloadsState(bool isEnabled) {
+    if (state is SystemConfigurationStateSettingsModified) {
+      emit((state as SystemConfigurationStateSettingsModified)
+          .copyWith(isOfflineModeTeslaFirmwareDownloadsEnabled: isEnabled));
+    }
+    if (state is SystemConfigurationStateSettingsFetched) {
+      final configuration = (state as SystemConfigurationStateSettingsFetched)
+          .currentConfiguration;
+      emit(
+        SystemConfigurationStateSettingsModified.fromCurrentConfiguration(
+          currentConfiguration: configuration,
+          isOfflineModeTeslaFirmwareDownloadsEnabled: isEnabled,
         ),
       );
     }
@@ -72,12 +126,12 @@ class SystemConfigurationCubit extends Cubit<SystemConfigurationState> {
     ScaffoldMessenger.of(context).showMaterialBanner(
       MaterialBanner(
         content: const Text(
-            'Wi-Fi configuration has been updated. Would you like to apply it during the next system startup?'),
+            'System configuration has been updated. Would you like to apply it during the next system startup?'),
         leading: const Icon(Icons.settings),
         actions: [
           IconButton(
               onPressed: () {
-                applySoftApConfiguration();
+                applySystemConfiguration();
                 ScaffoldMessenger.of(context).clearMaterialBanners();
               },
               icon: const Icon(Icons.save)),
@@ -86,16 +140,26 @@ class SystemConfigurationCubit extends Cubit<SystemConfigurationState> {
     );
   }
 
-  void applySoftApConfiguration() async {
+  void applySystemConfiguration() async {
     if (state is SystemConfigurationStateSettingsModified) {
       final configState = (state as SystemConfigurationStateSettingsModified);
       final newBand = configState.newBandType;
       final isEnabledFlag = configState.isSoftApEnabled;
+      final isOfflineModeEnabledFlag = configState.isSoftApEnabled;
+      final isOfflineModeTelemetryEnabledFlag =
+          configState.isOfflineModeTelemetryEnabled;
+      final isOfflineModeTeslaFirmwareDownloadsEnabledFlag =
+          configState.isOfflineModeTeslaFirmwareDownloadsEnabled;
       try {
         await _repository.setSoftApBand(newBand.band);
         await _repository.setSoftApChannelWidth(newBand.channelWidth);
         await _repository.setSoftApChannel(newBand.channel);
         await _repository.setSoftApState(isEnabledFlag ? 1 : 0);
+        await _repository.setOfflineModeState(isOfflineModeEnabledFlag ? 1 : 0);
+        await _repository.setOfflineModeTelemetryState(
+            isOfflineModeTelemetryEnabledFlag ? 1 : 0);
+        await _repository.setOfflineModeTeslaFirmwareDownloads(
+            isOfflineModeTeslaFirmwareDownloadsEnabledFlag ? 1 : 0);
       } catch (exception) {
         Sentry.captureException(exception);
         emit(SystemConfigurationStateSettingsSavingFailedError());

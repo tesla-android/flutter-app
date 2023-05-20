@@ -13,12 +13,21 @@ class SystemConfigurationResponseBody {
   final int channelWidth;
   @JsonKey(name: "persist.tesla-android.softap.is_enabled")
   final int isEnabledFlag;
+  @JsonKey(name: "persist.tesla-android.offline-mode.is_enabled")
+  final int isOfflineModeEnabledFlag;
+  @JsonKey(name: "persist.tesla-android.offline-mode.telemetry.is_enabled")
+  final int isOfflineModeTelemetryEnabledFlag;
+  @JsonKey(name: "persist.tesla-android.offline-mode.tesla-firmware-downloads")
+  final int isOfflineModeTeslaFirmwareDownloadsEnabledFlag;
 
   SystemConfigurationResponseBody({
     required this.bandType,
     required this.channel,
     required this.channelWidth,
     required this.isEnabledFlag,
+    required this.isOfflineModeEnabledFlag,
+    required this.isOfflineModeTelemetryEnabledFlag,
+    required this.isOfflineModeTeslaFirmwareDownloadsEnabledFlag,
   });
 
   factory SystemConfigurationResponseBody.fromJson(Map<String, dynamic> json) =>
