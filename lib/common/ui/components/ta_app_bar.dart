@@ -19,7 +19,7 @@ class TaAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: false,
       title: Text(title ?? ''),
       actions: [
-        //if (window.location.hostname?.contains("teslaandroid.com") ?? false)
+        if (window.location.hostname?.contains("teslaandroid.com") ?? false)
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: OutlinedButton(
@@ -31,7 +31,7 @@ class TaAppBar extends StatelessWidget implements PreferredSizeWidget {
                 Widget okButton = TextButton(
                   child: const Text("Understood"),
                   onPressed: () {
-                    window.location.href = "http://fullscreen.teslaandroid.com";
+                    window.location.href = "http://fullscreen.app.teslaandroid.com";
                   },
                 );
                 Widget cancelButton = TextButton(
