@@ -3,10 +3,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:tesla_android/common/di/ta_locator.dart';
 import 'package:tesla_android/common/navigation/ta_page_factory.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await configureTADependencies();
-
+Future<void> main() async {
   await SentryFlutter.init(
     (options) {
       options.dsn =
@@ -14,11 +11,18 @@ void main() async {
       options.attachScreenshot = true;
       options.attachViewHierarchy = true;
     },
-    appRunner: () => runApp(
-      SentryScreenshotWidget(
-        child: SentryUserInteractionWidget(
-          child: TeslaAndroid(),
-        ),
+    appRunner: _runMyApp,
+  );
+}
+
+Future<void> _runMyApp() async {
+  // Sentry already initialized WidgetsFlutterBinding.ensureInitialized();
+  await configureTADependencies();
+
+  runApp(
+    SentryScreenshotWidget(
+      child: SentryUserInteractionWidget(
+        child: TeslaAndroid(),
       ),
     ),
   );
