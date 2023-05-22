@@ -22,8 +22,8 @@ class SystemConfigurationCubit extends Cubit<SystemConfigurationState> {
       final configuration = await _repository.getConfiguration();
       emit(SystemConfigurationStateSettingsFetched(
           currentConfiguration: configuration));
-    } catch (exception) {
-      Sentry.captureException(exception);
+    } catch (exception, stackTrace) {
+      Sentry.captureException(exception, stackTrace: stackTrace);
       emit(SystemConfigurationStateSettingsFetchingError());
     }
   }
@@ -160,8 +160,8 @@ class SystemConfigurationCubit extends Cubit<SystemConfigurationState> {
             isOfflineModeTelemetryEnabledFlag ? 1 : 0);
         await _repository.setOfflineModeTeslaFirmwareDownloads(
             isOfflineModeTeslaFirmwareDownloadsEnabledFlag ? 1 : 0);
-      } catch (exception) {
-        Sentry.captureException(exception);
+      } catch (exception, stackTrace) {
+        Sentry.captureException(exception, stackTrace: stackTrace);
         emit(SystemConfigurationStateSettingsSavingFailedError());
       }
     }

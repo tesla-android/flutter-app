@@ -16,7 +16,9 @@ void main() async {
     },
     appRunner: () => runApp(
       SentryScreenshotWidget(
-        child: TeslaAndroid(),
+        child: SentryUserInteractionWidget(
+          child: TeslaAndroid(),
+        ),
       ),
     ),
   );
