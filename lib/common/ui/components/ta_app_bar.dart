@@ -19,13 +19,13 @@ class TaAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: false,
       title: Text(title ?? ''),
       actions: [
-        if (window.location.hostname?.contains("teslaandroid.com") ?? false)
+        if (window.location.hostname?.contains("teslaandroid.com") ?? true)
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: OutlinedButton(
               style: ButtonStyle(
                 backgroundColor: MaterialStateColor.resolveWith(
-                    (states) => theme.scaffoldBackgroundColor),
+                    (states) => theme.primaryColor),
               ),
               onPressed: () {
                 Widget okButton = TextButton(
@@ -58,21 +58,21 @@ class TaAppBar extends StatelessWidget implements PreferredSizeWidget {
                 );
               },
               child: Row(
-                children: [
+                children: const [
                   Text(
                     "Go Full-Screen",
                     style: TextStyle(
-                        color: theme.primaryColor,
+                      color: Colors.red,
                         fontWeight: FontWeight.bold,
                         height: 1.15),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     width: TADimens.PADDING_S_VALUE,
                   ),
                   Icon(
                     Icons.fullscreen,
                     size: 35,
-                    color: theme.primaryColor,
+                    color: Colors.red,
                   ),
                 ],
               ),
