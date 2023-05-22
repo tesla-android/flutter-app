@@ -145,7 +145,7 @@ class SystemConfigurationCubit extends Cubit<SystemConfigurationState> {
       final configState = (state as SystemConfigurationStateSettingsModified);
       final newBand = configState.newBandType;
       final isEnabledFlag = configState.isSoftApEnabled;
-      final isOfflineModeEnabledFlag = configState.isSoftApEnabled;
+      final isOfflineModeEnabledFlag = configState.isOfflineModeEnabled;
       final isOfflineModeTelemetryEnabledFlag =
           configState.isOfflineModeTelemetryEnabled;
       final isOfflineModeTeslaFirmwareDownloadsEnabledFlag =
