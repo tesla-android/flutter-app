@@ -16,7 +16,6 @@ Future<void> main() async {
 }
 
 Future<void> _runMyApp() async {
-  // Sentry already initialized WidgetsFlutterBinding.ensureInitialized();
   await configureTADependencies();
 
   runApp(
