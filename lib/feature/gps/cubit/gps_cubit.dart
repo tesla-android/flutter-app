@@ -6,18 +6,21 @@ import 'package:injectable/injectable.dart';
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tesla_android/feature/gps/cubit/gps_state.dart';
-import 'package:tesla_android/feature/gps/utils/nmea_converter.dart';
+import 'package:tesla_android/feature/gps/model/gps_data.dart';
+import 'package:tesla_android/feature/gps/transport/gps_transport.dart';
 
-@lazySingleton
+@singleton
 class GpsCubit extends Cubit<GpsState> {
   final SharedPreferences _sharedPreferences;
   final Location _location;
+  final GpsTransport _gpsTransport;
 
   static const _sharedPreferencesKey = 'GpsCubit_isEnabled';
 
   StreamSubscription? _locationUpdatesStreamSubscription;
 
-  GpsCubit(this._sharedPreferences, this._location) : super(GpsStateInitial()) {
+  GpsCubit(this._sharedPreferences, this._location, this._gpsTransport)
+      : super(GpsStateInitial()) {
     _setInitialState();
   }
 
@@ -34,8 +37,9 @@ class GpsCubit extends Cubit<GpsState> {
 
   Future<void> enableGps() async {
     try {
-      await _enableGpsService();
-      await _checkGpsPermission();
+      _gpsTransport.maintainConnection();
+      await _enableGpsService().timeout(const Duration(seconds: 30));
+      await _checkGpsPermission().timeout(const Duration(seconds: 30));
     } catch (e) {
       emit(GpsStateInitialisationError());
     }
@@ -53,7 +57,7 @@ class GpsCubit extends Cubit<GpsState> {
 
   Future<void> _checkGpsPermission() async {
     final gpsPermissionStatus = await _location.hasPermission();
-    if (gpsPermissionStatus != PermissionStatus.granted ) {
+    if (gpsPermissionStatus != PermissionStatus.granted) {
       final gpsPermissionRequested = await _location.requestPermission();
       if (gpsPermissionRequested == PermissionStatus.granted) {
         _onLocationPermissionGranted();
@@ -66,25 +70,27 @@ class GpsCubit extends Cubit<GpsState> {
 
   void _onLocationPermissionGranted() {
     emit(GpsStateActive(currentLocation: initialLocationData));
-    _emitInitialLocation();
+    _emitCurrentLocation();
     _subscribeToLocationUpdates();
     return;
   }
 
-  void _emitInitialLocation() async {
+  void _emitCurrentLocation() async {
     try {
       final location = await _location.getLocation();
       emit(GpsStateActive(currentLocation: location));
-      debugPrint(NmeaConverter.locationToNMEA(location));
-    } catch (_) {
-      debugPrint("Failed to fetch initial location");
+      _gpsTransport.sendGpsData(GpsData.fromLocationData(location));
+    } catch (exception) {
+      debugPrint("Failed to fetch current location $exception");
     }
   }
 
-  void _subscribeToLocationUpdates() {
+  void _subscribeToLocationUpdates() async {
     _locationUpdatesStreamSubscription =
-        _location.onLocationChanged.listen((locationData) {
-      emit(GpsStateActive(currentLocation: locationData));
+        _location.onLocationChanged.listen((locationData) async {
+      final location = await _location.getLocation();
+      emit(GpsStateActive(currentLocation: location));
+      _gpsTransport.sendGpsData(GpsData.fromLocationData(location));
     });
   }
 

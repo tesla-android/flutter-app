@@ -42,6 +42,7 @@ class TAPageFactory {
         case TAPage.donations:
           return const DonationPage();
         case TAPage.settings:
+          //FIXME Move audio settings a separate cubit
           return _injectAndroidViewerDependencies(
             child: BlocProvider(
               create: (_) =>

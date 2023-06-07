@@ -1,5 +1,4 @@
 import 'package:location/location.dart';
-import 'package:tesla_android/feature/gps/utils/nmea_converter.dart';
 
 abstract class GpsState {}
 
@@ -15,8 +14,6 @@ class GpsStateActive extends GpsState {
   final LocationData currentLocation;
 
   GpsStateActive({required this.currentLocation});
-
-  String get nmeaString => NmeaConverter.locationToNMEA(currentLocation);
 }
 
 LocationData get initialLocationData {

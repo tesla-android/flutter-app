@@ -6,7 +6,7 @@ import 'package:injectable/injectable.dart' hide Environment;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:location/location.dart';
 
-const bool _enableIpOverride = true;
+const bool _enableIpOverride = false;
 const String _ipOverride = '100.64.255.1';
 
 @module
@@ -21,6 +21,7 @@ abstract class AppModule {
       color: _enableIpOverride ? Colors.green : Colors.red,
       properties: {
         'touchscreenWebSocket': 'ws://$ipAddress:9999',
+        'gpsWebSocket': 'ws://$ipAddress:9998',
         'displayWebSocket': 'ws://$ipAddress:9090',
         'audioWebSocket': 'ws://$ipAddress:8080',
         'configurationApiBaseUrl': 'http://$ipAddress:8081',
