@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tesla_android/common/navigation/ta_page.dart';
+import 'package:tesla_android/common/ui/components/ta_app_bar.dart';
 import 'package:tesla_android/common/ui/components/ta_bottom_navigation_bar.dart';
 import 'package:tesla_android/feature/releaseNotes/cubit/release_notes_cubit.dart';
 import 'package:tesla_android/feature/releaseNotes/cubit/release_notes_state.dart';
@@ -19,9 +20,8 @@ class ReleaseNotesPage extends StatelessWidget {
     BlocProvider.of<ReleaseNotesCubit>(context).loadReleaseNotes();
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text(TAPage.releaseNotes.title),
-          automaticallyImplyLeading: false,
+        appBar: TaAppBar(
+          title: TAPage.releaseNotes.title,
         ),
         bottomNavigationBar: const TaBottomNavigationBar(
           currentIndex: 2,
@@ -57,6 +57,8 @@ class ReleaseNotesPage extends StatelessWidget {
     final Version selectedVersion = state.selectedVersion;
     final ChangelogItem selectedChangelogItem = state.selectedChangelogItem;
     return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
           width: MediaQuery.of(context).size.width * 0.30,

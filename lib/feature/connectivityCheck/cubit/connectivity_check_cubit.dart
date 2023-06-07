@@ -1,22 +1,21 @@
 import 'dart:async';
 import 'dart:html';
 
-import 'package:flavor/flavor.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:tesla_android/common/network/health_service.dart';
 import 'package:tesla_android/feature/connectivityCheck/model/connectivity_state.dart';
-import 'package:http/http.dart' as http;
 
 @singleton
 class ConnectivityCheckCubit extends Cubit<ConnectivityState> {
-  final Flavor flavor;
+  final HealthService _healthService;
 
-  ConnectivityCheckCubit(this.flavor) : super(ConnectivityState.initial) {
+  ConnectivityCheckCubit(this._healthService)
+      : super(ConnectivityState.initial) {
     _observeBackendAccessibility();
   }
 
   static const _connectivityTimeoutDuration = Duration(seconds: 30);
-  static const _requestTimeoutDuration = Duration(seconds: 25);
 
   void _observeBackendAccessibility() {
     _checkConnectivity();
@@ -26,15 +25,9 @@ class ConnectivityCheckCubit extends Cubit<ConnectivityState> {
   }
 
   void _checkConnectivity() async {
-    final uri = Uri.parse(flavor.getString("connectivityCheck")!);
-
     try {
-      final response = await http.get(uri).timeout(_requestTimeoutDuration);
-      if (response.statusCode != 200) {
-        _onRequestFailure();
-      } else {
-        _onRequestSuccess();
-      }
+      await _healthService.getHealthCheck();
+      _onRequestSuccess();
     } catch (_) {
       _onRequestFailure();
     }
