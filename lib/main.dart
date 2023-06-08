@@ -7,7 +7,7 @@ Future<void> main() async {
   await SentryFlutter.init(
     (options) {
       options.dsn =
-          'http://c18dd8bef7c74eec8c6074e6f8c9fd09@sentry.teslaandroid.com/2';
+          'https://c18dd8bef7c74eec8c6074e6f8c9fd09@sentry.teslaandroid.com/2';
       options.attachScreenshot = true;
       options.attachViewHierarchy = true;
     },
