@@ -27,9 +27,11 @@ dependencies:
   logger: any
   json_serializable: ^6.2.0
   package_info_plus: ^3.0.2
+  location: ^4.4.0
   sentry_flutter: ^7.5.2
   sentry_dio: ^7.5.2
-
+  url_launcher: ^6.1.1
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

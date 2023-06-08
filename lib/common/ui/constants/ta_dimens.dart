@@ -71,6 +71,6 @@ class TADimens {
 
   static const backendErrorIconSize = 80.0;
 
-  static const settingsTileTrailingWidth = 200.0;
+  static const settingsTileTrailingWidth = 250.0;
   static const settingsPageTableMaxWidth = 800.0;
 }

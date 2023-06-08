@@ -1,30 +1,30 @@
-import 'dart:html';
+import 'dart:html' hide Location;
 
-import 'package:dio/dio.dart';
 import 'package:flavor/flavor.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart' hide Environment;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:location/location.dart';
 
-const bool _enableIpOverride = false;
-const String _ipOverride = '100.64.255.1';
+const bool _enableDomainOverride = false;
+const String _domainOverride = 'device.teslaandroid.com';
 
 @module
 abstract class AppModule {
   @singleton
   Flavor get provideFlavor {
-    final ipAddress = _enableIpOverride
-        ? _ipOverride
-        : (window.location.hostname ?? "100.64.255.1");
+    final domain = _enableDomainOverride
+        ? _domainOverride
+        : (window.location.hostname ?? "device.teslaandroid.com");
     return Flavor.create(
-      _enableIpOverride ? Environment.dev : Environment.production,
-      color: _enableIpOverride ? Colors.green : Colors.red,
+      _enableDomainOverride ? Environment.dev : Environment.production,
+      color: _enableDomainOverride ? Colors.green : Colors.red,
       properties: {
-        'touchscreenWebSocket': 'ws://$ipAddress:9999',
-        'displayWebSocket': 'ws://$ipAddress:9090',
-        'audioWebSocket': 'ws://$ipAddress:8080',
-        'configurationApiBaseUrl': 'http://$ipAddress:8081',
-        'connectivityCheck': 'http://$ipAddress/online/connectivity_check.txt',
+        'touchscreenWebSocket': 'wss://$domain/sockets/touchscreen',
+        'gpsWebSocket': 'wss://$domain/sockets/gps',
+        'audioWebSocket': 'wss://$domain/sockets/audio',
+        'configurationApiBaseUrl': 'https://$domain/api',
+        'connectivityCheck': 'https://$domain/online/connectivity_check.txt',
         'virtualDisplayWidth': 1088,
         'virtualDisplayHeight': 832,
       },
@@ -33,8 +33,10 @@ abstract class AppModule {
 
   @singleton
   @preResolve
-  Future<SharedPreferences> get sharedPreferences =>
-      SharedPreferences.getInstance();
+  Future<SharedPreferences> get sharedPreferences => SharedPreferences.getInstance();
+
+  @singleton
+  Location get location => Location();
 
   @lazySingleton
   GlobalKey<NavigatorState> get navigatorKey => GlobalKey<NavigatorState>();

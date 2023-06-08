@@ -1,23 +1,24 @@
+import 'dart:convert';
 import 'dart:html';
-import 'dart:typed_data';
 
 import 'package:flavor/flavor.dart';
 import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:tesla_android/feature/gps/model/gps_data.dart';
 
 @injectable
-class AudioTransport {
+class GpsTransport {
   final Flavor flavor;
   final Uri webSocketUri;
   final BehaviorSubject pcmDataSubject = BehaviorSubject();
   final BehaviorSubject<bool> connectionStateSubject =
       BehaviorSubject.seeded(false);
 
-  static const String tag = "AudioTransport: ";
+  static const String tag = "GpsTransport: ";
 
-  AudioTransport(this.flavor)
+  GpsTransport(this.flavor)
       : webSocketUri = Uri.parse(flavor.getString(
-          "audioWebSocket",
+          "gpsWebSocket",
         )!);
 
   WebSocket? _webSocketChannel;
@@ -29,18 +30,15 @@ class AudioTransport {
     _connect();
   }
 
-  void _connect() {
+  Future<void> _connect() async {
     if (_keepConnectionAlive) {
       _webSocketChannel = WebSocket(flavor.getString(
-        "audioWebSocket",
-      )!)
-        ..binaryType = 'arraybuffer';
+        "gpsWebSocket",
+      )!);
       _webSocketChannel?.onOpen.listen((event) {
         connectionStateSubject.add(true);
       });
       _webSocketChannel?.onMessage.listen((MessageEvent e) {
-        ByteBuffer buf = e.data;
-        pcmDataSubject.add(buf.asByteData());
         connectionStateSubject.add(true);
       });
       _webSocketChannel?.onClose.listen((event) {
@@ -58,5 +56,15 @@ class AudioTransport {
     _keepConnectionAlive = false;
     _webSocketChannel?.close();
     _webSocketChannel = null;
+  }
+
+  void sendGpsData(GpsData gpsData) async {
+    if(connectionStateSubject.valueOrNull == true) {
+      final jsonString = jsonEncode(gpsData.toJson());
+      _webSocketChannel?.sendString(jsonString);
+    } else {
+      await Future.delayed(const Duration(seconds: 1), _connect);
+      await Future.delayed(const Duration(seconds: 1), () => sendGpsData(gpsData));
+    }
   }
 }
