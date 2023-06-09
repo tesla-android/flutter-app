@@ -8,7 +8,7 @@ import 'package:tesla_android/feature/audio/cubit/audio_state.dart';
 import 'package:tesla_android/feature/audio/transport/audio_transport.dart';
 import 'package:tesla_android/feature/audio/utils/pcm_player.dart';
 
-@singleton
+@injectable
 class AudioCubit extends Cubit<AudioState> {
   final AudioTransport _audioTransport;
   final PcmAudioPlayer _pcmAudioPlayer;
@@ -26,6 +26,14 @@ class AudioCubit extends Cubit<AudioState> {
   ) : super(AudioState(isEnabled: false, isWebSocketConnectionActive: false)) {
     _listenToAudioTransportState();
     _setInitialState();
+  }
+
+  @override
+  Future<void> close() {
+    _audioTransportConnectionStateStreamSubscription?.cancel();
+    _audioTransportPcmDataStreamSubscription?.cancel();
+    _audioTransport.disconnect();
+    return super.close();
   }
 
   void enableAudio() {
@@ -70,7 +78,6 @@ class AudioCubit extends Cubit<AudioState> {
   }
 
   void _subscribeToAudioTransport() {
-    _audioTransport.maintainConnection();
     _audioTransportPcmDataStreamSubscription =
         _audioTransport.pcmDataSubject.listen((data) {
       _feedAudioPlayer(data);

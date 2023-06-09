@@ -15,16 +15,20 @@ class ConnectivityCheckCubit extends Cubit<ConnectivityState> {
     _observeBackendAccessibility();
   }
 
-  static const _connectivityTimeoutDuration = Duration(seconds: 30);
+  static const _standardCheckInterval = Duration(seconds: 30);
+  static const _offlineCheckInterval = Duration(seconds: 5);
 
   void _observeBackendAccessibility() {
-    _checkConnectivity();
-    Timer.periodic(_connectivityTimeoutDuration, (timer) async {
-      _checkConnectivity();
+    checkConnectivity();
+    Timer.periodic(_standardCheckInterval, (timer) async {
+      if (state == ConnectivityState.backendAccessible) checkConnectivity();
+    });
+    Timer.periodic(_offlineCheckInterval, (timer) async {
+      if (state != ConnectivityState.backendAccessible) checkConnectivity();
     });
   }
 
-  void _checkConnectivity() async {
+  void checkConnectivity() async {
     try {
       await _healthService.getHealthCheck();
       _onRequestSuccess();
