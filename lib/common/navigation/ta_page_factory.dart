@@ -29,8 +29,9 @@ class TAPageFactory {
     return (context) {
       switch (page) {
         case TAPage.home:
-          return _injectAndroidViewerDependencies(
-            child: HomePage(),
+          return _injectSingletons(
+            child: BlocProvider(
+                create: (_) => getIt<TouchscreenCubit>(), child: HomePage()),
           );
         case TAPage.releaseNotes:
           return BlocProvider(
@@ -42,8 +43,7 @@ class TAPageFactory {
         case TAPage.donations:
           return const DonationPage();
         case TAPage.settings:
-          //FIXME Move audio settings a separate cubit
-          return _injectAndroidViewerDependencies(
+          return _injectSingletons(
             child: BlocProvider(
               create: (_) =>
                   getIt<SystemConfigurationCubit>()..fetchConfiguration(),
@@ -57,17 +57,14 @@ class TAPageFactory {
     };
   }
 
-  Widget _injectAndroidViewerDependencies({required Widget child}) {
+  Widget _injectSingletons({required Widget child}) {
     return MultiBlocProvider(
       providers: [
         BlocProvider.value(
           value: getIt<ConnectivityCheckCubit>(),
         ),
-        BlocProvider.value(
-          value: getIt<TouchscreenCubit>(),
-        ),
-        BlocProvider.value(
-          value: getIt<AudioCubit>(),
+        BlocProvider(
+          create: (_) => getIt<AudioCubit>(),
         ),
         BlocProvider.value(
           value: getIt<GpsCubit>(),
