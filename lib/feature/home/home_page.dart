@@ -4,6 +4,7 @@ import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
 import 'package:tesla_android/feature/connectivityCheck/cubit/connectivity_check_cubit.dart';
 import 'package:tesla_android/feature/connectivityCheck/model/connectivity_state.dart';
 import 'package:tesla_android/feature/display/widget/display_view.dart';
+import 'package:tesla_android/feature/home/dino/chrome_dino_game.dart';
 import 'package:tesla_android/feature/releaseNotes/widget/versionRibbon/version_ribbon.dart';
 import 'package:tesla_android/feature/touchscreen/touchscreen_view.dart';
 
@@ -48,12 +49,6 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _backendConnectionLostWidget() {
-    return const Center(
-      child: Icon(
-        Icons.error_outline,
-        color: Colors.red,
-        size: TADimens.backendErrorIconSize,
-      ),
-    );
+    return ChromeDinoGame();
   }
 }
