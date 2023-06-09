@@ -43,6 +43,10 @@ dev_dependencies:
 flutter:
   assets:
     - images/png/
+    - images/dino-game/
+    - images/dino-game/cacti/
+    - images/dino-game/dino/
+    - images/dino-game/ptera/
     - fonts/
   uses-material-design: true
   fonts:
