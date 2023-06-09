@@ -1,5 +1,6 @@
 import 'dart:html' hide Location;
 
+import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:flavor/flavor.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart' hide Environment;
@@ -33,11 +34,22 @@ abstract class AppModule {
 
   @singleton
   @preResolve
-  Future<SharedPreferences> get sharedPreferences => SharedPreferences.getInstance();
+  Future<SharedPreferences> get sharedPreferences =>
+      SharedPreferences.getInstance();
 
   @singleton
   Location get location => Location();
 
   @lazySingleton
   GlobalKey<NavigatorState> get navigatorKey => GlobalKey<NavigatorState>();
+
+  @singleton
+  Future<Aptabase> provideAptabase() async {
+    await Aptabase.init(
+        "A-SH-9186809739",
+        const InitOptions(
+          host: "https://aptabase.teslaandroid.com",
+        ));
+    return Aptabase.instance;
+  }
 }

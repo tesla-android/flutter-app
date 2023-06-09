@@ -31,7 +31,9 @@ dependencies:
   sentry_flutter: ^7.5.2
   sentry_dio: ^7.5.2
   url_launcher: ^6.1.1
-  
+  equatable: ^2.0.0
+  aptabase_flutter: ^0.0.10
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
