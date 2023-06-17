@@ -1,8 +1,11 @@
 import 'package:flavor/flavor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:tesla_android/common/di/ta_locator.dart';
-import 'package:tesla_android/feature/display/widget/iframe_view.dart';
+import 'package:tesla_android/feature/display/cubit/display_cubit.dart';
+import 'package:tesla_android/feature/display/cubit/display_state.dart';
+import 'package:tesla_android/feature/display/widget/display_html_view.dart';
 
 class DisplayView extends StatelessWidget {
   final Widget touchScreenView;
@@ -12,17 +15,30 @@ class DisplayView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final flavor = getIt<Flavor>();
-    return Center(
-      child: AspectRatio(
-        aspectRatio: (flavor.getInt("virtualDisplayWidth") ?? 1) /
-            (flavor.getInt("virtualDisplayHeight") ?? 1),
-        child: Stack(
-          children: [
-            const IframeView(source: "player.html"),
-            PointerInterceptor(child: touchScreenView),
-          ],
-        ),
+    final cubit = BlocProvider.of<DisplayCubit>(context);
+    return LayoutBuilder(
+        builder: (context, constraints) {
+          cubit.resizeDisplay(viewConstraints: constraints);
+          return Center(
+            child: BlocBuilder<DisplayCubit, DisplayState>(builder: (context, state) {
+              if (state is DisplayStateNormal) {
+                return _normalBody(state);
+              }
+              return const CircularProgressIndicator();
+            }),
+          );
+        }
+    );
+  }
+
+  Widget _normalBody(DisplayStateNormal state) {
+    return AspectRatio(
+      aspectRatio: state.adjustedSize.width/state.adjustedSize.height,
+      child: Stack(
+        children: [
+          const DisplayHtmlView(),
+          PointerInterceptor(child: touchScreenView),
+        ],
       ),
     );
   }

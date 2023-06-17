@@ -6,6 +6,7 @@ import 'package:tesla_android/common/navigation/ta_page.dart';
 import 'package:tesla_android/feature/about/about_page.dart';
 import 'package:tesla_android/feature/audio/cubit/audio_cubit.dart';
 import 'package:tesla_android/feature/connectivityCheck/cubit/connectivity_check_cubit.dart';
+import 'package:tesla_android/feature/display/cubit/display_cubit.dart';
 import 'package:tesla_android/feature/donations/widget/donation_page.dart';
 import 'package:tesla_android/feature/gps/cubit/gps_cubit.dart';
 import 'package:tesla_android/feature/home/home_page.dart';
@@ -30,9 +31,17 @@ class TAPageFactory {
       switch (page) {
         case TAPage.home:
           return _injectSingletons(
-            child: BlocProvider(
-                create: (_) => getIt<TouchscreenCubit>(), child: HomePage()),
-          );
+              child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) => getIt<TouchscreenCubit>(),
+              ),
+              BlocProvider(
+                create: (_) => getIt<DisplayCubit>(),
+              ),
+            ],
+            child: HomePage(),
+          ));
         case TAPage.releaseNotes:
           return BlocProvider(
             create: (_) => getIt<ReleaseNotesCubit>(),

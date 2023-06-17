@@ -1,8 +1,5 @@
 import 'dart:ui';
 
-const touchScreenMaxX = 1024.0;
-const touchScreenMaxY = 768.0;
-
 class VirtualTouchscreenSlotState {
   int slotIndex; // 0-9
   int trackingId; // active pointer index or -1
