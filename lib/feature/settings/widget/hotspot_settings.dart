@@ -129,7 +129,6 @@ class HotspotSettings extends StatelessWidget {
               child: Text(
                   'To ensure continuous internet access, your Tesla vehicle relies on Wi-Fi networks that have an active internet connection. However, if you encounter a situation where Wi-Fi connectivity is unavailable, there is a solution called "offline mode" to address this limitation. In offline mode, certain features like Tesla Mobile App access and other car-side functionalities that rely on internet connectivity will be disabled. To overcome this limitation, you can establish internet access in your Tesla Android setup by using an LTE Modem or enabling tethering.'),
               ),
-              if (isOfflineModeEnabled) ...[
             SettingsTile(
                 icon: Icons.data_thresholding_sharp,
                 title: 'Tesla Telemetry',
@@ -155,7 +154,6 @@ class HotspotSettings extends StatelessWidget {
             ),
           ],
         ],
-      ],
     );
   }
 }
