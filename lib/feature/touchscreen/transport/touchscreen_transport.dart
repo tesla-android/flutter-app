@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:tesla_android/common/network/base_websocket_transport.dart';
 import 'package:tesla_android/feature/touchscreen/model/virtual_touchscreen_command.dart';

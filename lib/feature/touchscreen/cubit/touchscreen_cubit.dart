@@ -22,9 +22,9 @@ class TouchscreenCubit extends Cubit<bool> with Logger {
   }
 
   void handlePointerDownEvent(
-      PointerDownEvent event, BoxConstraints constraints) {
+      PointerDownEvent event, BoxConstraints constraints, Size touchscreenSize) {
     final scaledPointerPosition =
-        _scalePointerPosition(event.localPosition, constraints);
+        _scalePointerPosition(event.localPosition, constraints, touchscreenSize);
     final slot = _getFirstUnusedSlot();
     if (slot == null) return;
     slot.trackingId = event.pointer;
@@ -43,9 +43,9 @@ class TouchscreenCubit extends Cubit<bool> with Logger {
   }
 
   void handlePointerMoveEvent(
-      PointerMoveEvent event, BoxConstraints constraints) {
+      PointerMoveEvent event, BoxConstraints constraints, Size touchscreenSize) {
     final scaledPointerPosition =
-        _scalePointerPosition(event.localPosition, constraints);
+        _scalePointerPosition(event.localPosition, constraints, touchscreenSize);
     final slot = _getSlotFromTrackingId(event.pointer);
     if (slot == null) return;
     slot.position = scaledPointerPosition;
@@ -95,9 +95,9 @@ class TouchscreenCubit extends Cubit<bool> with Logger {
     return null;
   }
 
-  Offset _scalePointerPosition(Offset position, BoxConstraints constraints) {
-    final scaleX = touchScreenMaxX / constraints.maxWidth;
-    final scaleY = touchScreenMaxY / constraints.maxHeight;
+  Offset _scalePointerPosition(Offset position, BoxConstraints constraints, Size touchscreenSize) {
+    final scaleX = touchscreenSize.width / constraints.maxWidth;
+    final scaleY = touchscreenSize.height / constraints.maxHeight;
 
     var scaledOffset = position.scale(scaleX, scaleY);
 

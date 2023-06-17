@@ -54,8 +54,10 @@ abstract class BaseWebsocketTransport with Logger {
     if (_keepConnectionAlive) {
       _webSocketChannel = WebSocket(_flavor.getString(
         flavorUrlKey,
-      )!)
-        ..binaryType = binaryType;
+      )!);
+      if (binaryType != null) {
+        _webSocketChannel?.binaryType = binaryType;
+      }
       _webSocketChannel?.onOpen.listen((event) {
         connectionStateSubject.add(true);
         log("open");

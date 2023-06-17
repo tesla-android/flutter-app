@@ -25,9 +25,7 @@ abstract class AppModule {
         'gpsWebSocket': 'wss://$domain/sockets/gps',
         'audioWebSocket': 'wss://$domain/sockets/audio',
         'configurationApiBaseUrl': 'https://$domain/api',
-        'connectivityCheck': 'https://$domain/online/connectivity_check.txt',
-        'virtualDisplayWidth': 1088,
-        'virtualDisplayHeight': 832,
+        'displayStreamUrl': 'https://$domain/stream',
       },
     );
   }

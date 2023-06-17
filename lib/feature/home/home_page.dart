@@ -9,7 +9,7 @@ import 'package:tesla_android/feature/releaseNotes/widget/versionRibbon/version_
 import 'package:tesla_android/feature/touchscreen/touchscreen_view.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +49,6 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _backendConnectionLostWidget() {
-    return ChromeDinoGame();
+    return const ChromeDinoGame();
   }
 }
