@@ -8,11 +8,14 @@ class RemoteDisplayState extends Equatable {
   final int width;
   final int height;
   final int density;
+  @JsonKey(name: "lowres")
+  final int lowRes;
 
   const RemoteDisplayState({
     required this.width,
     required this.height,
     required this.density,
+    required this.lowRes,
   });
 
   factory RemoteDisplayState.fromJson(Map<String, dynamic> json) =>
@@ -22,5 +25,5 @@ class RemoteDisplayState extends Equatable {
       _$RemoteDisplayStateToJson(this);
   
   @override
-  List<Object?> get props => [width, height, density];
+  List<Object?> get props => [width, height, density, lowRes];
 }

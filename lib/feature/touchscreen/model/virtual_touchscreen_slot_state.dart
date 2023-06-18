@@ -5,12 +5,6 @@ class VirtualTouchscreenSlotState {
   int trackingId; // active pointer index or -1
   Offset position;
 
-  VirtualTouchscreenSlotState._({
-    required this.slotIndex,
-    required this.trackingId,
-    required this.position,
-  });
-
   VirtualTouchscreenSlotState.initial({required this.slotIndex})
       : trackingId = -1,
         position = Offset.zero;

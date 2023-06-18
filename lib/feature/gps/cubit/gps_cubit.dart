@@ -1,28 +1,60 @@
 import 'dart:async';
+import 'dart:collection';
+import 'dart:html';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tesla_android/common/utils/logger.dart';
 import 'package:tesla_android/feature/gps/cubit/gps_state.dart';
 import 'package:tesla_android/feature/gps/model/gps_data.dart';
 import 'package:tesla_android/feature/gps/transport/gps_transport.dart';
+import 'package:tesla_android/feature/gps/util/web_location.dart';
 
-@singleton
+@injectable
 class GpsCubit extends Cubit<GpsState> with Logger {
   final SharedPreferences _sharedPreferences;
-  final Location _location;
+  final WebLocation _location;
   final GpsTransport _gpsTransport;
 
   static const _sharedPreferencesKey = 'GpsCubit_isEnabled';
 
   StreamSubscription? _locationUpdatesStreamSubscription;
+  final Queue<int> _locationUpdateTimestamps = Queue<int>();
 
   GpsCubit(this._sharedPreferences, this._location, this._gpsTransport)
       : super(GpsStateInitial()) {
     _setInitialState();
+  }
+
+  @override
+  Future<void> close() {
+    _gpsTransport.disconnect();
+    _locationUpdatesStreamSubscription?.cancel();
+    _locationUpdatesStreamSubscription = null;
+    return super.close();
+  }
+
+  Future<void> enableGps() async {
+    try {
+      await _checkGpsPermission().timeout(const Duration(seconds: 30));
+    } catch (exception, stacktrace) {
+      emit(GpsStateInitialisationError());
+      if (exception is TimeoutException) {
+        log("Timed out waiting for GPS init");
+      } else {
+        logExceptionAndUploadToSentry(
+            exception: exception, stackTrace: stacktrace);
+      }
+    }
+  }
+
+  void disableGPS() {
+    _gpsTransport.disconnect();
+    _locationUpdatesStreamSubscription?.cancel();
+    _locationUpdatesStreamSubscription = null;
+    _sharedPreferences.setBool(_sharedPreferencesKey, false);
+    emit(GpsStateManuallyDisabled());
   }
 
   void _setInitialState() {
@@ -36,38 +68,12 @@ class GpsCubit extends Cubit<GpsState> with Logger {
     }
   }
 
-  Future<void> enableGps() async {
-    try {
-      await _enableGpsService().timeout(const Duration(seconds: 30));
-      await _checkGpsPermission().timeout(const Duration(seconds: 30));
-    } catch (exception, stacktrace) {
-      emit(GpsStateInitialisationError());
-      if (exception is TimeoutException) {
-        log("Timed out waiting for GPS init");
-      } else {
-        logExceptionAndUploadToSentry(
-            exception: exception, stackTrace: stacktrace);
-      }
-    }
-  }
-
-  Future<void> _enableGpsService() async {
-    final gpsServiceEnabled = await _location.serviceEnabled();
-    if (!gpsServiceEnabled) {
-      final gpsServiceRequested = await _location.requestService();
-      if (!gpsServiceRequested) {
-        throw Exception("requestService == false");
-      }
-    }
-  }
-
   Future<void> _checkGpsPermission() async {
-    final gpsPermissionStatus = await _location.hasPermission();
-    if (gpsPermissionStatus != PermissionStatus.granted) {
+    final gpsPermissionStatus = await _location.getPermissionStatus();
+    if (gpsPermissionStatus == false) {
       var gpsPermissionRequested = await _location.requestPermission();
-      // https://github.com/Lyokone/flutterlocation/issues/348
-      gpsPermissionRequested = await _location.hasPermission();
-      if (gpsPermissionRequested == PermissionStatus.granted) {
+      gpsPermissionRequested = await _location.getPermissionStatus();
+      if (gpsPermissionRequested) {
         _onLocationPermissionGranted();
         return;
       }
@@ -90,6 +96,10 @@ class GpsCubit extends Cubit<GpsState> with Logger {
       emit(GpsStateActive(currentLocation: location));
       _gpsTransport.sendJson(GpsData.fromLocationData(location));
     } catch (exception, stacktrace) {
+      if (exception is PositionError) {
+        logException(exception: exception, stackTrace: stacktrace);
+        return;
+      }
       logExceptionAndUploadToSentry(
           exception: exception, stackTrace: stacktrace);
     }
@@ -97,17 +107,46 @@ class GpsCubit extends Cubit<GpsState> with Logger {
 
   void _subscribeToLocationUpdates() async {
     _locationUpdatesStreamSubscription =
-        _location.onLocationChanged.listen((locationData) async {
-      emit(GpsStateActive(currentLocation: locationData));
-      _gpsTransport.sendJson(GpsData.fromLocationData(locationData));
-    });
+        _location.locationStream.listen((locationData) async {
+          _registerLocationUpdate();
+
+          final averageUpdateInterval =
+          _calculateAverageUpdateIntervalInSeconds();
+
+          emit(GpsStateActive(
+            currentLocation: locationData,
+            averageUpdateIntervalInSeconds: averageUpdateInterval,
+          ));
+
+          _gpsTransport.sendJson(GpsData.fromLocationData(locationData));
+        });
   }
 
-  void disableGPS() {
-    _gpsTransport.disconnect();
-    _locationUpdatesStreamSubscription?.cancel();
-    _locationUpdatesStreamSubscription = null;
-    _sharedPreferences.setBool(_sharedPreferencesKey, false);
-    emit(GpsStateManuallyDisabled());
+  void _registerLocationUpdate() {
+    final currentTimestamp = DateTime.now().millisecondsSinceEpoch;
+
+    _locationUpdateTimestamps.addLast(currentTimestamp);
+
+    // Remove timestamps older than 60 seconds
+    final oneMinuteAgo = currentTimestamp - 60000;
+    while (_locationUpdateTimestamps.first < oneMinuteAgo) {
+      _locationUpdateTimestamps.removeFirst();
+    }
+  }
+
+  double _calculateAverageUpdateIntervalInSeconds() {
+    final totalUpdates = _locationUpdateTimestamps.length;
+    if (totalUpdates < 2) {
+      return 0;
+    }
+
+    final oldestUpdateTimestamp = _locationUpdateTimestamps.first;
+    final newestUpdateTimestamp = _locationUpdateTimestamps.last;
+    final totalDurationInSeconds =
+        (newestUpdateTimestamp - oldestUpdateTimestamp) / 1000;
+
+    final result = totalDurationInSeconds / (totalUpdates - 1);
+
+    return result;
   }
 }

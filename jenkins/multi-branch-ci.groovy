@@ -53,14 +53,14 @@ pipeline {
                 script {
                     SENTRY_RELEASE = 'flutter-app-ci-' + getCurrentBranch()  + '-' + getCommitSha()
                 }
-                sh('flutter build web --source-maps --dart-define=SENTRY_RELEASE=' + SENTRY_RELEASE)
+                sh('flutter build web --profile --source-maps --dart-define=SENTRY_RELEASE=' + SENTRY_RELEASE)
             }
         }
         stage('Upload debug symbols to Sentry') {
             steps {
                 sh('sentry-cli releases new ' + SENTRY_RELEASE)
-                sh('sentry-cli releases files ' + SENTRY_RELEASE + ' upload-sourcemaps . --ext dart')
-                sh('sentry-cli releases files ' + SENTRY_RELEASE + ' upload-sourcemaps "build/web" --ext map --ext js')
+                sh('sentry-cli releases files ' + SENTRY_RELEASE + ' upload-sourcemaps . --ext dart --dist 1')
+                sh('sentry-cli releases files ' + SENTRY_RELEASE + ' upload-sourcemaps "build/web" --ext map --ext js --dist 1')
                 sh('sentry-cli releases finalize ' + SENTRY_RELEASE)
             }
         }
