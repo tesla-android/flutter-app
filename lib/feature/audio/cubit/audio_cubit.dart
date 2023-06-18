@@ -14,7 +14,6 @@ class AudioCubit extends Cubit<AudioState> {
   final PcmAudioPlayer _pcmAudioPlayer;
   final SharedPreferences _sharedPreferences;
 
-  StreamSubscription? _audioTransportConnectionStateStreamSubscription;
   StreamSubscription? _audioTransportPcmDataStreamSubscription;
 
   static const _sharedPreferencesKey = 'AudioCubit_isEnabled';
@@ -23,17 +22,17 @@ class AudioCubit extends Cubit<AudioState> {
     this._audioTransport,
     this._pcmAudioPlayer,
     this._sharedPreferences,
-  ) : super(AudioState(isEnabled: false, isWebSocketConnectionActive: false)) {
-    _listenToAudioTransportState();
-    _setInitialState();
-  }
+  ) : super(AudioState(isEnabled: false));
 
   @override
   Future<void> close() {
-    _audioTransportConnectionStateStreamSubscription?.cancel();
     _audioTransportPcmDataStreamSubscription?.cancel();
     _audioTransport.disconnect();
     return super.close();
+  }
+
+  void init() {
+    _setInitialState();
   }
 
   void enableAudio() {
@@ -46,8 +45,10 @@ class AudioCubit extends Cubit<AudioState> {
   }
 
   void disableAudio() {
-    _audioTransport.disconnect();
-    _audioTransportPcmDataStreamSubscription?.cancel();
+    if (state.isEnabled) {
+      _audioTransport.disconnect();
+      _audioTransportPcmDataStreamSubscription?.cancel();
+    }
     _sharedPreferences.setBool(
       _sharedPreferencesKey,
       false,
@@ -68,13 +69,6 @@ class AudioCubit extends Cubit<AudioState> {
     } else {
       disableAudio();
     }
-  }
-
-  void _listenToAudioTransportState() {
-    _audioTransportConnectionStateStreamSubscription =
-        _audioTransport.connectionStateSubject.listen((value) {
-      emit(state.copyWith(isWebSocketConnectionActive: value));
-    });
   }
 
   void _subscribeToAudioTransport() {

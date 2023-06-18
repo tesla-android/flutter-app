@@ -11,6 +11,7 @@ RemoteDisplayState _$RemoteDisplayStateFromJson(Map<String, dynamic> json) =>
       width: json['width'] as int,
       height: json['height'] as int,
       density: json['density'] as int,
+      lowRes: json['lowres'] as int,
     );
 
 Map<String, dynamic> _$RemoteDisplayStateToJson(RemoteDisplayState instance) =>
@@ -18,4 +19,5 @@ Map<String, dynamic> _$RemoteDisplayStateToJson(RemoteDisplayState instance) =>
       'width': instance.width,
       'height': instance.height,
       'density': instance.density,
+      'lowres': instance.lowRes,
     };

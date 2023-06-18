@@ -95,7 +95,7 @@
 					}
 				}).then(function(engineInitializer) {
 					loading.classList.add('main_done');
-					return engineInitializer.initializeEngine({canvasKitBaseUrl: "/canvaskit/", renderer: "canvaskit"});
+					return engineInitializer.initializeEngine({canvasKitBaseUrl: "/canvaskit/", renderer: "canvaskit", canvasKitMaximumSurfaces: 4, canvasKitVariant: "chromium"});
 				}).then(function(appRunner) {
 					loading.classList.add('init_done');
 					return appRunner.runApp();

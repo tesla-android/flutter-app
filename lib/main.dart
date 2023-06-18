@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:tesla_android/common/di/ta_locator.dart';
@@ -6,6 +7,8 @@ import 'package:tesla_android/common/navigation/ta_page_factory.dart';
 Future<void> main() async {
   await SentryFlutter.init(
     (options) {
+      options.debug = kDebugMode;
+      options.dist = "1";
       options.dsn =
           'https://c18dd8bef7c74eec8c6074e6f8c9fd09@sentry.teslaandroid.com/2';
       options.attachScreenshot = true;

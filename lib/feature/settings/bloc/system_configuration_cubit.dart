@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:tesla_android/common/utils/logger.dart';
 import 'package:tesla_android/feature/settings/bloc/system_configuration_state.dart';
 import 'package:tesla_android/feature/settings/model/softap_band_type.dart';
 import 'package:tesla_android/feature/settings/repository/system_configuration_repository.dart';
 
 @injectable
-class SystemConfigurationCubit extends Cubit<SystemConfigurationState> {
+class SystemConfigurationCubit extends Cubit<SystemConfigurationState> with Logger {
   final SystemConfigurationRepository _repository;
   final GlobalKey<NavigatorState> _navigatorState;
 
@@ -23,8 +24,8 @@ class SystemConfigurationCubit extends Cubit<SystemConfigurationState> {
       emit(SystemConfigurationStateSettingsFetched(
           currentConfiguration: configuration));
     } catch (exception, stackTrace) {
-      Sentry.captureException(exception, stackTrace: stackTrace);
-      emit(SystemConfigurationStateSettingsFetchingError());
+      logExceptionAndUploadToSentry(exception: exception, stackTrace: stackTrace);
+      if (!isClosed) emit(SystemConfigurationStateSettingsFetchingError());
     }
   }
 
@@ -161,8 +162,8 @@ class SystemConfigurationCubit extends Cubit<SystemConfigurationState> {
         await _repository.setOfflineModeTeslaFirmwareDownloads(
             isOfflineModeTeslaFirmwareDownloadsEnabledFlag ? 1 : 0);
       } catch (exception, stackTrace) {
-        Sentry.captureException(exception, stackTrace: stackTrace);
-        emit(SystemConfigurationStateSettingsSavingFailedError());
+        logExceptionAndUploadToSentry(exception: exception, stackTrace: stackTrace);
+        if (!isClosed) emit(SystemConfigurationStateSettingsSavingFailedError());
       }
     }
   }

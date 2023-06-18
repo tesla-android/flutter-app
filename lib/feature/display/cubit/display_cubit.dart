@@ -17,6 +17,12 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
   Timer? _resizeCoolDownTimer;
   static const Duration _coolDownDuration = Duration(seconds: 1);
 
+  @override
+  Future<void> close() {
+    _resizeCoolDownTimer?.cancel();
+    return super.close();
+  }
+
   void resizeDisplay({required BoxConstraints viewConstraints}) {
     if(state is DisplayStateResizeInProgress) {
       log("Display resize can't happen now (state == DisplayStateResizeInProgress)");
@@ -64,9 +70,11 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
         await _repository.updateDisplayConfiguration(RemoteDisplayState(
           width: adjustedSize.width.toInt(),
           height: adjustedSize.height.toInt(),
-          density: 160,
+          density: 200,
+          lowRes: 0,
         ));
         await Future.delayed(_coolDownDuration, () {
+          if(isClosed) return;
           emit(DisplayStateNormal(
             viewConstraints: viewConstraints,
             adjustedSize: adjustedSize,
@@ -79,7 +87,8 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
             "height": adjustedSize.height,
             "viewportWidth": viewConstraints.maxWidth,
             "viewportHeight": viewConstraints.maxHeight,
-            "density": "160"
+            "density": "200",
+            "lowRes": "0"
           },
         );
       } catch (exception, stacktrace) {
@@ -92,7 +101,7 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
   }
   ///
   /// Display resolution needs to be aligned by 16 for the hardware encoder
-  /// Not going below 1280 x 864 just to be safe
+  /// Not going below 1280 x 832 just to be safe
   ///
   Size _calculateOptimalSize(BoxConstraints constraints) {
     double maxWidth;
@@ -100,9 +109,9 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
 
     if (constraints.maxWidth > constraints.maxHeight) {
       maxWidth = constraints.maxWidth > 1280 ? 1280 : constraints.maxWidth;
-      maxHeight = constraints.maxHeight > 864 ? 864 : constraints.maxHeight;
+      maxHeight = constraints.maxHeight > 832 ? 832 : constraints.maxHeight;
     } else {
-      maxWidth = constraints.maxWidth > 864 ? 864 : constraints.maxWidth;
+      maxWidth = constraints.maxWidth > 832 ? 832 : constraints.maxWidth;
       maxHeight = constraints.maxHeight > 1280 ? 1280 : constraints.maxHeight;
     }
 

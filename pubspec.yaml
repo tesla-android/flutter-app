@@ -3,11 +3,11 @@ description: Tesla Android
 
 publish_to: 'none'
 
-version: 2023.20.1+2
+version: 2023.20.1+1
 
 environment:
-  flutter: "3.7.0"
-  sdk: "2.19.0"
+  flutter: "3.10.5"
+  sdk: "3.0.5"
 
 dependencies:
   flutter:
@@ -27,7 +27,6 @@ dependencies:
   logger: any
   json_serializable: ^6.2.0
   package_info_plus: ^3.0.2
-  location: ^4.4.0
   sentry_flutter: ^7.5.2
   sentry_dio: ^7.5.2
   url_launcher: ^6.1.1

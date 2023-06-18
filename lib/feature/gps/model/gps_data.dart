@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:location/location.dart';
+import 'package:tesla_android/feature/gps/util/web_location_data.dart';
 
 part 'gps_data.g.dart';
 
@@ -9,6 +9,8 @@ class GpsData {
   final String longitude;
   @JsonKey(name: "vertical_accuracy")
   final String verticalAccuracy;
+  final String bearing;
+  final String speed;
   final String timestamp;
 
   const GpsData({
@@ -16,12 +18,14 @@ class GpsData {
     required this.longitude,
     required this.verticalAccuracy,
     required this.timestamp,
+    this.bearing = "not-available",
+    this.speed = "not-available",
   });
 
   factory GpsData.fromJson(Map<String, dynamic> json) =>
       _$GpsDataFromJson(json);
 
-  factory GpsData.fromLocationData(LocationData locationData) {
+  factory GpsData.fromLocationData(WebLocationData locationData) {
     return GpsData(
         latitude: locationData.latitude.toString(),
         longitude: locationData.longitude.toString(),

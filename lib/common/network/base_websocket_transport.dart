@@ -17,13 +17,13 @@ abstract class BaseWebsocketTransport with Logger {
 
   ConnectivityCheckCubit get _connectivityCheckCubit =>
       getIt<ConnectivityCheckCubit>();
-  final BehaviorSubject<bool> connectionStateSubject =
-      BehaviorSubject.seeded(false);
 
   ConnectivityState _connectivityState = ConnectivityState.initial;
   WebSocket? _webSocketChannel;
   bool _keepConnectionAlive = false;
   bool _waitingForConnectivityToRestore = false;
+
+  bool get _isConnected => _webSocketChannel?.readyState == WebSocket.OPEN;
 
   BaseWebsocketTransport({required this.flavorUrlKey, this.binaryType}) {
     _observeConnectivityState();
@@ -38,7 +38,7 @@ abstract class BaseWebsocketTransport with Logger {
         _maintainConnection();
         _waitingForConnectivityToRestore = false;
       } else if (_connectivityState == ConnectivityState.backendUnreachable &&
-          connectionStateSubject.valueOrNull == true) {
+          _isConnected) {
         log("backendUnreachable");
         disconnect();
       }
@@ -59,12 +59,11 @@ abstract class BaseWebsocketTransport with Logger {
         _webSocketChannel?.binaryType = binaryType;
       }
       _webSocketChannel?.onOpen.listen((event) {
-        connectionStateSubject.add(true);
         log("open");
         onOpen();
       });
       _webSocketChannel?.onMessage.listen((MessageEvent e) {
-        connectionStateSubject.add(true);
+        onMessage(e);
       });
       _webSocketChannel?.onClose.listen((event) {
         _reconnect();
@@ -76,7 +75,6 @@ abstract class BaseWebsocketTransport with Logger {
   }
 
   void _reconnect() async {
-    connectionStateSubject.add(false);
     if (_connectivityState == ConnectivityState.backendAccessible) {
       log("reconnecting");
       Future.delayed(const Duration(seconds: 1), _connect);
@@ -96,27 +94,33 @@ abstract class BaseWebsocketTransport with Logger {
   }
 
   void send(dynamic message) {
+    if (!_isConnected) return;
     _webSocketChannel?.send(message);
   }
 
   void sendString(String string) {
+    if (!_isConnected) return;
     _webSocketChannel?.sendString(string);
   }
 
   void sendJson(object) {
+    if (!_isConnected) return;
     final jsonString = jsonEncode(object);
     sendString(jsonString);
   }
 
   void sendBlob(Blob blob) {
+    if (!_isConnected) return;
     _webSocketChannel?.sendBlob(blob);
   }
 
   void sendByteBuffer(ByteBuffer byteBuffer) {
+    if (!_isConnected) return;
     _webSocketChannel?.sendByteBuffer(byteBuffer);
   }
 
   void sendTypedData(TypedData typedData) {
+    if (!_isConnected) return;
     _webSocketChannel?.sendTypedData(typedData);
   }
 
