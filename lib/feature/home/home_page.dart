@@ -4,6 +4,7 @@ import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
 import 'package:tesla_android/feature/connectivityCheck/cubit/connectivity_check_cubit.dart';
 import 'package:tesla_android/feature/connectivityCheck/model/connectivity_state.dart';
 import 'package:tesla_android/feature/display/widget/display_view.dart';
+import 'package:tesla_android/feature/gps/cubit/gps_cubit.dart';
 import 'package:tesla_android/feature/releaseNotes/widget/versionRibbon/version_ribbon.dart';
 import 'package:tesla_android/feature/touchscreen/touchscreen_view.dart';
 
@@ -12,6 +13,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<GpsCubit>(context);
     return BlocBuilder<ConnectivityCheckCubit, ConnectivityState>(
         builder: (context, state) {
       if (state == ConnectivityState.initial) {

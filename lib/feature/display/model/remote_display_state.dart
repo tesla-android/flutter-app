@@ -21,9 +21,17 @@ class RemoteDisplayState extends Equatable {
   factory RemoteDisplayState.fromJson(Map<String, dynamic> json) =>
       _$RemoteDisplayStateFromJson(json);
 
-  Map<String, dynamic> toJson() =>
-      _$RemoteDisplayStateToJson(this);
-  
+  Map<String, dynamic> toJson() => _$RemoteDisplayStateToJson(this);
+
   @override
   List<Object?> get props => [width, height, density, lowRes];
+
+  RemoteDisplayState updateLowRes({required bool isEnabled}) {
+    return RemoteDisplayState(
+      width: width,
+      height: height,
+      density: density,
+      lowRes: isEnabled ? 1 : 0,
+    );
+  }
 }

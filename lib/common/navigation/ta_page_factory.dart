@@ -12,6 +12,7 @@ import 'package:tesla_android/feature/gps/cubit/gps_cubit.dart';
 import 'package:tesla_android/feature/home/home_page.dart';
 import 'package:tesla_android/feature/releaseNotes/cubit/release_notes_cubit.dart';
 import 'package:tesla_android/feature/releaseNotes/widget/release_notes_page.dart';
+import 'package:tesla_android/feature/settings/bloc/display_configuration_cubit.dart';
 import 'package:tesla_android/feature/settings/bloc/system_configuration_cubit.dart';
 import 'package:tesla_android/feature/settings/widget/settings_page.dart';
 import 'package:tesla_android/feature/touchscreen/cubit/touchscreen_cubit.dart';
@@ -40,7 +41,7 @@ class TAPageFactory {
                 create: (_) => getIt<DisplayCubit>(),
               ),
             ],
-            child: HomePage(),
+            child: const HomePage(),
           ));
         case TAPage.releaseNotes:
           return BlocProvider(
@@ -53,9 +54,17 @@ class TAPageFactory {
           return const DonationPage();
         case TAPage.settings:
           return _injectSingletons(
-            child: BlocProvider(
-              create: (_) =>
-                  getIt<SystemConfigurationCubit>()..fetchConfiguration(),
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (_) =>
+                      getIt<DisplayConfigurationCubit>()..fetchConfiguration(),
+                ),
+                BlocProvider(
+                  create: (_) =>
+                      getIt<SystemConfigurationCubit>()..fetchConfiguration(),
+                ),
+              ],
               child: const SettingsPage(),
             ),
           );
