@@ -4,9 +4,6 @@ import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
 import 'package:tesla_android/feature/connectivityCheck/cubit/connectivity_check_cubit.dart';
 import 'package:tesla_android/feature/connectivityCheck/model/connectivity_state.dart';
 import 'package:tesla_android/feature/display/widget/display_view.dart';
-import 'package:tesla_android/feature/gps/cubit/gps_cubit.dart';
-import 'package:tesla_android/feature/gps/cubit/gps_state.dart';
-import 'package:tesla_android/feature/home/dino/chrome_dino_game.dart';
 import 'package:tesla_android/feature/releaseNotes/widget/versionRibbon/version_ribbon.dart';
 import 'package:tesla_android/feature/touchscreen/touchscreen_view.dart';
 
@@ -26,35 +23,11 @@ class HomePage extends StatelessWidget {
       }
       return Scaffold(
           body: isBackendAccessible
-              ? Stack(
+              ? const Stack(
                   children: [
-                    const Center(
-                        child: DisplayView()),
-                    const Positioned(right: 0, top: 0, child: VersionRibbon()),
-                    Positioned(
-                      left: 15,
-                      top: 15,
-                      child: Container(
-                        color: Colors.black.withOpacity(0.5),
-                        child: BlocBuilder<GpsCubit, GpsState>(
-                          builder: (context, state) {
-                            if(state is GpsStateActive) {
-                              return Column(
-                                children: [
-                                  Text("Latitude ${state.currentLocation.latitude}"),
-                                  Text("Longitude ${state.currentLocation.longitude}"),
-                                  Text("Approximated bearing ${state.currentLocation.approximatedBearing}"),
-                                  Text("Approximated speed ${state.currentLocation.approximatedSpeed}"),
-                                  Text("Update interval per second ${state.averageUpdateIntervalInSeconds}")
-                                ],
-                              );
-                            } else {
-                              return const SizedBox.shrink();
-                            }
-                          },
-                        ),
-                      ),
-                    )
+                    Center(
+                        child: DisplayView(touchScreenView: TouchScreenView())),
+                    Positioned(right: 0, top: 0, child: VersionRibbon())
                   ],
                 )
               : _backendConnectionLostWidget());
@@ -75,6 +48,12 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _backendConnectionLostWidget() {
-    return const ChromeDinoGame();
+    return const Center(
+      child: Icon(
+        Icons.error_outline,
+        color: Colors.red,
+        size: TADimens.backendErrorIconSize,
+      ),
+    );
   }
 }
