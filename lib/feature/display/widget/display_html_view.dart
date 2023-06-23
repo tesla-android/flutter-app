@@ -1,6 +1,8 @@
 //ignore: avoid_web_libraries_in_flutter
 import 'dart:html';
 import 'dart:ui' as ui;
+import 'package:uuid/uuid.dart';
+
 
 import 'package:flavor/flavor.dart';
 import 'package:flutter/material.dart';
@@ -19,15 +21,20 @@ class DisplayHtmlViewState extends State<DisplayHtmlView> {
 
   String get _streamUrl => _flavor.getString("displayStreamUrl")!;
 
+  late String _viewId;
+
   @override
   void initState() {
     super.initState();
+    _viewId = const Uuid().v1();
     _iframeElement.srcdoc = _getIframeContent();
     _iframeElement.style.border = 'none';
+    _iframeElement.style.width = "100%";
+    _iframeElement.style.height = "100%";
 
     //ignore: undefined_prefixed_name
-    ui.platformViewRegistry.registerViewFactory(
-      _streamUrl, //use source as registered key to ensure uniqueness
+    final test = ui.platformViewRegistry.registerViewFactory(
+     _viewId,
       (int viewId) => _iframeElement,
     );
   }
@@ -35,7 +42,7 @@ class DisplayHtmlViewState extends State<DisplayHtmlView> {
   @override
   Widget build(BuildContext context) {
     return HtmlElementView(
-      viewType: _streamUrl,
+      viewType: _viewId,
     );
   }
 

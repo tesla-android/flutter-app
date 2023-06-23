@@ -27,10 +27,13 @@ class GpsData {
 
   factory GpsData.fromLocationData(WebLocationData locationData) {
     return GpsData(
-        latitude: locationData.latitude.toString(),
-        longitude: locationData.longitude.toString(),
-        verticalAccuracy: locationData.longitude.toString(),
-        timestamp: locationData.time.toString());
+      latitude: locationData.latitude.toString(),
+      longitude: locationData.longitude.toString(),
+      verticalAccuracy: locationData.verticalAccuracy.toString(),
+      timestamp: locationData.time.toString(),
+      speed: locationData.approximatedSpeed.toString(),
+      bearing: locationData.approximatedBearing.toString(),
+    );
   }
 
   Map<String, dynamic> toJson() => _$GpsDataToJson(this);

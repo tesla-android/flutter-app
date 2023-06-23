@@ -106,7 +106,8 @@ class WebLocation with Logger {
     }
 
     if (_locationBuffer.length >= 2) {
-      for (int i = _locationBuffer.length - 2; i >= 0; i--) {
+      int i = _locationBuffer.length - 2;
+      while(i >= 0) {
         final previousLocation = _locationBuffer[i];
 
         final previousLat = previousLocation.latitude;
@@ -116,18 +117,18 @@ class WebLocation with Logger {
 
         final distance = _calculateDistance(
             previousLat!, previousLng!, currentLat!, currentLng!);
-        if (distance >= 5.0) {
+        if (distance >= 2.0) {
           final elapsedTimeSec = (data.time! - previousLocation.time!) / 1000;
-
           final approximatedSpeed = distance / elapsedTimeSec;
           final approximatedBearing = _calculateBearing(
               previousLat, previousLng, currentLat, currentLng);
-          data.addApproximatedData(
+          data = data.addApproximatedData(
             approximatedSpeed: approximatedSpeed,
             approximatedBearing: approximatedBearing,
           );
           break;
         }
+        i--;
       }
     }
     return data;
