@@ -1,11 +1,10 @@
-import 'dart:html' hide Location;
+import 'dart:html';
 
 import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:flavor/flavor.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart' hide Environment;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:location/location.dart';
 
 const bool _enableDomainOverride = false;
 const String _domainOverride = 'device.teslaandroid.com';
@@ -34,9 +33,6 @@ abstract class AppModule {
   @preResolve
   Future<SharedPreferences> get sharedPreferences =>
       SharedPreferences.getInstance();
-
-  @singleton
-  Location get location => Location();
 
   @lazySingleton
   GlobalKey<NavigatorState> get navigatorKey => GlobalKey<NavigatorState>();

@@ -73,10 +73,10 @@ class TAPageFactory {
           value: getIt<ConnectivityCheckCubit>(),
         ),
         BlocProvider(
-          create: (_) => getIt<AudioCubit>(),
+          create: (_) => getIt<AudioCubit>()..init(),
         ),
-        BlocProvider.value(
-          value: getIt<GpsCubit>(),
+        BlocProvider(
+          create: (_) => getIt<GpsCubit>(),
         ),
       ],
       child: child,
