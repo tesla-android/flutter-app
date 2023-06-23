@@ -26,7 +26,7 @@ class HomePage extends StatelessWidget {
               ? const Stack(
                   children: [
                     Center(
-                        child: DisplayView(touchScreenView: TouchScreenView())),
+                        child: DisplayView()),
                     Positioned(right: 0, top: 0, child: VersionRibbon())
                   ],
                 )
