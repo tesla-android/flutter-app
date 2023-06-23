@@ -32,7 +32,7 @@ class AudioCubit extends Cubit<AudioState> {
   }
 
   void init() {
-    _setInitialState();
+    //_setInitialState();
   }
 
   void enableAudio() {

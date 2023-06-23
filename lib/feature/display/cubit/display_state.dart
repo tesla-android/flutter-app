@@ -11,14 +11,22 @@ class DisplayStateInitial extends DisplayState {}
 class DisplayStateResizeCoolDown extends DisplayState {
   final BoxConstraints viewConstraints;
   final Size adjustedSize;
+  final bool isLowRes;
   final DateTime timestamp;
 
-  DisplayStateResizeCoolDown(
-      {required this.viewConstraints, required this.adjustedSize})
-      : timestamp = DateTime.now();
+  DisplayStateResizeCoolDown({
+    required this.viewConstraints,
+    required this.adjustedSize,
+    required this.isLowRes,
+  }) : timestamp = DateTime.now();
 
   @override
-  List<Object?> get props => [viewConstraints, adjustedSize, timestamp];
+  List<Object?> get props => [
+        viewConstraints,
+        adjustedSize,
+        timestamp,
+        isLowRes,
+      ];
 }
 
 class DisplayStateResizeInProgress extends DisplayState {
