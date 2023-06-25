@@ -21,65 +21,64 @@ class TaAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: false,
       title: Text(title ?? ''),
       actions: [
-        if (window.location.hostname?.contains("teslaandroid.com") ?? true)
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: OutlinedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateColor.resolveWith(
-                    (states) => theme.primaryColor),
-              ),
-              onPressed: () {
-                Widget okButton = TextButton(
-                  child: const Text("Understood"),
-                  onPressed: () {
-                    window.location.href = "http://fullscreen.app.teslaandroid.com";
-                  },
-                );
-                Widget cancelButton = TextButton(
-                  child: const Text("Dismiss"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                );
-                AlertDialog alert = AlertDialog(
-                  title: const Text("Are you in Park?"),
-                  content:
-                      const Text("Full-Screen App is not available in Drive."),
-                  actions: [
-                    okButton,
-                    cancelButton
-                  ],
-                );
-                // show the dialog
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return alert;
-                  },
-                );
-              },
-              child: Row(
-                children: const [
-                  Text(
-                    "Go Full-Screen",
-                    style: TextStyle(
-                      color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                        height: 1.15),
-                  ),
-                  SizedBox(
-                    width: TADimens.PADDING_S_VALUE,
-                  ),
-                  Icon(
-                    Icons.fullscreen,
-                    size: 35,
-                    color: Colors.red,
-                  ),
-                ],
-              ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: OutlinedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateColor.resolveWith(
+                      (states) => theme.primaryColor),
             ),
-          )
+            onPressed: () {
+              Widget okButton = TextButton(
+                child: const Text("Understood"),
+                onPressed: () {
+                  window.location.href = "http://youtu.be:6969";
+                },
+              );
+              Widget cancelButton = TextButton(
+                child: const Text("Dismiss"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              );
+              AlertDialog alert = AlertDialog(
+                title: const Text("Are you in Park?"),
+                content:
+                const Text("Full-Screen App is not available in Drive."),
+                actions: [
+                  okButton,
+                  cancelButton
+                ],
+              );
+              // show the dialog
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return alert;
+                },
+              );
+            },
+            child: const Row(
+              children: [
+                Text(
+                  "Go Full-Screen",
+                  style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      height: 1.15),
+                ),
+                SizedBox(
+                  width: TADimens.PADDING_S_VALUE,
+                ),
+                Icon(
+                  Icons.fullscreen,
+                  size: 35,
+                  color: Colors.red,
+                ),
+              ],
+            ),
+          ),
+        )
       ],
     );
   }
