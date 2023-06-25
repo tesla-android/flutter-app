@@ -1,44 +1,54 @@
-import 'package:flavor/flavor.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pointer_interceptor/pointer_interceptor.dart';
-import 'package:tesla_android/common/di/ta_locator.dart';
 import 'package:tesla_android/feature/display/cubit/display_cubit.dart';
-import 'package:tesla_android/feature/display/cubit/display_state.dart';
-import 'package:tesla_android/feature/display/widget/display_html_view.dart';
-import 'package:tesla_android/feature/touchscreen/touchscreen_view.dart';
 
-class DisplayView extends StatelessWidget {
-  const DisplayView({Key? key}) : super(key: key);
+class DisplayView extends StatefulWidget {
+  const DisplayView({super.key});
+
+  @override
+  State createState() => _DisplayViewState();
+}
+
+class _DisplayViewState extends State<DisplayView> {
+  MemoryImage? _image;
+  late DisplayCubit _cubit;
+  late StreamSubscription _streamSubscription;
+
+  @override
+  void initState() {
+    _cubit = context.read<DisplayCubit>();
+    _streamSubscription = _cubit.jpegDataStream.listen((byteBuffer) async {
+      final decodedImage = MemoryImage(byteBuffer.asUint8List());
+      if (mounted) {
+        await precacheImage(decodedImage, context).catchError((error) {
+          debugPrint('Image precache error');
+        });
+      }
+      if (mounted) {
+        setState(() {
+          _image = decodedImage;
+        });
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() async {
+    _streamSubscription.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final cubit = BlocProvider.of<DisplayCubit>(context);
-    return LayoutBuilder(builder: (context, constraints) {
-      cubit.resizeDisplay(viewConstraints: constraints);
-      return Center(
-        child:
-            BlocBuilder<DisplayCubit, DisplayState>(builder: (context, state) {
-          if (state is DisplayStateNormal) {
-            return _normalBody(state);
-          } else {
-            return const CircularProgressIndicator();
-          }
-        }),
+    if (_image != null) {
+      return Image(
+        image: _image!,
+        fit: BoxFit.cover,
       );
-    });
-  }
-
-  Widget _normalBody(DisplayStateNormal state) {
-    return AspectRatio(
-      aspectRatio: state.adjustedSize.width / state.adjustedSize.height,
-      child: Stack(
-        children: [
-          const DisplayHtmlView(),
-          PointerInterceptor(
-              child: TouchScreenView(displaySize: state.adjustedSize))
-        ],
-      ),
-    );
+    }
+    return Container();
   }
 }

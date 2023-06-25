@@ -10,7 +10,10 @@ class AudioTransport extends BaseWebsocketTransport {
   final BehaviorSubject pcmDataSubject = BehaviorSubject();
 
   AudioTransport()
-      : super(flavorUrlKey: "audioWebSocket", binaryType: "arraybuffer");
+      : super(
+          flavorUrlKey: "audioWebSocket",
+          binaryType: "arraybuffer",
+        );
 
   @override
   void onMessage(MessageEvent event) {
