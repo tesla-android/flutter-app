@@ -78,9 +78,6 @@ class TAPageFactory {
   Widget _injectSingletons({required Widget child}) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider.value(
-          value: getIt<ConnectivityCheckCubit>(),
-        ),
         BlocProvider(
           create: (_) => getIt<AudioCubit>()..init(),
         ),

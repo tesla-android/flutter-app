@@ -32,10 +32,11 @@ class AudioCubit extends Cubit<AudioState> {
   }
 
   void init() {
-    //_setInitialState();
+    _setInitialState();
   }
 
   void enableAudio() {
+    if(state.isEnabled == true) return;
     _subscribeToAudioTransport();
     _sharedPreferences.setBool(
       _sharedPreferencesKey,

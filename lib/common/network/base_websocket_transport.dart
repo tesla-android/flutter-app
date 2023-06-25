@@ -12,22 +12,26 @@ import 'package:tesla_android/feature/connectivityCheck/model/connectivity_state
 abstract class BaseWebsocketTransport with Logger {
   final String flavorUrlKey;
   final String? binaryType;
+  final bool sendKeepAlive;
+
+  static const _disposeCloseCode = 3000;
 
   Flavor get _flavor => getIt<Flavor>();
 
   ConnectivityCheckCubit get _connectivityCheckCubit =>
       getIt<ConnectivityCheckCubit>();
 
-  ConnectivityState _connectivityState = ConnectivityState.initial;
+  ConnectivityState _connectivityState = ConnectivityState.backendAccessible;
   WebSocket? _webSocketChannel;
   bool _keepConnectionAlive = false;
   bool _waitingForConnectivityToRestore = false;
 
   bool get _isConnected => _webSocketChannel?.readyState == WebSocket.OPEN;
 
-  BaseWebsocketTransport({required this.flavorUrlKey, this.binaryType}) {
+  BaseWebsocketTransport({required this.flavorUrlKey, this.binaryType, this.sendKeepAlive = false}) {
     _observeConnectivityState();
     _maintainConnection();
+    _sendKeepAliveMessages();
   }
 
   void _observeConnectivityState() {
@@ -50,6 +54,14 @@ abstract class BaseWebsocketTransport with Logger {
     _connect();
   }
 
+  Future<void> _sendKeepAliveMessages() async {
+    while(sendKeepAlive) {
+      await Future.delayed(const Duration(seconds: 10), () {
+        sendString("ping");
+      });
+    }
+  }
+
   Future<void> _connect() async {
     if (_keepConnectionAlive) {
       _webSocketChannel = WebSocket(_flavor.getString(
@@ -66,7 +78,11 @@ abstract class BaseWebsocketTransport with Logger {
         onMessage(e);
       });
       _webSocketChannel?.onClose.listen((event) {
-        _reconnect();
+        if(event.code == _disposeCloseCode) {
+          log("terminating");
+        } else {
+          _reconnect();
+        }
       });
       _webSocketChannel?.onError.listen((event) {
         _reconnect();
@@ -80,7 +96,9 @@ abstract class BaseWebsocketTransport with Logger {
       Future.delayed(const Duration(seconds: 1), _connect);
     } else {
       log("disconnecting, waiting for connectivity to restore");
-      disconnect();
+      _keepConnectionAlive = false;
+      _webSocketChannel?.close();
+      _webSocketChannel = null;
       _waitingForConnectivityToRestore = true;
     }
   }
@@ -126,7 +144,7 @@ abstract class BaseWebsocketTransport with Logger {
 
   void disconnect() {
     _keepConnectionAlive = false;
-    _webSocketChannel?.close();
+    _webSocketChannel?.close(_disposeCloseCode);
     _webSocketChannel = null;
   }
 }

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tesla_android/common/di/ta_locator.dart';
 import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
+import 'package:tesla_android/feature/audio/cubit/audio_cubit.dart';
 import 'package:tesla_android/feature/connectivityCheck/cubit/connectivity_check_cubit.dart';
 import 'package:tesla_android/feature/connectivityCheck/model/connectivity_state.dart';
+import 'package:tesla_android/feature/display/cubit/display_cubit.dart';
+import 'package:tesla_android/feature/display/cubit/display_state.dart';
 import 'package:tesla_android/feature/display/widget/display_view.dart';
 import 'package:tesla_android/feature/gps/cubit/gps_cubit.dart';
 import 'package:tesla_android/feature/releaseNotes/widget/versionRibbon/version_ribbon.dart';
@@ -14,26 +18,46 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<GpsCubit>(context);
+    BlocProvider.of<AudioCubit>(context);
+    final connectivityCheck = getIt<ConnectivityCheckCubit>();
     return BlocBuilder<ConnectivityCheckCubit, ConnectivityState>(
+        bloc: connectivityCheck,
         builder: (context, state) {
-      if (state == ConnectivityState.initial) {
-        return Container();
-      }
-      final isBackendAccessible = state == ConnectivityState.backendAccessible;
-      if (!isBackendAccessible) {
-        _onBackendConnectionLost(context);
-      }
-      return Scaffold(
-          body: isBackendAccessible
-              ? const Stack(
-                  children: [
-                    Center(
-                        child: DisplayView()),
-                    Positioned(right: 0, top: 0, child: VersionRibbon())
-                  ],
-                )
-              : _backendConnectionLostWidget());
-    });
+          if (state == ConnectivityState.initial) {
+            return Container();
+          }
+          final isBackendAccessible =
+              state == ConnectivityState.backendAccessible;
+          if (!isBackendAccessible) {
+            _onBackendConnectionLost(context);
+          }
+          return Scaffold(
+              body: isBackendAccessible
+                  ? Stack(
+                      children: [
+                        Center(child: Builder(builder: (context) {
+                          final cubit = BlocProvider.of<DisplayCubit>(context);
+                          return LayoutBuilder(builder: (context, constraints) {
+                            cubit.resizeDisplay(viewConstraints: constraints);
+                            return Center(
+                              child: BlocBuilder<DisplayCubit, DisplayState>(
+                                  builder: (context, state) {
+                                if (state is DisplayStateNormal) {
+                                  return TouchScreenView(
+                                      displaySize: state.adjustedSize);
+                                } else {
+                                  return const CircularProgressIndicator();
+                                }
+                              }),
+                            );
+                          });
+                        })),
+                        const Positioned(
+                            right: 0, top: 0, child: VersionRibbon())
+                      ],
+                    )
+                  : _backendConnectionLostWidget());
+        });
   }
 
   void _onBackendConnectionLost(BuildContext context) {

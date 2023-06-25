@@ -1,29 +1,43 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:rxdart/subjects.dart';
 import 'package:tesla_android/common/utils/logger.dart';
 import 'package:tesla_android/feature/display/cubit/display_state.dart';
 import 'package:tesla_android/feature/display/model/remote_display_state.dart';
 import 'package:tesla_android/feature/display/repository/display_repository.dart';
+import 'package:tesla_android/feature/display/transport/display_transport.dart';
 
 @injectable
 class DisplayCubit extends Cubit<DisplayState> with Logger {
   final DisplayRepository _repository;
+  final DisplayTransport _transport;
+  final BehaviorSubject<ByteBuffer> _displayDataSubject = BehaviorSubject();
 
-  DisplayCubit(this._repository) : super(DisplayStateInitial());
+  DisplayCubit(this._repository, this._transport)
+      : super(DisplayStateInitial());
 
+  Stream<ByteBuffer> get jpegDataStream => _displayDataSubject.stream;
+
+  StreamSubscription? _transportStreamSubscription;
   Timer? _resizeCoolDownTimer;
   static const Duration _coolDownDuration = Duration(seconds: 1);
 
   @override
   Future<void> close() {
     _resizeCoolDownTimer?.cancel();
+    _displayDataSubject.close();
+    _transportStreamSubscription?.cancel();
+    _transport.disconnect();
     return super.close();
   }
 
   void resizeDisplay({required BoxConstraints viewConstraints}) {
+    _subscribeToTransportStream();
+
     if (state is DisplayStateResizeInProgress) {
       log("Display resize can't happen now (state == DisplayStateResizeInProgress)");
       return;
@@ -37,6 +51,13 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
       }
     }
     _startResize(viewConstraints: viewConstraints);
+  }
+
+  void _subscribeToTransportStream() {
+    _transportStreamSubscription ??=
+        _transport.jpegDataSubject.listen((imageData) {
+      _displayDataSubject.add(imageData);
+    });
   }
 
   void _startResize({required BoxConstraints viewConstraints}) async {
