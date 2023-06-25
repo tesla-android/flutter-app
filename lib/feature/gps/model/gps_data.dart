@@ -30,7 +30,7 @@ class GpsData {
       latitude: locationData.latitude.toString(),
       longitude: locationData.longitude.toString(),
       verticalAccuracy: locationData.verticalAccuracy.toString(),
-      timestamp: locationData.time.toString(),
+      timestamp: locationData.time.millisecondsSinceEpoch.toString(),
       speed: locationData.approximatedSpeed.toString(),
       bearing: locationData.approximatedBearing.toString(),
     );

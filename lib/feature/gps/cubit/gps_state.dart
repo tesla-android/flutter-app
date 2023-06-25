@@ -28,6 +28,5 @@ WebLocationData get initialLocationData {
     latitude: 53.4289,
     longitude: 14.5530,
     verticalAccuracy: 0,
-    time: DateTime.now().millisecondsSinceEpoch.toDouble() / 1000,
   );
 }
