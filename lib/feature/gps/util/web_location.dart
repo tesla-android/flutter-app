@@ -17,7 +17,7 @@ class WebLocation with Logger {
   StreamController<WebLocationData>? _locationStreamController;
   Timer? _locationTimer;
 
-  static const int _bufferSize = 5;
+  static const int _bufferSize = 25;
   final List<WebLocationData> _locationBuffer = [];
 
   WebLocation()
@@ -97,7 +97,6 @@ class WebLocation with Logger {
       latitude: result.coords?.latitude?.toDouble(),
       longitude: result.coords?.longitude?.toDouble(),
       verticalAccuracy: result.coords?.accuracy?.toDouble(),
-      time: result.timestamp?.toDouble(),
     );
 
     _locationBuffer.add(data);
@@ -118,7 +117,7 @@ class WebLocation with Logger {
         final distance = _calculateDistance(
             previousLat!, previousLng!, currentLat!, currentLng!);
         if (distance >= 2.0) {
-          final elapsedTimeSec = (data.time! - previousLocation.time!) / 1000;
+          final elapsedTimeSec = data.time!.difference(previousLocation.time!).inSeconds;
           final approximatedSpeed = distance / elapsedTimeSec;
           final approximatedBearing = _calculateBearing(
               previousLat, previousLng, currentLat, currentLng);

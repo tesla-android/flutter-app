@@ -1,14 +1,13 @@
 import 'package:equatable/equatable.dart';
 
 class WebLocationData extends Equatable {
-  const WebLocationData({
+  WebLocationData({
     this.latitude,
     this.longitude,
     this.verticalAccuracy,
-    this.time,
     this.approximatedSpeed,
     this.approximatedBearing,
-  });
+  }) : time = DateTime.now();
 
   /// Latitude in degrees
   final double? latitude;
@@ -19,8 +18,8 @@ class WebLocationData extends Equatable {
   /// Estimated vertical accuracy of this location, in meters.
   final double? verticalAccuracy;
 
-  /// Timestamp of the WebLocationData
-  final double? time;
+  /// Time of the WebLocationData
+  final DateTime time;
 
   /// Estimated speed, in meters per second
   final double? approximatedSpeed;
@@ -46,7 +45,6 @@ class WebLocationData extends Equatable {
       latitude: latitude,
       longitude: longitude,
       verticalAccuracy: verticalAccuracy,
-      time: time,
       approximatedSpeed: approximatedSpeed,
       approximatedBearing: approximatedBearing,
     );
