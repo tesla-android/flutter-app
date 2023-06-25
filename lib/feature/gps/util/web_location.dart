@@ -17,8 +17,7 @@ class WebLocation with Logger {
   StreamController<WebLocationData>? _locationStreamController;
   Timer? _locationTimer;
 
-  static const int _bufferSize = 25;
-  final List<WebLocationData> _locationBuffer = [];
+  WebLocationData? _lastLocationData;
 
   WebLocation()
       : _geolocation = window.navigator.geolocation,
@@ -75,7 +74,7 @@ class WebLocation with Logger {
 
   void _startLocationUpdates() {
     _locationTimer ??= Timer.periodic(
-      const Duration(milliseconds: 1000),
+      const Duration(milliseconds: 3000),
       (Timer t) => getLocation(
               timeout: const Duration(milliseconds: 950),
               maximumAge: const Duration(milliseconds: 900))
@@ -99,37 +98,29 @@ class WebLocation with Logger {
       verticalAccuracy: result.coords?.accuracy?.toDouble(),
     );
 
-    _locationBuffer.add(data);
-    if (_locationBuffer.length > _bufferSize) {
-      _locationBuffer.removeAt(0);
-    }
+    if (_lastLocationData != null) {
+      final previousLocation = _lastLocationData!;
 
-    if (_locationBuffer.length >= 2) {
-      int i = _locationBuffer.length - 2;
-      while(i >= 0) {
-        final previousLocation = _locationBuffer[i];
+      final previousLat = previousLocation.latitude;
+      final previousLng = previousLocation.longitude;
+      final currentLat = data.latitude;
+      final currentLng = data.longitude;
 
-        final previousLat = previousLocation.latitude;
-        final previousLng = previousLocation.longitude;
-        final currentLat = data.latitude;
-        final currentLng = data.longitude;
-
-        final distance = _calculateDistance(
-            previousLat!, previousLng!, currentLat!, currentLng!);
-        if (distance >= 2.0) {
-          final elapsedTimeSec = data.time!.difference(previousLocation.time!).inSeconds;
-          final approximatedSpeed = distance / elapsedTimeSec;
-          final approximatedBearing = _calculateBearing(
-              previousLat, previousLng, currentLat, currentLng);
-          data = data.addApproximatedData(
-            approximatedSpeed: approximatedSpeed,
-            approximatedBearing: approximatedBearing,
-          );
-          break;
-        }
-        i--;
+      final distance = _calculateDistance(
+          previousLat!, previousLng!, currentLat!, currentLng!);
+      if (distance >= 1.0) {
+        final elapsedTimeSec = data.time!.difference(previousLocation.time!).inSeconds;
+        final approximatedSpeed = distance / elapsedTimeSec;
+        final approximatedBearing = _calculateBearing(
+            previousLat, previousLng, currentLat, currentLng);
+        data = data.addApproximatedData(
+          approximatedSpeed: approximatedSpeed,
+          approximatedBearing: approximatedBearing,
+        );
       }
     }
+
+    _lastLocationData = data;
     return data;
   }
 
