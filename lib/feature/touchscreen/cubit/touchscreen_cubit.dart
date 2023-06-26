@@ -78,7 +78,7 @@ class TouchscreenCubit extends Cubit<bool> with Logger {
   }
 
   VirtualTouchscreenSlotState? _getFirstUnusedSlot() {
-    for (final slot in slotsState) {
+    for (final slot in slotsState..shuffle()) {
       if (slot.trackingId == -1) {
         return slot;
       }

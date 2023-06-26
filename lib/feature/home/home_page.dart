@@ -11,6 +11,7 @@ import 'package:tesla_android/feature/display/widget/display_view.dart';
 import 'package:tesla_android/feature/gps/cubit/gps_cubit.dart';
 import 'package:tesla_android/feature/releaseNotes/widget/versionRibbon/version_ribbon.dart';
 import 'package:tesla_android/feature/touchscreen/touchscreen_view.dart';
+import 'package:pointer_interceptor/pointer_interceptor.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -43,8 +44,17 @@ class HomePage extends StatelessWidget {
                               child: BlocBuilder<DisplayCubit, DisplayState>(
                                   builder: (context, state) {
                                 if (state is DisplayStateNormal) {
-                                  return TouchScreenView(
-                                      displaySize: state.adjustedSize);
+                                  return Stack(
+                                    fit: StackFit.expand,
+                                    children: [
+                                      const DisplayView(
+                                          source:
+                                              "/renderer.html"),
+                                      PointerInterceptor(child: TouchScreenView(
+                                            displaySize: state.adjustedSize),
+                                      ),
+                                    ],
+                                  );
                                 } else {
                                   return const CircularProgressIndicator();
                                 }
