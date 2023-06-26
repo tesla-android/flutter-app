@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:html';
 import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
@@ -15,13 +16,10 @@ import 'package:tesla_android/feature/display/transport/display_transport.dart';
 class DisplayCubit extends Cubit<DisplayState> with Logger {
   final DisplayRepository _repository;
   final DisplayTransport _transport;
-  final BehaviorSubject<ByteBuffer> _displayDataSubject = BehaviorSubject();
 
   DisplayCubit(this._repository, this._transport)
       : super(DisplayStateInitial());
-
-  Stream<ByteBuffer> get jpegDataStream => _displayDataSubject.stream;
-
+  
   StreamSubscription? _transportStreamSubscription;
   Timer? _resizeCoolDownTimer;
   static const Duration _coolDownDuration = Duration(seconds: 1);
@@ -29,9 +27,8 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
   @override
   Future<void> close() {
     _resizeCoolDownTimer?.cancel();
-    _displayDataSubject.close();
-    _transportStreamSubscription?.cancel();
-    _transport.disconnect();
+     _transportStreamSubscription?.cancel();
+     _transport.disconnect();
     return super.close();
   }
 
@@ -56,7 +53,7 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
   void _subscribeToTransportStream() {
     _transportStreamSubscription ??=
         _transport.jpegDataSubject.listen((imageData) {
-      _displayDataSubject.add(imageData);
+          window.postMessage(imageData, "*");
     });
   }
 
@@ -157,7 +154,7 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
     double maxWidth;
     double maxHeight;
 
-    double maxShortestSide = needsLowRes ? 672 : 832;
+    double maxShortestSide = needsLowRes ? 640 : 832;
 
     if (constraints.maxWidth > constraints.maxHeight) {
       maxWidth = constraints.maxWidth > 1280 ? 1280 : constraints.maxWidth;

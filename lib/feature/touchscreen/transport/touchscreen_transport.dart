@@ -10,13 +10,17 @@ class TouchScreenTransport extends BaseWebsocketTransport {
 
   @override
   void onOpen() {
+    resetTouchScreen();
+    super.onOpen();
+  }
+
+  void resetTouchScreen() {
     List<VirtualTouchScreenCommand> commands = [];
     for (final slot in VirtualTouchscreenSlotState.generateSlots()) {
       commands.add(VirtualTouchScreenCommand(
           absMtSlot: slot.slotIndex, absMtTrackingId: slot.trackingId));
     }
     sendCommands(commands: commands);
-    super.onOpen();
   }
 
   void sendCommands({required List<VirtualTouchScreenCommand> commands}) {

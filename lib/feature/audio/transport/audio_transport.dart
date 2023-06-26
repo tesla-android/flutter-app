@@ -13,6 +13,7 @@ class AudioTransport extends BaseWebsocketTransport {
       : super(
           flavorUrlKey: "audioWebSocket",
           binaryType: "arraybuffer",
+          sendKeepAlive: true,
         );
 
   @override

@@ -1,54 +1,42 @@
-import 'dart:async';
+//ignore: avoid_web_libraries_in_flutter
+import 'dart:html';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tesla_android/feature/display/cubit/display_cubit.dart';
+import 'package:uuid/uuid.dart';
 
 class DisplayView extends StatefulWidget {
-  const DisplayView({super.key});
+  final String source;
+
+  const DisplayView({Key? key, required this.source}) : super(key: key);
 
   @override
-  State createState() => _DisplayViewState();
+  State<DisplayView> createState() => _IframeViewState();
 }
 
-class _DisplayViewState extends State<DisplayView> {
-  MemoryImage? _image;
-  late DisplayCubit _cubit;
-  late StreamSubscription _streamSubscription;
+class _IframeViewState extends State<DisplayView> {
+  final IFrameElement _iframeElement = IFrameElement();
+
+  late String _uuid;
 
   @override
   void initState() {
-    _cubit = context.read<DisplayCubit>();
-    _streamSubscription = _cubit.jpegDataStream.listen((byteBuffer) async {
-      final decodedImage = MemoryImage(byteBuffer.asUint8List());
-      if (mounted) {
-        await precacheImage(decodedImage, context).catchError((error) {
-          debugPrint('Image precache error');
-        });
-      }
-      if (mounted) {
-        setState(() {
-          _image = decodedImage;
-        });
-      }
-    });
     super.initState();
-  }
+    _uuid = const Uuid().v1();
+    _iframeElement.src = widget.source;
+    _iframeElement.style.border = 'none';
 
-  @override
-  void dispose() async {
-    _streamSubscription.cancel();
-    super.dispose();
+    //ignore: undefined_prefixed_name
+    ui.platformViewRegistry.registerViewFactory(
+      _uuid,
+          (int viewId) => _iframeElement,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_image != null) {
-      return Image(
-        image: _image!,
-        fit: BoxFit.cover,
-      );
-    }
-    return Container();
+    return HtmlElementView(
+      viewType: _uuid,
+    );
   }
 }
