@@ -132,7 +132,7 @@ class HotspotSettings extends StatelessWidget {
             SettingsTile(
                 icon: Icons.data_thresholding_sharp,
                 title: 'Tesla Telemetry',
-                subtitle: 'Reduces data usage(important for FSD users)',
+                subtitle: 'Reduces data usage, uncheck to disable',
                 trailing: Switch(
                     value: isOfflineModeTelemetryEnabled,
                     onChanged: (value) {
@@ -141,7 +141,7 @@ class HotspotSettings extends StatelessWidget {
             SettingsTile(
                 icon: Icons.update,
                 title: 'Tesla Software Updates',
-                subtitle: 'Reduces data usage',
+                subtitle: 'Reduces data usage, uncheck to disable',
                 trailing: Switch(
                     value: isOfflineModeTeslaFirmwareDownloadsEnabled,
                     onChanged: (value) {

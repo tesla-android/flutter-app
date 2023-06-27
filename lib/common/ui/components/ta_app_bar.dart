@@ -15,7 +15,6 @@ class TaAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return AppBar(
       automaticallyImplyLeading: false,
       centerTitle: false,
@@ -24,10 +23,6 @@ class TaAppBar extends StatelessWidget implements PreferredSizeWidget {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: OutlinedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateColor.resolveWith(
-                      (states) => theme.primaryColor),
-            ),
             onPressed: () {
               Widget okButton = TextButton(
                 child: const Text("Understood"),
@@ -50,7 +45,6 @@ class TaAppBar extends StatelessWidget implements PreferredSizeWidget {
                   cancelButton
                 ],
               );
-              // show the dialog
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -63,7 +57,6 @@ class TaAppBar extends StatelessWidget implements PreferredSizeWidget {
                 Text(
                   "Go Full-Screen",
                   style: TextStyle(
-                      color: Colors.red,
                       fontWeight: FontWeight.bold,
                       height: 1.15),
                 ),
@@ -73,7 +66,6 @@ class TaAppBar extends StatelessWidget implements PreferredSizeWidget {
                 Icon(
                   Icons.fullscreen,
                   size: 35,
-                  color: Colors.red,
                 ),
               ],
             ),
