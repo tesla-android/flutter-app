@@ -54,8 +54,8 @@ class ReleaseNotesChangelogItemCard extends StatelessWidget {
     final themeCardColor = theme.cardColor;
     final brightness = MediaQuery.of(context).platformBrightness;
     bool isDark = brightness == Brightness.dark;
-    if(isDark) {
-      return isActive ? themeCardColor : themeCardColor.withOpacity(0.5);
+    if (isDark) {
+      return isActive ? themeCardColor : Colors.transparent;
     } else {
       return isActive ? themeCardColor.withOpacity(0.75) : themeCardColor;
     }

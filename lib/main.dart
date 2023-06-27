@@ -12,7 +12,7 @@ Future<void> main() async {
       options.dsn =
           'https://c18dd8bef7c74eec8c6074e6f8c9fd09@sentry.teslaandroid.com/2';
       options.attachScreenshot = true;
-      options.attachViewHierarchy = true;
+      options.attachViewHierarchy = false;
     },
     appRunner: _runMyApp,
   );
@@ -23,9 +23,7 @@ Future<void> _runMyApp() async {
 
   runApp(
     SentryScreenshotWidget(
-      child: SentryUserInteractionWidget(
-        child: TeslaAndroid(),
-      ),
+      child: TeslaAndroid(),
     ),
   );
 }
@@ -38,40 +36,23 @@ class TeslaAndroid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MediaQueryData windowData =
-        MediaQueryData.fromWindow(WidgetsBinding.instance.window);
-
-    final switchTheme = SwitchThemeData(
-      trackColor:
-          MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-        return Colors.red.withOpacity(.40);
-      }),
-      thumbColor:
-          MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-        if (states.contains(MaterialState.disabled)) {
-          return Colors.red.withOpacity(.60);
-        }
-        return Colors.red;
-      }),
-    );
+        MediaQueryData.fromView(WidgetsBinding.instance.window);
 
     return MediaQuery(
-      data: windowData.copyWith(textScaleFactor: 1.5),
+      data: windowData.copyWith(textScaleFactor: 1.5, devicePixelRatio: 1.0),
       child: MaterialApp(
-        useInheritedMediaQuery: true,
         debugShowCheckedModeBanner: false,
         navigatorKey: getIt<GlobalKey<NavigatorState>>(),
         title: 'Tesla Android',
         theme: ThemeData(
             brightness: Brightness.light,
-            primarySwatch: Colors.red,
-            switchTheme: switchTheme,
+            useMaterial3: true,
+            colorSchemeSeed: Colors.red,
             fontFamily: 'Roboto'),
         darkTheme: ThemeData(
-            brightness: Brightness.dark,
-            primarySwatch: Colors.red,
-            switchTheme: switchTheme,
-            bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-                selectedItemColor: Colors.red),
+            brightness: Brightness.light,
+            useMaterial3: true,
+            colorSchemeSeed: Colors.red,
             fontFamily: 'Roboto'),
         themeMode: ThemeMode.system,
         initialRoute: _pageFactory.initialRoute,
