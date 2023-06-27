@@ -76,8 +76,8 @@ class WebLocation with Logger {
     _locationTimer ??= Timer.periodic(
       const Duration(milliseconds: 3000),
       (Timer t) => getLocation(
-              timeout: const Duration(milliseconds: 950),
-              maximumAge: const Duration(milliseconds: 900))
+              timeout: const Duration(milliseconds: 1000),
+              maximumAge: const Duration(milliseconds: 1000))
           .then((locationData) {
         _locationStreamController!.add(locationData);
       }).catchError((error) {
@@ -108,8 +108,8 @@ class WebLocation with Logger {
 
       final distance = _calculateDistance(
           previousLat!, previousLng!, currentLat!, currentLng!);
-      if (distance >= 1.0) {
-        final elapsedTimeSec = data.time!.difference(previousLocation.time!).inSeconds;
+      if (distance >= 5.0) {
+        final elapsedTimeSec = data.time.difference(previousLocation.time).inSeconds;
         final approximatedSpeed = distance / elapsedTimeSec;
         final approximatedBearing = _calculateBearing(
             previousLat, previousLng, currentLat, currentLng);
