@@ -3,7 +3,7 @@ import 'package:tesla_android/common/network/base_websocket_transport.dart';
 import 'package:tesla_android/feature/touchscreen/model/virtual_touchscreen_command.dart';
 import 'package:tesla_android/feature/touchscreen/model/virtual_touchscreen_slot_state.dart';
 
-@injectable
+@lazySingleton
 class TouchScreenTransport extends BaseWebsocketTransport {
   TouchScreenTransport()
       : super(flavorUrlKey: "touchscreenWebSocket");

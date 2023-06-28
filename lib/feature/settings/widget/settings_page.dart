@@ -6,10 +6,31 @@ import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
 import 'package:tesla_android/feature/settings/widget/display_settings.dart';
 import 'package:tesla_android/feature/settings/widget/gps_settings.dart';
 import 'package:tesla_android/feature/settings/widget/hotspot_settings.dart';
+import 'package:tesla_android/feature/settings/widget/settings_section.dart';
 import 'package:tesla_android/feature/settings/widget/sound_settings.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
+
+  @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  int _activeIndex = 0;
+
+  late List<SettingsSection> _sections;
+
+  @override
+  void initState() {
+    _sections = [
+      const HotspotSettings(),
+      const DisplaySettings(),
+      const SoundSettings(),
+      const GpsSettings(),
+    ];
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,26 +41,42 @@ class SettingsPage extends StatelessWidget {
       bottomNavigationBar: const TaBottomNavigationBar(
         currentIndex: 4,
       ),
-      body: Align(
-        alignment: Alignment.topCenter,
-        child: Container(
-          constraints: const BoxConstraints(
-              maxWidth: TADimens.settingsPageTableMaxWidth),
-          padding: const EdgeInsets.symmetric(
-              horizontal: TADimens.baseContentMargin,
-              vertical: TADimens.baseContentMargin),
-          child: ListView(
-            children: const <Widget>[
-              SoundSettings(),
-              Divider(),
-              DisplaySettings(),
-              Divider(),
-              GpsSettings(),
-              Divider(),
-              HotspotSettings(),
+      body: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          NavigationDrawer(
+            selectedIndex: _activeIndex,
+            onDestinationSelected: (index) {
+              setState(() {
+                _activeIndex = index;
+              });
+            },
+            children: [
+              const SizedBox(
+                height: TADimens.baseContentMargin,
+              ),
+              ..._sections
+                  .map(
+                    (section) => NavigationDrawerDestination(
+                      icon: Icon(
+                        section.icon,
+                      ),
+                      label: Text(
+                        section.name,
+                      ),
+                    ),
+                  )
+                  .toList(),
             ],
           ),
-        ),
+          Expanded(
+            child: IndexedStack(
+              index: _activeIndex,
+              children: _sections
+            ),
+          ),
+        ],
       ),
     );
   }

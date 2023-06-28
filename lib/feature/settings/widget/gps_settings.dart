@@ -6,13 +6,19 @@ import 'package:tesla_android/feature/audio/cubit/audio_state.dart';
 import 'package:tesla_android/feature/gps/cubit/gps_cubit.dart';
 import 'package:tesla_android/feature/gps/cubit/gps_state.dart';
 import 'package:tesla_android/feature/settings/widget/settings_header.dart';
+import 'package:tesla_android/feature/settings/widget/settings_page.dart';
+import 'package:tesla_android/feature/settings/widget/settings_section.dart';
 import 'package:tesla_android/feature/settings/widget/settings_tile.dart';
 
-class GpsSettings extends StatelessWidget {
-  const GpsSettings({super.key});
+class GpsSettings extends SettingsSection {
+  const GpsSettings({super.key})
+      : super(
+          name: "GPS",
+          icon: Icons.gps_fixed,
+        );
 
   @override
-  Widget build(BuildContext context) {
+  Widget body(BuildContext context) {
     final cubit = BlocProvider.of<GpsCubit>(context);
 
     return BlocBuilder<GpsCubit, GpsState>(
@@ -29,7 +35,8 @@ class GpsSettings extends StatelessWidget {
                 trailing: _stateTrailing(cubit, state)),
             const Padding(
               padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
-              child: Text('Please be assured that your location data never leaves your car. The real-time location updates sent to your Tesla Android device are solely utilized to emulate a hardware GPS module in the Android OS.'),
+              child: Text(
+                  'Please be assured that your location data never leaves your car. The real-time location updates sent to your Tesla Android device are solely utilized to emulate a hardware GPS module in the Android OS.'),
             ),
           ],
         );

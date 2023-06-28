@@ -4,7 +4,7 @@ import 'package:injectable/injectable.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:tesla_android/common/network/base_websocket_transport.dart';
 
-@injectable
+@lazySingleton
 class DisplayTransport extends BaseWebsocketTransport {
   final BehaviorSubject jpegDataSubject = BehaviorSubject();
 

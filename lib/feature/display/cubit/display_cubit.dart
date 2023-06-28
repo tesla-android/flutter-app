@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'dart:html';
-import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:rxdart/subjects.dart';
 import 'package:tesla_android/common/utils/logger.dart';
 import 'package:tesla_android/feature/display/cubit/display_state.dart';
 import 'package:tesla_android/feature/display/model/remote_display_state.dart';
@@ -18,7 +16,9 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
   final DisplayTransport _transport;
 
   DisplayCubit(this._repository, this._transport)
-      : super(DisplayStateInitial());
+      : super(DisplayStateInitial()) {
+    _transport.connect();
+  }
   
   StreamSubscription? _transportStreamSubscription;
   Timer? _resizeCoolDownTimer;

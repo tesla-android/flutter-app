@@ -25,6 +25,7 @@ class GpsCubit extends Cubit<GpsState> with Logger {
   GpsCubit(this._sharedPreferences, this._location, this._gpsTransport)
       : super(GpsStateInitial()) {
     _setInitialState();
+    _gpsTransport.connect();
   }
 
   @override

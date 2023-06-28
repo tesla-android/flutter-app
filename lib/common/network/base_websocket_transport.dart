@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:html';
+import 'dart:math' show min;
 import 'dart:typed_data';
 
 import 'package:flavor/flavor.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:tesla_android/common/di/ta_locator.dart';
 import 'package:tesla_android/common/utils/logger.dart';
 import 'package:tesla_android/feature/connectivityCheck/cubit/connectivity_check_cubit.dart';
@@ -15,6 +15,7 @@ abstract class BaseWebsocketTransport with Logger {
   final bool sendKeepAlive;
 
   static const _disposeCloseCode = 3000;
+  int _reconnectDelay = 1;
 
   Flavor get _flavor => getIt<Flavor>();
 
@@ -28,10 +29,22 @@ abstract class BaseWebsocketTransport with Logger {
 
   bool get _isConnected => _webSocketChannel?.readyState == WebSocket.OPEN;
 
-  BaseWebsocketTransport({required this.flavorUrlKey, this.binaryType, this.sendKeepAlive = false}) {
+  BaseWebsocketTransport({
+    required this.flavorUrlKey,
+    this.binaryType,
+    this.sendKeepAlive = false,
+  });
+
+  void connect() {
     _observeConnectivityState();
     _maintainConnection();
     _sendKeepAliveMessages();
+  }
+
+  void disconnect() {
+    _keepConnectionAlive = false;
+    _webSocketChannel?.close(_disposeCloseCode);
+    _webSocketChannel = null;
   }
 
   void _observeConnectivityState() {
@@ -55,9 +68,11 @@ abstract class BaseWebsocketTransport with Logger {
   }
 
   Future<void> _sendKeepAliveMessages() async {
-    while(sendKeepAlive) {
+    while (_keepConnectionAlive && sendKeepAlive) {
       await Future.delayed(const Duration(seconds: 10), () {
-        sendString("ping");
+        if (_keepConnectionAlive && sendKeepAlive) {
+          sendString("ping");
+        }
       });
     }
   }
@@ -78,7 +93,7 @@ abstract class BaseWebsocketTransport with Logger {
         onMessage(e);
       });
       _webSocketChannel?.onClose.listen((event) {
-        if(event.code == _disposeCloseCode) {
+        if (event.code == _disposeCloseCode) {
           log("terminating");
         } else {
           _reconnect();
@@ -93,7 +108,8 @@ abstract class BaseWebsocketTransport with Logger {
   void _reconnect() async {
     if (_connectivityState == ConnectivityState.backendAccessible) {
       log("reconnecting");
-      Future.delayed(const Duration(seconds: 1), _connect);
+      Future.delayed(Duration(seconds: _reconnectDelay), _connect);
+      _reconnectDelay = min(_reconnectDelay * 2, 60);
     } else {
       log("disconnecting, waiting for connectivity to restore");
       _keepConnectionAlive = false;
@@ -140,11 +156,5 @@ abstract class BaseWebsocketTransport with Logger {
   void sendTypedData(TypedData typedData) {
     if (!_isConnected) return;
     _webSocketChannel?.sendTypedData(typedData);
-  }
-
-  void disconnect() {
-    _keepConnectionAlive = false;
-    _webSocketChannel?.close(_disposeCloseCode);
-    _webSocketChannel = null;
   }
 }
