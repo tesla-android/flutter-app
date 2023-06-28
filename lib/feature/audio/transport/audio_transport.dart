@@ -5,7 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:tesla_android/common/network/base_websocket_transport.dart';
 
-@injectable
+@lazySingleton
 class AudioTransport extends BaseWebsocketTransport {
   final BehaviorSubject pcmDataSubject = BehaviorSubject();
 

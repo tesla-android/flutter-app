@@ -12,7 +12,9 @@ class TouchscreenCubit extends Cubit<bool> with Logger {
       VirtualTouchscreenSlotState.generateSlots();
   final TouchScreenTransport _transport;
 
-  TouchscreenCubit(this._transport) : super(false);
+  TouchscreenCubit(this._transport) : super(false) {
+    _transport.connect();
+  }
 
   @override
   Future<void> close() {

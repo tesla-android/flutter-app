@@ -4,13 +4,18 @@ import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
 import 'package:tesla_android/feature/settings/bloc/display_configuration_cubit.dart';
 import 'package:tesla_android/feature/settings/bloc/display_configuration_state.dart';
 import 'package:tesla_android/feature/settings/widget/settings_header.dart';
+import 'package:tesla_android/feature/settings/widget/settings_section.dart';
 import 'package:tesla_android/feature/settings/widget/settings_tile.dart';
 
-class DisplaySettings extends StatelessWidget {
-  const DisplaySettings({super.key});
+class DisplaySettings extends SettingsSection {
+  const DisplaySettings({super.key})
+      : super(
+          name: "Display",
+          icon: Icons.display_settings,
+        );
 
   @override
-  Widget build(BuildContext context) {
+  Widget body(BuildContext context) {
     final cubit = BlocProvider.of<DisplayConfigurationCubit>(context);
 
     return BlocBuilder<DisplayConfigurationCubit, DisplayConfigurationState>(
@@ -41,7 +46,8 @@ class DisplaySettings extends StatelessWidget {
     if (state is DisplayConfigurationStateSettingsFetched) {
       return Switch(
           value: state.isLowResActive, onChanged: cubit.setLowResMode);
-    } else if (state is DisplayConfigurationStateSettingsUpdateInProgress || state is DisplayConfigurationStateLoading) {
+    } else if (state is DisplayConfigurationStateSettingsUpdateInProgress ||
+        state is DisplayConfigurationStateLoading) {
       return const CircularProgressIndicator();
     } else if (state is DisplayConfigurationStateError) {
       return const Text("Service error");
