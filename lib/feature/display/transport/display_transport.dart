@@ -11,6 +11,7 @@ class DisplayTransport extends BaseWebsocketTransport {
   DisplayTransport()
       : super(
           flavorUrlKey: "displayWebSocket",
+          binaryType: "arraybuffer",
           sendKeepAlive: true,
         );
 

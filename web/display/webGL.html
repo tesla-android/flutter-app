@@ -97,7 +97,8 @@
             window.parent.addEventListener("message", handleMessage, false);
 
             function handleMessage(evt) {
-                var blob = evt.data;
+                var arrayBuffer = evt.data;
+                var blob = new Blob([arrayBuffer]);
                 var url = URL.createObjectURL(blob);
                 var img = new Image();
 

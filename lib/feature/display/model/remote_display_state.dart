@@ -170,23 +170,4 @@ enum DisplayRendererType {
         return "/display/imgTag.html";
     }
   }
-
-  String binaryType() {
-    switch (index) {
-      case 0:
-        return "blob";
-      case 1:
-        return "arraybuffer";
-      case 2:
-        return "arraybuffer";
-      case 3:
-        return "blob";
-      case 4:
-        return "arraybuffer";
-      case 5:
-        return "blob";
-      default:
-        return "blob";
-    }
-  }
 }

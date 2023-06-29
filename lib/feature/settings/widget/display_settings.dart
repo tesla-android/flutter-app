@@ -36,6 +36,7 @@ class DisplaySettings extends SettingsSection {
             SettingsTile(
                 icon: Icons.texture,
                 title: 'Renderer',
+                dense: false,
                 trailing: _rendererDropdown(context, cubit, state)),
             const Padding(
               padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),

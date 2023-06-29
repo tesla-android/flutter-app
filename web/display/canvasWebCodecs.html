@@ -44,7 +44,6 @@
 
                 imageDecoder.decode().then((result) => {
                     var imageBitmap = result.image;
-                    //handleTextureLoaded(gl, imageBitmap, texture, imageBitmap.codedWidth, imageBitmap.codedHeight);
                     ctx.clearRect(0, 0, c.width, c.height); // Clear the canvas first
 
                     var width = imageBitmap.codedWidth;

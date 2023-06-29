@@ -26,6 +26,8 @@ class _IframeViewState extends State<DisplayView> {
     _uuid = const Uuid().v1();
     _iframeElement.src = widget.type.resourcePath();
     _iframeElement.style.border = 'none';
+    _iframeElement.style.width = '100%';
+    _iframeElement.style.height = '100%';
 
     //ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory(
