@@ -9,13 +9,16 @@ class RemoteDisplayState extends Equatable {
   final int height;
   final int density;
   @JsonKey(name: "lowres")
-  final int lowRes;
+  final DisplayLowResModePreset lowRes;
+  @JsonKey(defaultValue: DisplayRendererType.imgTag)
+  final DisplayRendererType renderer;
 
   const RemoteDisplayState({
     required this.width,
     required this.height,
     required this.density,
     required this.lowRes,
+    required this.renderer,
   });
 
   factory RemoteDisplayState.fromJson(Map<String, dynamic> json) =>
@@ -26,12 +29,160 @@ class RemoteDisplayState extends Equatable {
   @override
   List<Object?> get props => [width, height, density, lowRes];
 
-  RemoteDisplayState updateLowRes({required bool isEnabled}) {
-    return RemoteDisplayState(
-      width: width,
-      height: height,
-      density: density,
-      lowRes: isEnabled ? 1 : 0,
+  RemoteDisplayState updateLowRes(
+      {required DisplayLowResModePreset newPreset}) {
+    return copyWith(
+      lowRes: lowRes,
+      density: lowRes.density(),
     );
+  }
+
+  RemoteDisplayState updateRenderer(
+      {required DisplayRendererType newType}) {
+    return copyWith(transportType: newType);
+  }
+
+  RemoteDisplayState copyWith({
+    int? width,
+    int? height,
+    int? density,
+    DisplayLowResModePreset? lowRes,
+    DisplayRendererType? transportType,
+  }) {
+    return RemoteDisplayState(
+      width: width ?? this.width,
+      height: height ?? this.height,
+      density: density ?? this.density,
+      lowRes: lowRes ?? this.lowRes,
+      renderer: transportType ?? this.renderer,
+    );
+  }
+}
+
+enum DisplayLowResModePreset {
+  @JsonValue(0)
+  res832p,
+  @JsonValue(1)
+  res640p,
+  @JsonValue(2)
+  res544p,
+  @JsonValue(3)
+  res480p;
+
+  double maxHeight() {
+    switch (index) {
+      case 0:
+        return 832;
+      case 1:
+        return 640;
+      case 2:
+        return 544;
+      case 3:
+        return 480;
+      default:
+        return 832;
+    }
+  }
+
+  int density() {
+    switch (index) {
+      case 0:
+        return 200;
+      case 1:
+        return 180;
+      case 2:
+        return 170;
+      case 3:
+        return 160;
+      default:
+        return 832;
+    }
+  }
+
+  String name() {
+    switch (index) {
+      case 0:
+        return "832p";
+      case 1:
+        return "640p";
+      case 2:
+        return "544p";
+      case 3:
+        return "480p";
+      default:
+        return "832p";
+    }
+  }
+}
+
+enum DisplayRendererType {
+  @JsonValue(0)
+  imgTag,
+  @JsonValue(1)
+  workerWebGLWebCodecs,
+  @JsonValue(2)
+  webGLWebCodecs,
+  @JsonValue(3)
+  webGL,
+  @JsonValue(4)
+  canvasWebCodecs,
+  @JsonValue(5)
+  canvas;
+
+  String name() {
+    switch (index) {
+      case 0:
+        return "Image tag";
+      case 1:
+        return "Worker + WebGL + WebCodecs";
+      case 2:
+        return "WebGL + WebCodecs";
+      case 3:
+        return "WebGL";
+      case 4:
+        return "2D Canvas + WebCodecs";
+      case 5:
+        return "2D Canvas";
+      default:
+        return "Image tag";
+    }
+  }
+
+  String resourcePath() {
+    switch (index) {
+      case 0:
+        return "/display/imgTag.html";
+      case 1:
+        return "/display/workerWebGLWebCodecs.html";
+      case 2:
+        return "/display/webGLWebCodecs.html";
+      case 3:
+        return "/display/webGL.html";
+      case 4:
+        return "/display/canvasWebCodecs.html";
+      case 5:
+        return "/display/canvas.html";
+      default:
+        return "/display/imgTag.html";
+    }
+  }
+
+  String binaryType() {
+    switch (index) {
+      case 0:
+        return "blob";
+      case 1:
+        return "arraybuffer";
+      case 2:
+        return "arraybuffer";
+      case 3:
+        return "blob";
+      case 4:
+        return "arraybuffer";
+      case 5:
+        return "blob";
+      default:
+        return "blob";
+    }
   }
 }

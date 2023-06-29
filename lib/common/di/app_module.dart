@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart' hide Environment;
 import 'package:shared_preferences/shared_preferences.dart';
 
-const bool _enableDomainOverride = false;
+const bool _enableDomainOverride = true;
 const String _domainOverride = 'device.teslaandroid.com';
 
 @module

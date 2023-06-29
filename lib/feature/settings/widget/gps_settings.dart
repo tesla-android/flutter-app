@@ -5,7 +5,6 @@ import 'package:tesla_android/feature/audio/cubit/audio_cubit.dart';
 import 'package:tesla_android/feature/audio/cubit/audio_state.dart';
 import 'package:tesla_android/feature/gps/cubit/gps_cubit.dart';
 import 'package:tesla_android/feature/gps/cubit/gps_state.dart';
-import 'package:tesla_android/feature/settings/widget/settings_header.dart';
 import 'package:tesla_android/feature/settings/widget/settings_page.dart';
 import 'package:tesla_android/feature/settings/widget/settings_section.dart';
 import 'package:tesla_android/feature/settings/widget/settings_tile.dart';
@@ -26,12 +25,9 @@ class GpsSettings extends SettingsSection {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SettingsHeader(
-              title: 'GPS',
-            ),
             SettingsTile(
                 icon: Icons.location_pin,
-                title: 'State',
+                title: 'GPS',
                 trailing: _stateTrailing(cubit, state)),
             const Padding(
               padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
 import 'package:tesla_android/feature/audio/cubit/audio_cubit.dart';
 import 'package:tesla_android/feature/audio/cubit/audio_state.dart';
-import 'package:tesla_android/feature/settings/widget/settings_header.dart';
 import 'package:tesla_android/feature/settings/widget/settings_section.dart';
 import 'package:tesla_android/feature/settings/widget/settings_tile.dart';
 
@@ -23,12 +22,9 @@ class SoundSettings extends SettingsSection {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SettingsHeader(
-              title: 'Browser audio',
-            ),
             SettingsTile(
                 icon: Icons.speaker,
-                title: 'State',
+                title: 'Browser audio',
                 subtitle: 'Disable if you intend to use Bluetooth audio',
                 trailing: Switch(
                     value: state.isEnabled,
@@ -39,6 +35,7 @@ class SoundSettings extends SettingsSection {
                         cubit.disableAudio();
                       }
                     })),
+            if (state.isEnabled) divider,
             if (state.isEnabled)
               SettingsTile(
                   icon: Icons.volume_down,

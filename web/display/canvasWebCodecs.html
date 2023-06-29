@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+            body,
+            html {
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                width: 100%;
+                height: 100%;
+            }
+            #canvas {
+                width: 100%;
+                height: 100%;
+                position: absolute;
+            }
+        </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script>
+            var c = document.getElementById("canvas");
+            var ctx = c.getContext("2d");
+
+            c.width = window.innerWidth;
+            c.height = window.innerHeight;
+
+            window.addEventListener(
+                "resize",
+                function () {
+                    c.width = window.innerWidth;
+                    c.height = window.innerHeight;
+                },
+                false
+            );
+
+            window.parent.addEventListener("message", handleMessage, false);
+
+            function handleMessage(evt) {
+                var arrayBuffer = evt.data;
+
+                var imageDecoder = new ImageDecoder({ type: "image/jpeg", data: arrayBuffer });
+
+                imageDecoder.decode().then((result) => {
+                    var imageBitmap = result.image;
+                    //handleTextureLoaded(gl, imageBitmap, texture, imageBitmap.codedWidth, imageBitmap.codedHeight);
+                    ctx.clearRect(0, 0, c.width, c.height); // Clear the canvas first
+
+                    var width = imageBitmap.codedWidth;
+                    var height = imageBitmap.codedHeight;
+
+                    // Compute the new width and height to maintain aspect ratio
+                    var hRatio = c.width / width;
+                    var vRatio = c.height / height;
+                    var ratio = Math.min(hRatio, vRatio);
+                    var centerShift_x = (c.width - width * ratio) / 2;
+                    var centerShift_y = (c.height - height * ratio) / 2;
+                    // Draw the image, scaled and centered to fit on canvas
+                    ctx.drawImage(imageBitmap, 0, 0, width, height, centerShift_x, centerShift_y, width * ratio, height * ratio);
+                });
+            }
+        </script>
+</body>
+</html>

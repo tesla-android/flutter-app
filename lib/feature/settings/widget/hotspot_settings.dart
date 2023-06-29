@@ -4,7 +4,6 @@ import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
 import 'package:tesla_android/feature/settings/bloc/system_configuration_cubit.dart';
 import 'package:tesla_android/feature/settings/bloc/system_configuration_state.dart';
 import 'package:tesla_android/feature/settings/model/softap_band_type.dart';
-import 'package:tesla_android/feature/settings/widget/settings_header.dart';
 import 'package:tesla_android/feature/settings/widget/settings_section.dart';
 import 'package:tesla_android/feature/settings/widget/settings_tile.dart';
 
@@ -71,12 +70,9 @@ class HotspotSettings extends SettingsSection {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SettingsHeader(
-          title: 'Wi-Fi',
-        ),
         SettingsTile(
             icon: Icons.wifi,
-            title: 'State',
+            title: 'Wi-Fi Hotspot',
             subtitle:
                 'Disable only if you use and external router and you don\'t need the Tesla Android Wi-Fi network',
             trailing: Switch(
@@ -84,6 +80,7 @@ class HotspotSettings extends SettingsSection {
                 onChanged: (value) {
                   cubit.updateSoftApState(value);
                 })),
+        divider,
         if (isSoftApEnabled) ...[
           SettingsTile(
               icon: Icons.wifi_channel,
@@ -114,24 +111,23 @@ class HotspotSettings extends SettingsSection {
             child: Text(
                 'The utilization of the 5 GHz operation mode enhances the performance of the Tesla Android system while effectively resolving Bluetooth-related challenges. This mode is anticipated to be designated as the default option in a future versions.\n\nConversely, when operating on the 2.4 GHz frequency, the allocation of resources between the hotspot and Bluetooth can lead to dropped frames, particularly when utilizing AD2P audio.'),
           ),
-          const Divider(),
-          const SettingsHeader(
-            title: 'Offline mode',
-          ),
+          divider,
           SettingsTile(
               icon: Icons.wifi_off,
-              title: 'State',
+              title: 'Offline mode',
               subtitle: 'Persistent Wi-Fi connection',
               trailing: Switch(
                   value: isOfflineModeEnabled,
                   onChanged: (value) {
                     cubit.updateOfflineModeState(value);
                   })),
+          divider,
           const Padding(
             padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
             child: Text(
                 'To ensure continuous internet access, your Tesla vehicle relies on Wi-Fi networks that have an active internet connection. However, if you encounter a situation where Wi-Fi connectivity is unavailable, there is a solution called "offline mode" to address this limitation. In offline mode, certain features like Tesla Mobile App access and other car-side functionalities that rely on internet connectivity will be disabled. To overcome this limitation, you can establish internet access in your Tesla Android setup by using an LTE Modem or enabling tethering.'),
           ),
+          divider,
           SettingsTile(
               icon: Icons.data_thresholding_sharp,
               title: 'Tesla Telemetry',
@@ -141,6 +137,7 @@ class HotspotSettings extends SettingsSection {
                   onChanged: (value) {
                     cubit.updateOfflineModeTelemetryState(value);
                   })),
+          divider,
           SettingsTile(
               icon: Icons.update,
               title: 'Tesla Software Updates',

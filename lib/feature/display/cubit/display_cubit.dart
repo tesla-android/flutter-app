@@ -19,7 +19,7 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
       : super(DisplayStateInitial()) {
     _transport.connect();
   }
-  
+
   StreamSubscription? _transportStreamSubscription;
   Timer? _resizeCoolDownTimer;
   static const Duration _coolDownDuration = Duration(seconds: 1);
@@ -27,8 +27,8 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
   @override
   Future<void> close() {
     _resizeCoolDownTimer?.cancel();
-     _transportStreamSubscription?.cancel();
-     _transport.disconnect();
+    _transportStreamSubscription?.cancel();
+    _transport.disconnect();
     return super.close();
   }
 
@@ -53,7 +53,7 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
   void _subscribeToTransportStream() {
     _transportStreamSubscription ??=
         _transport.jpegDataSubject.listen((imageData) {
-          window.postMessage(imageData, "*");
+      window.postMessage(imageData, "*");
     });
   }
 
@@ -70,11 +70,13 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
     }
 
     final remoteState = await _getRemoteDisplayState();
-    final needsLowRes = remoteState.lowRes == 1 ? true : false;
+    final lowResPreset = remoteState.lowRes;
+    final renderer = remoteState.renderer;
+    _transport.updateBinaryType(renderer.binaryType());
 
     final desiredSize = _calculateOptimalSize(
       viewConstraints,
-      needsLowRes: needsLowRes,
+      lowResModePreset: lowResPreset,
     );
 
     if (remoteState.width == desiredSize.width &&
@@ -84,14 +86,18 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
       _resizeCoolDownTimer = null;
       emit(
         DisplayStateNormal(
-            viewConstraints: viewConstraints, adjustedSize: desiredSize),
+          viewConstraints: viewConstraints,
+          adjustedSize: desiredSize,
+          rendererType: renderer,
+        ),
       );
     }
 
     emit(DisplayStateResizeCoolDown(
       viewConstraints: viewConstraints,
       adjustedSize: desiredSize,
-      isLowRes: needsLowRes,
+      lowResModePreset: lowResPreset,
+      rendererType: renderer,
     ));
     _resizeCoolDownTimer = Timer(_coolDownDuration, _sendResizeRequest);
   }
@@ -101,23 +107,25 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
       final currentState = state as DisplayStateResizeCoolDown;
       final viewConstraints = currentState.viewConstraints;
       final adjustedSize = currentState.adjustedSize;
-      final isLowRes = currentState.isLowRes;
-      const density = 200;
-      emit(DisplayStateResizeInProgress(
-          viewConstraints: viewConstraints, adjustedSize: adjustedSize));
+      final lowResModePreset = currentState.lowResModePreset;
+      final renderer = currentState.rendererType;
+      final density = lowResModePreset.density();
+      emit(DisplayStateResizeInProgress());
       try {
+        _transport.updateBinaryType(renderer.binaryType());
         await _repository.updateDisplayConfiguration(RemoteDisplayState(
           width: adjustedSize.width.toInt(),
           height: adjustedSize.height.toInt(),
           density: density,
-          lowRes: isLowRes ? 1 : 0,
+          lowRes: lowResModePreset,
+          renderer: renderer,
         ));
         await Future.delayed(_coolDownDuration, () {
           if (isClosed) return;
           emit(DisplayStateNormal(
-            viewConstraints: viewConstraints,
-            adjustedSize: adjustedSize,
-          ));
+              viewConstraints: viewConstraints,
+              adjustedSize: adjustedSize,
+              rendererType: renderer));
         });
         dispatchAnalyticsEvent(
           eventName: "virtualDisplayResolutionChanged",
@@ -127,7 +135,7 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
             "viewportWidth": viewConstraints.maxWidth,
             "viewportHeight": viewConstraints.maxHeight,
             "density": density,
-            "lowRes": isLowRes,
+            "lowRes": lowResModePreset.maxHeight(),
           },
         );
       } catch (exception, stacktrace) {
@@ -149,12 +157,12 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
   ///
   Size _calculateOptimalSize(
     BoxConstraints constraints, {
-    required bool needsLowRes,
+    required DisplayLowResModePreset lowResModePreset,
   }) {
     double maxWidth;
     double maxHeight;
 
-    double maxShortestSide = needsLowRes ? 640 : 832;
+    double maxShortestSide = lowResModePreset.maxHeight();
 
     if (constraints.maxWidth > constraints.maxHeight) {
       maxWidth = constraints.maxWidth > 1280 ? 1280 : constraints.maxWidth;
@@ -168,8 +176,8 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
       maxHeight = constraints.maxHeight > 1280 ? 1280 : constraints.maxHeight;
     }
 
-    if (maxWidth < 640 || maxHeight < 480) {
-      return const Size(640, 480);
+    if (maxWidth < 320 || maxHeight < 320) {
+      return const Size(320, 320);
     }
 
     double aspectRatio = constraints.maxWidth / constraints.maxHeight;
@@ -178,14 +186,14 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
     double bestHeight = maxHeight;
     double minEmptySpace = maxWidth * maxHeight;
 
-    for (double height = maxHeight; height >= 480; height -= 16) {
+    for (double height = maxHeight; height >= 320; height -= 16) {
       double width = height * aspectRatio;
 
       if (width > maxWidth) {
         continue;
       }
 
-      if (width < 640 || height < 480) {
+      if (width < 320 || height < 320) {
         continue;
       }
 
