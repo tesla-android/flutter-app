@@ -15,43 +15,40 @@ class TouchScreenView extends StatelessWidget {
   Widget build(BuildContext context) {
     final touchScreenCubit = BlocProvider.of<TouchscreenCubit>(context);
     return LayoutBuilder(builder: (context, constraints) {
-      return AspectRatio(
-        aspectRatio: displaySize.width / displaySize.height,
-        child: Listener(
-          onPointerDown: (event) {
-            _handlePointerEvent(
-              cubit: touchScreenCubit,
-              event: event,
-              constraints: constraints,
-              touchscreenSize: displaySize,
-            );
-          },
-          onPointerMove: (event) {
-            _handlePointerEvent(
-              cubit: touchScreenCubit,
-              event: event,
-              constraints: constraints,
-              touchscreenSize: displaySize,
-            );
-          },
-          onPointerCancel: (event) {
-            _handlePointerEvent(
-              cubit: touchScreenCubit,
-              event: event,
-              constraints: constraints,
-              touchscreenSize: displaySize,
-            );
-          },
-          onPointerUp: (event) {
-            _handlePointerEvent(
-              cubit: touchScreenCubit,
-              event: event,
-              constraints: constraints,
-              touchscreenSize: displaySize,
-            );
-          },
-          child: Container(color: Colors.transparent,),
-        ),
+      return Listener(
+        onPointerDown: (event) {
+          _handlePointerEvent(
+            cubit: touchScreenCubit,
+            event: event,
+            constraints: constraints,
+            touchscreenSize: displaySize,
+          );
+        },
+        onPointerMove: (event) {
+          _handlePointerEvent(
+            cubit: touchScreenCubit,
+            event: event,
+            constraints: constraints,
+            touchscreenSize: displaySize,
+          );
+        },
+        onPointerCancel: (event) {
+          _handlePointerEvent(
+            cubit: touchScreenCubit,
+            event: event,
+            constraints: constraints,
+            touchscreenSize: displaySize,
+          );
+        },
+        onPointerUp: (event) {
+          _handlePointerEvent(
+            cubit: touchScreenCubit,
+            event: event,
+            constraints: constraints,
+            touchscreenSize: displaySize,
+          );
+        },
+        child: Container(color: Colors.transparent,),
       );
     });
   }

@@ -36,7 +36,8 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
     _subscribeToTransportStream();
 
     if (state is DisplayStateResizeInProgress) {
-      log("Display resize can't happen now (state == DisplayStateResizeInProgress)");
+      log(
+          "Display resize can't happen now (state == DisplayStateResizeInProgress)");
       return;
     }
 
@@ -53,15 +54,16 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
   void _subscribeToTransportStream() {
     _transportStreamSubscription ??=
         _transport.jpegDataSubject.listen((imageData) {
-      window.postMessage(imageData, "*");
-    });
+          window.postMessage(imageData, "*");
+        });
   }
 
   void _startResize({required BoxConstraints viewConstraints}) async {
     if (state is DisplayStateResizeCoolDown) {
       final currentState = state as DisplayStateResizeCoolDown;
       if (currentState.viewConstraints == viewConstraints) {
-        log("Display resize already scheduled (state == DisplayStateResizeCoolDown)");
+        log(
+            "Display resize already scheduled (state == DisplayStateResizeCoolDown)");
         return;
       } else {
         _resizeCoolDownTimer?.cancel();
@@ -72,11 +74,13 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
     final remoteState = await _getRemoteDisplayState();
     final lowResPreset = remoteState.lowRes;
     final renderer = remoteState.renderer;
+    final isHeadless = (remoteState.isHeadless ?? 1) == 1;
     _transport.updateBinaryType(renderer.binaryType());
 
     final desiredSize = _calculateOptimalSize(
-      viewConstraints,
-      lowResModePreset: lowResPreset,
+        viewConstraints,
+        lowResModePreset: lowResPreset,
+        isHeadless: isHeadless,
     );
 
     if (remoteState.width == desiredSize.width &&
@@ -155,10 +159,13 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
   /// Display resolution needs to be aligned by 16 for the hardware encoder
   /// Not going below 1280 x 832 just to be safe
   ///
-  Size _calculateOptimalSize(
-    BoxConstraints constraints, {
+  Size _calculateOptimalSize(BoxConstraints constraints, {
     required DisplayLowResModePreset lowResModePreset,
+    required bool isHeadless,
   }) {
+    if (!isHeadless) {
+      return const Size(1024, 768);
+    }
     double maxWidth;
     double maxHeight;
 

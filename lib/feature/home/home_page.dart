@@ -44,15 +44,19 @@ class HomePage extends StatelessWidget {
                               child: BlocBuilder<DisplayCubit, DisplayState>(
                                   builder: (context, state) {
                                 if (state is DisplayStateNormal) {
-                                  return Stack(
-                                    fit: StackFit.expand,
-                                    children: [
-                                      DisplayView(type: state.rendererType),
-                                      PointerInterceptor(
-                                        child: TouchScreenView(
-                                            displaySize: state.adjustedSize),
-                                      ),
-                                    ],
+                                  return AspectRatio(
+                                    aspectRatio: state.adjustedSize.width /
+                                        state.adjustedSize.height,
+                                    child: Stack(
+                                      fit: StackFit.expand,
+                                      children: [
+                                        DisplayView(type: state.rendererType),
+                                        PointerInterceptor(
+                                          child: TouchScreenView(
+                                              displaySize: state.adjustedSize),
+                                        ),
+                                      ],
+                                    ),
                                   );
                                 } else {
                                   return const CircularProgressIndicator();
