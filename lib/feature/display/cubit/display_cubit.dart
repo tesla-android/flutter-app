@@ -76,7 +76,6 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
     final lowResPreset = remoteState.lowRes;
     final renderer = remoteState.renderer;
     final isHeadless = (remoteState.isHeadless ?? 1) == 1;
-    _transport.updateBinaryType(renderer.binaryType());
 
     final desiredSize = _calculateOptimalSize(
         viewConstraints,
@@ -117,7 +116,6 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
       final density = lowResModePreset.density();
       emit(DisplayStateResizeInProgress());
       try {
-        _transport.updateBinaryType(renderer.binaryType());
         await _repository.updateDisplayConfiguration(RemoteDisplayState(
           width: adjustedSize.width.toInt(),
           height: adjustedSize.height.toInt(),
@@ -141,7 +139,7 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
             "viewportHeight": viewConstraints.maxHeight,
             "density": density,
             "lowRes": lowResModePreset.maxHeight(),
-            "renderer": renderer,
+            "renderer": renderer.name(),
           },
         );
       } catch (exception, stacktrace) {

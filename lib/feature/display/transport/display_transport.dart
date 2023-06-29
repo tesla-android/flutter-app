@@ -13,6 +13,7 @@ class DisplayTransport extends BaseWebsocketTransport {
       : super(
           flavorUrlKey: "displayWebSocket",
           sendKeepAlive: true,
+          binaryType: 'arraybuffer',
         );
 
   @override

@@ -1,137 +1,146 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <base href="$FLUTTER_BASE_HREF">
-  <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="">
+  <base href="$FLUTTER_BASE_HREF" />
+  <meta charset="UTF-8" />
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
+  <meta name="description" content="" />
   <title>Tesla Android</title>
-  <link rel="apple-touch-icon" sizes="57x57" href="icons/apple-icon-57x57.png">
-  <link rel="apple-touch-icon" sizes="60x60" href="icons/apple-icon-60x60.png">
-  <link rel="apple-touch-icon" sizes="72x72" href="icons/apple-icon-72x72.png">
-  <link rel="apple-touch-icon" sizes="76x76" href="icons/apple-icon-76x76.png">
-  <link rel="apple-touch-icon" sizes="114x114" href="icons/apple-icon-114x114.png">
-  <link rel="apple-touch-icon" sizes="120x120" href="icons/apple-icon-120x120.png">
-  <link rel="apple-touch-icon" sizes="144x144" href="icons/apple-icon-144x144.png">
-  <link rel="apple-touch-icon" sizes="152x152" href="icons/apple-icon-152x152.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-icon-180x180.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/android-icon-192x192.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="96x96" href="icons/favicon-96x96.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
-  <link rel="manifest" href="icons/manifest.json">
-  <meta name="msapplication-TileColor" content="#ffffff">
-  <meta name="msapplication-TileImage" content="icons/ms-icon-144x144.png">
-  <meta name="theme-color" content="#ffffff">
+  <link rel="apple-touch-icon" sizes="57x57" href="icons/apple-icon-57x57.png" />
+  <link rel="apple-touch-icon" sizes="60x60" href="icons/apple-icon-60x60.png" />
+  <link rel="apple-touch-icon" sizes="72x72" href="icons/apple-icon-72x72.png" />
+  <link rel="apple-touch-icon" sizes="76x76" href="icons/apple-icon-76x76.png" />
+  <link rel="apple-touch-icon" sizes="114x114" href="icons/apple-icon-114x114.png" />
+  <link rel="apple-touch-icon" sizes="120x120" href="icons/apple-icon-120x120.png" />
+  <link rel="apple-touch-icon" sizes="144x144" href="icons/apple-icon-144x144.png" />
+  <link rel="apple-touch-icon" sizes="152x152" href="icons/apple-icon-152x152.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-icon-180x180.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/android-icon-192x192.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="96x96" href="icons/favicon-96x96.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png" />
+  <link rel="manifest" href="icons/manifest.json" />
+  <meta name="msapplication-TileColor" content="#ffffff" />
+  <meta name="msapplication-TileImage" content="icons/ms-icon-144x144.png" />
+  <meta name="theme-color" content="#ffffff" />
   <script>
-  // The value below is injected by flutter build, do not touch.
-  var serviceWorkerVersion = null;
-  </script>
+            var serviceWorkerVersion = null;
+        </script>
   <script>
-  function createAudioContext() {
-      return new (window.AudioContext || window.webkitAudioContext)();
-  }
-  </script>
-  <!-- This script adds the flutter initialization JS code -->
+            function createAudioContext() {
+                return new (window.AudioContext || window.webkitAudioContext)();
+            }
+        </script>
   <script src="flutter.js" defer></script>
 </head>
 <body>
 <div id="loading">
   <style>
-				body {
-					inset: 0;
-					overflow: hidden;
-					margin: 0;
-					padding: 0;
-					position: fixed;
-				}
+                body {
+                    inset: 0;
+                    overflow: hidden;
+                    margin: 0;
+                    padding: 0;
+                    position: fixed;
+                    background-color: #ffffff; /* Light Mode */
+                }
 
-				#loading {
-					align-items: center;
-					display: flex;
-					height: 100%;
-					justify-content: center;
-					width: 100%;
-				}
+                #loading {
+                    align-items: center;
+                    display: flex;
+                    height: 100%;
+                    justify-content: center;
+                    width: 100%;
+                }
 
-				#loading img {
-					animation: 1s ease-in-out 0s infinite alternate breathe;
-					transition: opacity .4s;
-				}
+                #loading img {
+                    animation: 1s ease-in-out 0s infinite alternate breathe;
+                    transition: opacity 0.4s;
+                    border-radius: 20px;
+                }
 
-				#loading.init_done img {
-					animation: .33s ease-in-out 0s 1 forwards zooooom;
-					opacity: .05;
-				}
+                #loading.init_done img {
+                    animation: 0.33s ease-in-out 0s 1 forwards zooooom;
+                    opacity: 0.05;
+                }
 
-				@keyframes breathe {
-					from {
-						transform: scale(1)
-					}
+                @media (prefers-color-scheme: dark) {
+                    body {
+                        background-color: #303030; /* Dark Mode */
+                    }
+                }
 
-					to {
-						transform: scale(0.95)
-					}
-				}
+                @keyframes breathe {
+                    from {
+                        transform: scale(1);
+                    }
 
-				@keyframes zooooom {
-					from {
-						transform: scale(1)
-					}
+                    to {
+                        transform: scale(0.95);
+                    }
+                }
 
-					to {
-						transform: scale(10)
-					}
-				}
-			</style>
+                @keyframes zooooom {
+                    from {
+                        transform: scale(1);
+                    }
+
+                    to {
+                        transform: scale(10);
+                    }
+                }
+            </style>
   <img src="icons/android-icon-192x192.png" alt="Loading indicator..." />
 </div>
 <script>
-			window.addEventListener('load', function() {
-				var loading = document.querySelector('#loading');
-				_flutter.loader.loadEntrypoint({
-					serviceWorker: {
-						serviceWorkerVersion: serviceWorkerVersion,
-					}
-				}).then(function(engineInitializer) {
-					loading.classList.add('main_done');
-					return engineInitializer.initializeEngine({canvasKitBaseUrl: "/canvaskit/", renderer: "canvaskit", canvasKitMaximumSurfaces: 3});
-				}).then(function(appRunner) {
-					loading.classList.add('init_done');
-					return appRunner.runApp();
-				}).then(function(app) {
-					// Wait a few milliseconds so users can see the "zoooom" animation
-					// before getting rid of the "loading" div.
-					window.setTimeout(function() {
-						loading.remove();
-					}, 200);
-				});
-			});
-		</script>
-        <script src="pcmplayer.js"></script>
-        <script>
+            window.addEventListener("load", function () {
+                var loading = document.querySelector("#loading");
+                _flutter.loader
+                    .loadEntrypoint({
+                        serviceWorker: {
+                            serviceWorkerVersion: serviceWorkerVersion,
+                        },
+                    })
+                    .then(function (engineInitializer) {
+                        loading.classList.add("main_done");
+                        return engineInitializer.initializeEngine({ canvasKitBaseUrl: "/canvaskit/", renderer: "canvaskit", canvasKitMaximumSurfaces: 3 });
+                    })
+                    .then(function (appRunner) {
+                        loading.classList.add("init_done");
+                        return appRunner.runApp();
+                    })
+                    .then(function (app) {
+                        // Wait a few milliseconds so users can see the "zoooom" animation
+                        // before getting rid of the "loading" div.
+                        window.setTimeout(function () {
+                            loading.remove();
+                        }, 200);
+                    });
+            });
+        </script>
+<script src="pcmplayer.js"></script>
+<script>
             var player;
-		    window.addEventListener('click', function(e) {
-				if (typeof player == "undefined") {
-					player = new PCMPlayer({
-						inputCodec: 'Float32',
-						channels: 2,
-						sampleRate: 48000,
-						flushTime: 200,
-					});
-				}
-			});
-			function feedPlayer(data) {
-			  if (typeof player != "undefined") {
-                player.feed(data);
-			  }
-			};
-			function setPlayerVolume(volume) {
-			  if (typeof player != "undefined") {
-                player.volume(volume);
-			  }
-			};
-		</script>
-
+            window.addEventListener("click", function (e) {
+                if (typeof player == "undefined") {
+                    player = new PCMPlayer({
+                        inputCodec: "Float32",
+                        channels: 2,
+                        sampleRate: 48000,
+                        flushTime: 200,
+                    });
+                }
+            });
+            function feedPlayer(data) {
+                if (typeof player != "undefined") {
+                    player.feed(data);
+                }
+            }
+            function setPlayerVolume(volume) {
+                if (typeof player != "undefined") {
+                    player.volume(volume);
+                }
+            }
+        </script>
 </body>
 </html>

@@ -50,7 +50,7 @@ class TeslaAndroid extends StatelessWidget {
             colorSchemeSeed: Colors.red.shade900,
             fontFamily: 'Roboto'),
         darkTheme: ThemeData(
-            brightness: Brightness.light,
+            brightness: Brightness.dark,
             useMaterial3: true,
             colorSchemeSeed: Colors.red.shade900,
             fontFamily: 'Roboto'),

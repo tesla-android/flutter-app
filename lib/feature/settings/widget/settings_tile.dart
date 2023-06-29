@@ -6,6 +6,7 @@ class SettingsTile extends StatelessWidget {
   final String title;
   final String? subtitle;
   final Widget trailing;
+  final bool dense;
 
   const SettingsTile({
     super.key,
@@ -13,6 +14,7 @@ class SettingsTile extends StatelessWidget {
     required this.title,
     this.subtitle,
     required this.trailing,
+    this.dense = true,
   });
 
   @override
@@ -22,7 +24,8 @@ class SettingsTile extends StatelessWidget {
       title: Text(title),
       subtitle: subtitle != null ? Text(subtitle!) : const SizedBox.shrink(),
       trailing: SizedBox(
-          width: TADimens.settingsTileTrailingWidth,
+          width: dense ? TADimens.settingsTileTrailingWidthDense : TADimens
+              .settingsTileTrailingWidth,
           child: Row(
             children: [
               const Spacer(),
