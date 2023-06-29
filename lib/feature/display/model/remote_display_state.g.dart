@@ -15,6 +15,7 @@ RemoteDisplayState _$RemoteDisplayStateFromJson(Map<String, dynamic> json) =>
       renderer:
           $enumDecodeNullable(_$DisplayRendererTypeEnumMap, json['renderer']) ??
               DisplayRendererType.imgTag,
+      isHeadless: json['isHeadless'] as int?,
     );
 
 Map<String, dynamic> _$RemoteDisplayStateToJson(RemoteDisplayState instance) =>
@@ -24,6 +25,7 @@ Map<String, dynamic> _$RemoteDisplayStateToJson(RemoteDisplayState instance) =>
       'density': instance.density,
       'lowres': _$DisplayLowResModePresetEnumMap[instance.lowRes]!,
       'renderer': _$DisplayRendererTypeEnumMap[instance.renderer]!,
+      'isHeadless': instance.isHeadless,
     };
 
 const _$DisplayLowResModePresetEnumMap = {

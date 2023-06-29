@@ -12,6 +12,7 @@ class RemoteDisplayState extends Equatable {
   final DisplayLowResModePreset lowRes;
   @JsonKey(defaultValue: DisplayRendererType.imgTag)
   final DisplayRendererType renderer;
+  final int? isHeadless;
 
   const RemoteDisplayState({
     required this.width,
@@ -19,6 +20,7 @@ class RemoteDisplayState extends Equatable {
     required this.density,
     required this.lowRes,
     required this.renderer,
+    this.isHeadless,
   });
 
   factory RemoteDisplayState.fromJson(Map<String, dynamic> json) =>
@@ -27,7 +29,7 @@ class RemoteDisplayState extends Equatable {
   Map<String, dynamic> toJson() => _$RemoteDisplayStateToJson(this);
 
   @override
-  List<Object?> get props => [width, height, density, lowRes];
+  List<Object?> get props => [width, height, density, lowRes, renderer, isHeadless];
 
   RemoteDisplayState updateLowRes(
       {required DisplayLowResModePreset newPreset}) {
@@ -39,22 +41,24 @@ class RemoteDisplayState extends Equatable {
 
   RemoteDisplayState updateRenderer(
       {required DisplayRendererType newType}) {
-    return copyWith(transportType: newType);
+    return copyWith(renderer: newType);
   }
 
   RemoteDisplayState copyWith({
     int? width,
     int? height,
     int? density,
+    int? isHeadless,
     DisplayLowResModePreset? lowRes,
-    DisplayRendererType? transportType,
+    DisplayRendererType? renderer,
   }) {
     return RemoteDisplayState(
       width: width ?? this.width,
       height: height ?? this.height,
       density: density ?? this.density,
       lowRes: lowRes ?? this.lowRes,
-      renderer: transportType ?? this.renderer,
+      isHeadless: isHeadless ?? this.isHeadless,
+      renderer: renderer ?? this.renderer,
     );
   }
 }
