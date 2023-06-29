@@ -1,3 +1,4 @@
+// ignore: avoid_web_libraries_in_flutter
 import 'dart:html';
 
 import 'package:aptabase_flutter/aptabase_flutter.dart';
@@ -6,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart' hide Environment;
 import 'package:shared_preferences/shared_preferences.dart';
 
-const bool _enableDomainOverride = true;
+const bool _enableDomainOverride = false;
 const String _domainOverride = 'device.teslaandroid.com';
 
 @module

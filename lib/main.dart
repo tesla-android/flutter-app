@@ -36,7 +36,7 @@ class TeslaAndroid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MediaQueryData windowData =
-        MediaQueryData.fromView(WidgetsBinding.instance.window);
+        MediaQueryData.fromView(View.of(context));
 
     return MediaQuery(
       data: windowData.copyWith(textScaleFactor: 1.5, devicePixelRatio: 1.0),

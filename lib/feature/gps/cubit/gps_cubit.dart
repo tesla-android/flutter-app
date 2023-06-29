@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
+// ignore: avoid_web_libraries_in_flutter
 import 'dart:html';
 
 import 'package:flutter_bloc/flutter_bloc.dart';

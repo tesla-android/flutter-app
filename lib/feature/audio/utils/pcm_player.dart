@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:injectable/injectable.dart';
 import 'package:js/js.dart';
 

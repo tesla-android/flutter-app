@@ -24,9 +24,6 @@ class HomePage extends StatelessWidget {
     return BlocBuilder<ConnectivityCheckCubit, ConnectivityState>(
         bloc: connectivityCheck,
         builder: (context, state) {
-          if (state == ConnectivityState.initial) {
-            return Container();
-          }
           final isBackendAccessible =
               state == ConnectivityState.backendAccessible;
           if (!isBackendAccessible) {

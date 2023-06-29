@@ -1,7 +1,5 @@
-import 'package:flavor/flavor.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:tesla_android/common/di/ta_locator.dart';
 import 'package:tesla_android/common/navigation/ta_page.dart';
 import 'package:tesla_android/common/ui/components/ta_app_bar.dart';
 import 'package:tesla_android/common/ui/components/ta_bottom_navigation_bar.dart';

@@ -41,7 +41,10 @@ class ReleaseNotesChangelogItemCard extends StatelessWidget {
               const SizedBox(
                 height: TADimens.PADDING_XS_VALUE,
               ),
-              Text(changelogItem.shortDescription, style: textTheme.caption),
+              Text(
+                changelogItem.shortDescription,
+                style: textTheme.bodySmall,
+              ),
             ],
           ),
         ),

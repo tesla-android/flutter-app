@@ -1,6 +1,3 @@
-import 'dart:html';
-
-import 'package:tesla_android/feature/gps/model/gps_data.dart';
 import 'package:tesla_android/feature/gps/util/web_location_data.dart';
 
 abstract class GpsState {}

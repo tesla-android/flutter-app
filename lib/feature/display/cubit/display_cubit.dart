@@ -1,4 +1,5 @@
 import 'dart:async';
+// ignore: avoid_web_libraries_in_flutter
 import 'dart:html';
 
 import 'package:flutter/cupertino.dart';
@@ -140,6 +141,7 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
             "viewportHeight": viewConstraints.maxHeight,
             "density": density,
             "lowRes": lowResModePreset.maxHeight(),
+            "renderer": renderer,
           },
         );
       } catch (exception, stacktrace) {

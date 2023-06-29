@@ -1,9 +1,10 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'changelog_item.g.dart';
 
 @JsonSerializable()
-class ChangelogItem {
+class ChangelogItem extends Equatable {
   final String title;
   final String shortDescription;
   final String descriptionMarkdown;
@@ -20,17 +21,9 @@ class ChangelogItem {
   Map<String, dynamic> toJson() => _$ChangelogItemToJson(this);
 
   @override
-  bool operator ==(Object other) {
-    return (other is ChangelogItem) &&
-        title == other.title &&
-        shortDescription == other.shortDescription &&
-        descriptionMarkdown == other.descriptionMarkdown;
-  }
-
-  @override
-  int get hashCode => Object.hashAll([
+  List<Object?> get props => [
         title,
         shortDescription,
         descriptionMarkdown,
-      ]);
+      ];
 }

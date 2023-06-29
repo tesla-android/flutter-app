@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
-import 'package:tesla_android/feature/audio/cubit/audio_cubit.dart';
-import 'package:tesla_android/feature/audio/cubit/audio_state.dart';
 import 'package:tesla_android/feature/gps/cubit/gps_cubit.dart';
 import 'package:tesla_android/feature/gps/cubit/gps_state.dart';
-import 'package:tesla_android/feature/settings/widget/settings_page.dart';
 import 'package:tesla_android/feature/settings/widget/settings_section.dart';
 import 'package:tesla_android/feature/settings/widget/settings_tile.dart';
 

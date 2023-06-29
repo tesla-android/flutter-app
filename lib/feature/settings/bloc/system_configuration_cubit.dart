@@ -1,9 +1,6 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:tesla_android/common/utils/logger.dart';
 import 'package:tesla_android/feature/settings/bloc/system_configuration_state.dart';
 import 'package:tesla_android/feature/settings/model/softap_band_type.dart';

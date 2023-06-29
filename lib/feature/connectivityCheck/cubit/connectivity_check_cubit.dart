@@ -1,4 +1,5 @@
 import 'dart:async';
+// ignore: avoid_web_libraries_in_flutter
 import 'dart:html';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +12,7 @@ class ConnectivityCheckCubit extends Cubit<ConnectivityState> {
   final HealthService _healthService;
 
   ConnectivityCheckCubit(this._healthService)
-      : super(ConnectivityState.initial) {
+      : super(ConnectivityState.backendAccessible) {
     _observeBackendAccessibility();
   }
 
