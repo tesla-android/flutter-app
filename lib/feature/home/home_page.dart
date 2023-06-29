@@ -47,10 +47,9 @@ class HomePage extends StatelessWidget {
                                   return Stack(
                                     fit: StackFit.expand,
                                     children: [
-                                      const DisplayView(
-                                          source:
-                                              "/renderer.html"),
-                                      PointerInterceptor(child: TouchScreenView(
+                                      DisplayView(type: state.rendererType),
+                                      PointerInterceptor(
+                                        child: TouchScreenView(
                                             displaySize: state.adjustedSize),
                                       ),
                                     ],

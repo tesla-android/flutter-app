@@ -119,6 +119,10 @@ abstract class BaseWebsocketTransport with Logger {
     }
   }
 
+  void updateBinaryType(String binaryType) {
+    _webSocketChannel?.binaryType = binaryType;
+  }
+
   void onMessage(MessageEvent event) {
     // optional
   }

@@ -1,0 +1,65 @@
+<html>
+<head>
+    <style>
+            body,
+            html {
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                width: 100%;
+                height: 100%;
+            }
+            #canvas {
+                width: 100%;
+                height: 100%;
+                position: absolute;
+            }
+        </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+
+<script>
+            var c = document.getElementById("canvas");
+            var ctx = c.getContext("2d");
+
+            c.width = window.innerWidth;
+            c.height = window.innerHeight;
+
+            window.addEventListener(
+                "resize",
+                function () {
+                    c.width = window.innerWidth;
+                    c.height = window.innerHeight;
+                },
+                false
+            );
+
+            window.parent.addEventListener("message", handleMessage, false);
+
+            function handleMessage(evt) {
+                var blob = evt.data;
+                var urlCreator = window.URL || window.webkitURL;
+                var imageUrl = urlCreator.createObjectURL(blob);
+
+                var image = new Image();
+                image.onload = function () {
+                    ctx.clearRect(0, 0, c.width, c.height); // Clear the canvas first
+
+                    // Compute the new width and height to maintain aspect ratio
+                    var hRatio = c.width / image.width;
+                    var vRatio = c.height / image.height;
+                    var ratio = Math.min(hRatio, vRatio);
+                    var centerShift_x = (c.width - image.width * ratio) / 2;
+                    var centerShift_y = (c.height - image.height * ratio) / 2;
+
+                    // Draw the image, scaled and centered to fit on canvas
+                    ctx.drawImage(image, 0, 0, image.width, image.height, centerShift_x, centerShift_y, image.width * ratio, image.height * ratio);
+
+                    urlCreator.revokeObjectURL(imageUrl); // Clean up after yourself.
+                };
+                image.src = imageUrl;
+            }
+        </script>
+</body>
+</html>

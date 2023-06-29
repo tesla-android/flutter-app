@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/rendering.dart';
+import 'package:tesla_android/feature/display/model/remote_display_state.dart';
 
 abstract class DisplayState extends Equatable {
   @override
@@ -11,13 +12,15 @@ class DisplayStateInitial extends DisplayState {}
 class DisplayStateResizeCoolDown extends DisplayState {
   final BoxConstraints viewConstraints;
   final Size adjustedSize;
-  final bool isLowRes;
+  final DisplayLowResModePreset lowResModePreset;
+  final DisplayRendererType rendererType;
   final DateTime timestamp;
 
   DisplayStateResizeCoolDown({
     required this.viewConstraints,
     required this.adjustedSize,
-    required this.isLowRes,
+    required this.lowResModePreset,
+    required this.rendererType,
   }) : timestamp = DateTime.now();
 
   @override
@@ -25,28 +28,29 @@ class DisplayStateResizeCoolDown extends DisplayState {
         viewConstraints,
         adjustedSize,
         timestamp,
-        isLowRes,
+        lowResModePreset,
+        rendererType,
       ];
 }
 
 class DisplayStateResizeInProgress extends DisplayState {
-  final BoxConstraints viewConstraints;
-  final Size adjustedSize;
-
-  DisplayStateResizeInProgress(
-      {required this.viewConstraints, required this.adjustedSize});
-
-  @override
-  List<Object?> get props => [viewConstraints, adjustedSize];
+  DisplayStateResizeInProgress();
 }
 
 class DisplayStateNormal extends DisplayState {
   final BoxConstraints viewConstraints;
   final Size adjustedSize;
+  final DisplayRendererType rendererType;
 
   DisplayStateNormal(
-      {required this.viewConstraints, required this.adjustedSize});
+      {required this.viewConstraints,
+      required this.adjustedSize,
+      required this.rendererType});
 
   @override
-  List<Object?> get props => [viewConstraints, adjustedSize];
+  List<Object?> get props => [
+        viewConstraints,
+        adjustedSize,
+        rendererType,
+      ];
 }

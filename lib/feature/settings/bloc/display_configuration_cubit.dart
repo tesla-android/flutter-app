@@ -21,7 +21,8 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
       _currentConfig = await _repository.getDisplayState();
       emit(
         DisplayConfigurationStateSettingsFetched(
-          isLowResActive: _currentConfig!.lowRes == 1 ? true : false,
+          lowResModePreset: _currentConfig!.lowRes,
+          renderer: _currentConfig!.renderer,
         ),
       );
     } catch (exception, stacktrace) {
@@ -35,15 +36,37 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
     }
   }
 
-  void setLowResMode(bool isEnabled) async {
+  void setLowResMode(DisplayLowResModePreset newPreset) async {
     var config = _currentConfig;
     if (config != null) {
-      config = config.updateLowRes(isEnabled: isEnabled);
+      config = config.updateLowRes(newPreset: newPreset);
       emit(DisplayConfigurationStateSettingsUpdateInProgress());
       try {
         await _repository.updateDisplayConfiguration(config);
         emit(DisplayConfigurationStateSettingsFetched(
-          isLowResActive: isEnabled,
+          lowResModePreset: newPreset,
+          renderer: _currentConfig!.renderer,
+        ));
+      } catch (exception, stackTrace) {
+        logExceptionAndUploadToSentry(
+            exception: exception, stackTrace: stackTrace);
+        emit(DisplayConfigurationStateError());
+      }
+    } else {
+      log("_currentConfig not available");
+    }
+  }
+
+  void setRenderer(DisplayRendererType newType) async {
+    var config = _currentConfig;
+    if (config != null) {
+      config = config.updateRenderer(newType: newType);
+      emit(DisplayConfigurationStateSettingsUpdateInProgress());
+      try {
+        await _repository.updateDisplayConfiguration(config);
+        emit(DisplayConfigurationStateSettingsFetched(
+          lowResModePreset: _currentConfig!.lowRes,
+          renderer: newType,
         ));
       } catch (exception, stackTrace) {
         logExceptionAndUploadToSentry(

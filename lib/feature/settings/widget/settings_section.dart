@@ -21,11 +21,13 @@ abstract class SettingsSection extends StatelessWidget {
           padding: const EdgeInsets.all(
             TADimens.baseContentMargin,
           ),
-          child: Container(
-            constraints: const BoxConstraints(
-              maxWidth: TADimens.settingsPageTableMaxWidth,
+          child: Center(
+            child: Container(
+              constraints: const BoxConstraints(
+                maxWidth: TADimens.settingsPageTableMaxWidth,
+              ),
+              child: body(context),
             ),
-            child: body(context),
           ),
         ),
       ),
@@ -33,4 +35,11 @@ abstract class SettingsSection extends StatelessWidget {
   }
 
   Widget body(BuildContext context);
+
+  Widget get divider => const Padding(
+        padding: EdgeInsets.symmetric(
+          vertical: TADimens.baseContentMargin,
+        ),
+        child: Divider(),
+      );
 }

@@ -1,3 +1,5 @@
+import 'package:tesla_android/feature/display/model/remote_display_state.dart';
+
 abstract class DisplayConfigurationState {}
 
 class DisplayConfigurationStateInitial extends DisplayConfigurationState {}
@@ -6,10 +8,12 @@ class DisplayConfigurationStateLoading extends DisplayConfigurationState {}
 
 class DisplayConfigurationStateSettingsFetched
     extends DisplayConfigurationState {
-  final bool isLowResActive;
+  final DisplayLowResModePreset lowResModePreset;
+  final DisplayRendererType renderer;
 
   DisplayConfigurationStateSettingsFetched({
-    required this.isLowResActive,
+    required this.lowResModePreset,
+    required this.renderer,
   });
 }
 
