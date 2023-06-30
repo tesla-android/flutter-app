@@ -26,7 +26,7 @@ class DisplaySettings extends SettingsSection {
             SettingsTile(
                 icon: Icons.display_settings,
                 title: 'Resolution',
-                trailing: _lowResDropdown(context, cubit, state)),
+                trailing: _resolutionDropdown(context, cubit, state)),
             const Padding(
               padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
               child: Text(
@@ -49,25 +49,25 @@ class DisplaySettings extends SettingsSection {
     );
   }
 
-  Widget _lowResDropdown(BuildContext context, DisplayConfigurationCubit cubit,
+  Widget _resolutionDropdown(BuildContext context, DisplayConfigurationCubit cubit,
       DisplayConfigurationState state) {
     if (state is DisplayConfigurationStateSettingsFetched) {
-      return DropdownButton<DisplayLowResModePreset>(
+      return DropdownButton<DisplayResolutionModePreset>(
         value: state.lowResModePreset,
         icon: const Icon(Icons.arrow_drop_down_outlined),
         underline: Container(
           height: 2,
           color: Theme.of(context).primaryColor,
         ),
-        onChanged: (DisplayLowResModePreset? value) {
+        onChanged: (DisplayResolutionModePreset? value) {
           if (value != null) {
-            cubit.setLowResMode(value);
+            cubit.setResolution(value);
           }
         },
-        items: DisplayLowResModePreset.values
-            .map<DropdownMenuItem<DisplayLowResModePreset>>(
-                (DisplayLowResModePreset value) {
-          return DropdownMenuItem<DisplayLowResModePreset>(
+        items: DisplayResolutionModePreset.values
+            .map<DropdownMenuItem<DisplayResolutionModePreset>>(
+                (DisplayResolutionModePreset value) {
+          return DropdownMenuItem<DisplayResolutionModePreset>(
             value: value,
             child: Text(value.name()),
           );

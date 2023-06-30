@@ -160,7 +160,7 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
   /// Not going below 1280 x 832 just to be safe
   ///
   Size _calculateOptimalSize(BoxConstraints constraints, {
-    required DisplayLowResModePreset lowResModePreset,
+    required DisplayResolutionModePreset lowResModePreset,
     required bool isHeadless,
   }) {
     if (!isHeadless) {

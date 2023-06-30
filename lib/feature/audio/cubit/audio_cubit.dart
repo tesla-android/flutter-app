@@ -15,7 +15,7 @@ class AudioCubit extends Cubit<AudioState> {
 
   StreamSubscription? _audioTransportPcmDataStreamSubscription;
 
-  static const _sharedPreferencesKey = 'AudioCubit_isEnabled';
+  static const _sharedPreferencesKey = 'AudioCubit_isActive';
 
   AudioCubit(
     this._audioTransport,
@@ -63,7 +63,7 @@ class AudioCubit extends Cubit<AudioState> {
 
   void _setInitialState() {
     final shouldEnable =
-        _sharedPreferences.getBool(_sharedPreferencesKey) ?? true;
+        _sharedPreferences.getBool(_sharedPreferencesKey) ?? false;
     if (shouldEnable) {
       enableAudio();
     } else {

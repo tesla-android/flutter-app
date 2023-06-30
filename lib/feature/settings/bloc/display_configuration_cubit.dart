@@ -1,3 +1,6 @@
+import 'dart:html';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:tesla_android/common/utils/logger.dart';
@@ -9,10 +12,11 @@ import 'package:tesla_android/feature/settings/bloc/display_configuration_state.
 class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
     with Logger {
   final DisplayRepository _repository;
+  final GlobalKey<NavigatorState> _navigatorKey;
 
   RemoteDisplayState? _currentConfig;
 
-  DisplayConfigurationCubit(this._repository)
+  DisplayConfigurationCubit(this._repository, this._navigatorKey)
       : super(DisplayConfigurationStateInitial());
 
   void fetchConfiguration() async {
@@ -36,10 +40,10 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
     }
   }
 
-  void setLowResMode(DisplayLowResModePreset newPreset) async {
+  void setResolution(DisplayResolutionModePreset newPreset) async {
     var config = _currentConfig;
     if (config != null) {
-      config = config.updateLowRes(newPreset: newPreset);
+      config = config.updateResolution(newPreset: newPreset);
       emit(DisplayConfigurationStateSettingsUpdateInProgress());
       try {
         await _repository.updateDisplayConfiguration(config);
@@ -68,6 +72,23 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
           lowResModePreset: _currentConfig!.lowRes,
           renderer: newType,
         ));
+        final context = _navigatorKey.currentContext;
+        if (context != null && context.mounted) {
+          ScaffoldMessenger.of(context).showMaterialBanner(
+            MaterialBanner(
+              content: const Text(
+                  'Renderer has been changed. Restarting the Flutter app is recommended'),
+              leading: const Icon(Icons.settings),
+              actions: [
+                IconButton(
+                    onPressed: () {
+                      window.location.reload();
+                    },
+                    icon: const Icon(Icons.restart_alt)),
+              ],
+            ),
+          );
+        }
       } catch (exception, stackTrace) {
         logExceptionAndUploadToSentry(
             exception: exception, stackTrace: stackTrace);

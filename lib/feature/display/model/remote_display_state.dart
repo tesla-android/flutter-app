@@ -9,7 +9,7 @@ class RemoteDisplayState extends Equatable {
   final int height;
   final int density;
   @JsonKey(name: "lowres")
-  final DisplayLowResModePreset lowRes;
+  final DisplayResolutionModePreset lowRes;
   @JsonKey(defaultValue: DisplayRendererType.imgTag)
   final DisplayRendererType renderer;
   final int? isHeadless;
@@ -31,11 +31,11 @@ class RemoteDisplayState extends Equatable {
   @override
   List<Object?> get props => [width, height, density, lowRes, renderer, isHeadless];
 
-  RemoteDisplayState updateLowRes(
-      {required DisplayLowResModePreset newPreset}) {
+  RemoteDisplayState updateResolution(
+      {required DisplayResolutionModePreset newPreset}) {
     return copyWith(
-      lowRes: lowRes,
-      density: lowRes.density(),
+      lowRes: newPreset,
+      density: newPreset.density(),
     );
   }
 
@@ -49,7 +49,7 @@ class RemoteDisplayState extends Equatable {
     int? height,
     int? density,
     int? isHeadless,
-    DisplayLowResModePreset? lowRes,
+    DisplayResolutionModePreset? lowRes,
     DisplayRendererType? renderer,
   }) {
     return RemoteDisplayState(
@@ -63,7 +63,7 @@ class RemoteDisplayState extends Equatable {
   }
 }
 
-enum DisplayLowResModePreset {
+enum DisplayResolutionModePreset {
   @JsonValue(0)
   res832p,
   @JsonValue(1)

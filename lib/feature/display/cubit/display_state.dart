@@ -12,7 +12,7 @@ class DisplayStateInitial extends DisplayState {}
 class DisplayStateResizeCoolDown extends DisplayState {
   final BoxConstraints viewConstraints;
   final Size adjustedSize;
-  final DisplayLowResModePreset lowResModePreset;
+  final DisplayResolutionModePreset lowResModePreset;
   final DisplayRendererType rendererType;
   final DateTime timestamp;
 

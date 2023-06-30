@@ -19,7 +19,7 @@ class TaAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: false,
       title: Text(title ?? ''),
       actions: [
-        Padding(
+        if(!(window.location.hostname?.contains("fullscreen") ?? false)) Padding(
           padding: const EdgeInsets.all(8.0),
           child: OutlinedButton(
             onPressed: () {
