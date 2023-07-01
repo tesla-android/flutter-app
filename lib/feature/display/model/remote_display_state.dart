@@ -171,6 +171,25 @@ enum DisplayRendererType {
     }
   }
 
+  bool needsSSL() {
+    switch (index) {
+      case 0:
+        return false;
+      case 1:
+        return true;
+      case 2:
+        return true;
+      case 3:
+        return false;
+      case 4:
+        return true;
+      case 5:
+        return false;
+      default:
+        return false;
+    }
+  }
+
   String binaryType() {
     switch (index) {
       case 0:

@@ -17,15 +17,19 @@ abstract class AppModule {
     final domain = _enableDomainOverride
         ? _domainOverride
         : (window.location.hostname ?? "device.teslaandroid.com");
+    final isSSL = window.location.protocol.contains("https");
+    final httpProtocol = isSSL ? "https://" : "http://";
+    final webSocketProtocol = isSSL ? "wss://" : "ws://";
     return Flavor.create(
       _enableDomainOverride ? Environment.dev : Environment.production,
       color: _enableDomainOverride ? Colors.green : Colors.red,
       properties: {
-        'touchscreenWebSocket': 'wss://$domain/sockets/touchscreen',
-        'gpsWebSocket': 'wss://$domain/sockets/gps',
-        'audioWebSocket': 'wss://$domain/sockets/audio',
-        'displayWebSocket': 'wss://$domain/sockets/display',
-        'configurationApiBaseUrl': 'https://$domain/api',
+        'isSSL' : isSSL,
+        'touchscreenWebSocket': '$webSocketProtocol$domain/sockets/touchscreen',
+        'gpsWebSocket': '$webSocketProtocol$domain/sockets/gps',
+        'audioWebSocket': '$webSocketProtocol$domain/sockets/audio',
+        'displayWebSocket': '$webSocketProtocol$domain/sockets/display',
+        'configurationApiBaseUrl': '$httpProtocol$domain/api',
       },
     );
   }

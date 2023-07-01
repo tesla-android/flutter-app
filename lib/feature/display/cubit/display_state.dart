@@ -12,14 +12,14 @@ class DisplayStateInitial extends DisplayState {}
 class DisplayStateResizeCoolDown extends DisplayState {
   final BoxConstraints viewConstraints;
   final Size adjustedSize;
-  final DisplayResolutionModePreset lowResModePreset;
+  final DisplayResolutionModePreset resolutionPreset;
   final DisplayRendererType rendererType;
   final DateTime timestamp;
 
   DisplayStateResizeCoolDown({
     required this.viewConstraints,
     required this.adjustedSize,
-    required this.lowResModePreset,
+    required this.resolutionPreset,
     required this.rendererType,
   }) : timestamp = DateTime.now();
 
@@ -28,7 +28,7 @@ class DisplayStateResizeCoolDown extends DisplayState {
         viewConstraints,
         adjustedSize,
         timestamp,
-        lowResModePreset,
+        resolutionPreset,
         rendererType,
       ];
 }

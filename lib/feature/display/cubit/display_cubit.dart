@@ -1,7 +1,9 @@
 import 'dart:async';
+
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html';
 
+import 'package:flavor/flavor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
@@ -15,8 +17,9 @@ import 'package:tesla_android/feature/display/transport/display_transport.dart';
 class DisplayCubit extends Cubit<DisplayState> with Logger {
   final DisplayRepository _repository;
   final DisplayTransport _transport;
+  final Flavor _flavor;
 
-  DisplayCubit(this._repository, this._transport)
+  DisplayCubit(this._repository, this._transport, this._flavor)
       : super(DisplayStateInitial()) {
     _transport.connect();
   }
@@ -73,14 +76,15 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
     }
 
     final remoteState = await _getRemoteDisplayState();
-    final lowResPreset = remoteState.lowRes;
-    final renderer = remoteState.renderer;
+    final resolutionPreset = remoteState.lowRes;
+
     final isHeadless = (remoteState.isHeadless ?? 1) == 1;
+    final renderer = _getRenderer(remoteState);
 
     final desiredSize = _calculateOptimalSize(
-        viewConstraints,
-        lowResModePreset: lowResPreset,
-        isHeadless: isHeadless,
+      viewConstraints,
+      resolutionPreset: resolutionPreset,
+      isHeadless: isHeadless,
     );
 
     if (remoteState.width == desiredSize.width &&
@@ -100,7 +104,7 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
     emit(DisplayStateResizeCoolDown(
       viewConstraints: viewConstraints,
       adjustedSize: desiredSize,
-      lowResModePreset: lowResPreset,
+      resolutionPreset: resolutionPreset,
       rendererType: renderer,
     ));
     _resizeCoolDownTimer = Timer(_coolDownDuration, _sendResizeRequest);
@@ -111,7 +115,7 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
       final currentState = state as DisplayStateResizeCoolDown;
       final viewConstraints = currentState.viewConstraints;
       final adjustedSize = currentState.adjustedSize;
-      final lowResModePreset = currentState.lowResModePreset;
+      final lowResModePreset = currentState.resolutionPreset;
       final renderer = currentState.rendererType;
       final density = lowResModePreset.density();
       emit(DisplayStateResizeInProgress());
@@ -155,21 +159,33 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
     return _repository.getDisplayState();
   }
 
+  DisplayRendererType _getRenderer(RemoteDisplayState remoteDisplayState) {
+    var renderer = remoteDisplayState.renderer;
+    final isSSL = _flavor.getBool("isSSL") ?? false;
+    final rendererNeedsSSL = renderer.needsSSL();
+    final isRendererSupported = isSSL && rendererNeedsSSL || !rendererNeedsSSL;
+    if(!isRendererSupported) {
+      log("Renderer needs SSL, returning to default");
+      renderer = DisplayRendererType.imgTag;
+    }
+    return renderer;
+  }
+
   ///
   /// Display resolution needs to be aligned by 16 for the hardware encoder
   /// Not going below 1280 x 832 just to be safe
   ///
   Size _calculateOptimalSize(BoxConstraints constraints, {
-    required DisplayResolutionModePreset lowResModePreset,
+    required DisplayResolutionModePreset resolutionPreset,
     required bool isHeadless,
   }) {
     if (!isHeadless) {
-      return const Size(1024, 768);
+      return const Size(1024, 480);
     }
     double maxWidth;
     double maxHeight;
 
-    double maxShortestSide = lowResModePreset.maxHeight();
+    double maxShortestSide = resolutionPreset.maxHeight();
 
     if (constraints.maxWidth > constraints.maxHeight) {
       maxWidth = constraints.maxWidth > 1280 ? 1280 : constraints.maxWidth;

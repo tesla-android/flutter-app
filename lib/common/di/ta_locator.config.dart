@@ -127,6 +127,7 @@ extension GetItInjectableX on _i1.GetIt {
     gh.factory<_i28.DisplayCubit>(() => _i28.DisplayCubit(
           gh<_i25.DisplayRepository>(),
           gh<_i6.DisplayTransport>(),
+          gh<_i7.Flavor>(),
         ));
     return this;
   }
