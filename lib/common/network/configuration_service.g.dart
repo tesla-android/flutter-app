@@ -37,13 +37,17 @@ class _ConfigurationService implements ConfigurationService {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = SystemConfigurationResponseBody.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<dynamic> setSoftApBand(band) async {
+  Future<dynamic> setSoftApBand(int band) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'Content-Type': 'text/plain'};
@@ -61,13 +65,17 @@ class _ConfigurationService implements ConfigurationService {
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
     final value = _result.data;
     return value;
   }
 
   @override
-  Future<dynamic> setSoftApChannel(channel) async {
+  Future<dynamic> setSoftApChannel(int channel) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'Content-Type': 'text/plain'};
@@ -85,13 +93,17 @@ class _ConfigurationService implements ConfigurationService {
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
     final value = _result.data;
     return value;
   }
 
   @override
-  Future<dynamic> setSoftApChannelWidth(channelWidth) async {
+  Future<dynamic> setSoftApChannelWidth(int channelWidth) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'Content-Type': 'text/plain'};
@@ -109,13 +121,17 @@ class _ConfigurationService implements ConfigurationService {
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
     final value = _result.data;
     return value;
   }
 
   @override
-  Future<dynamic> setSoftApState(isEnabledFlag) async {
+  Future<dynamic> setSoftApState(int isEnabledFlag) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'Content-Type': 'text/plain'};
@@ -133,13 +149,17 @@ class _ConfigurationService implements ConfigurationService {
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
     final value = _result.data;
     return value;
   }
 
   @override
-  Future<dynamic> setOfflineModeState(isEnabledFlag) async {
+  Future<dynamic> setOfflineModeState(int isEnabledFlag) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'Content-Type': 'text/plain'};
@@ -157,13 +177,17 @@ class _ConfigurationService implements ConfigurationService {
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
     final value = _result.data;
     return value;
   }
 
   @override
-  Future<dynamic> setOfflineModeTelemetryState(isEnabledFlag) async {
+  Future<dynamic> setOfflineModeTelemetryState(int isEnabledFlag) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'Content-Type': 'text/plain'};
@@ -181,13 +205,18 @@ class _ConfigurationService implements ConfigurationService {
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
     final value = _result.data;
     return value;
   }
 
   @override
-  Future<dynamic> setOfflineModeTeslaFirmwareDownloads(isEnabledFlag) async {
+  Future<dynamic> setOfflineModeTeslaFirmwareDownloads(
+      int isEnabledFlag) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'Content-Type': 'text/plain'};
@@ -205,7 +234,11 @@ class _ConfigurationService implements ConfigurationService {
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
     final value = _result.data;
     return value;
   }
@@ -221,5 +254,22 @@ class _ConfigurationService implements ConfigurationService {
       }
     }
     return requestOptions;
+  }
+
+  String _combineBaseUrls(
+    String dioBaseUrl,
+    String? baseUrl,
+  ) {
+    if (baseUrl == null || baseUrl.trim().isEmpty) {
+      return dioBaseUrl;
+    }
+
+    final url = Uri.parse(baseUrl);
+
+    if (url.isAbsolute) {
+      return url.toString();
+    }
+
+    return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }

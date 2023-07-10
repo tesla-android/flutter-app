@@ -1,9 +1,6 @@
-// ignore: avoid_web_libraries_in_flutter
 import 'dart:async';
-
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' show Geolocation, Geoposition, Permissions, window;
-import 'dart:math' hide log;
 
 import 'package:injectable/injectable.dart';
 import 'package:tesla_android/common/utils/logger.dart';
@@ -16,8 +13,6 @@ class WebLocation with Logger {
 
   StreamController<WebLocationData>? _locationStreamController;
   Timer? _locationTimer;
-
-  WebLocationData? _lastLocationData;
 
   WebLocation()
       : _geolocation = window.navigator.geolocation,
@@ -92,72 +87,10 @@ class WebLocation with Logger {
   }
 
   WebLocationData _toLocationData(Geoposition result) {
-    var data = WebLocationData(
+    return WebLocationData(
       latitude: result.coords?.latitude?.toDouble(),
       longitude: result.coords?.longitude?.toDouble(),
       verticalAccuracy: result.coords?.accuracy?.toDouble(),
     );
-
-    if (_lastLocationData != null) {
-      final previousLocation = _lastLocationData!;
-
-      final previousLat = previousLocation.latitude;
-      final previousLng = previousLocation.longitude;
-      final currentLat = data.latitude;
-      final currentLng = data.longitude;
-
-      final distance = _calculateDistance(
-          previousLat!, previousLng!, currentLat!, currentLng!);
-      if (distance >= 5.0) {
-        final elapsedTimeSec = data.time.difference(previousLocation.time).inSeconds;
-        final approximatedSpeed = distance / elapsedTimeSec;
-        final approximatedBearing = _calculateBearing(
-            previousLat, previousLng, currentLat, currentLng);
-        data = data.addApproximatedData(
-          approximatedSpeed: approximatedSpeed,
-          approximatedBearing: approximatedBearing,
-        );
-      }
-    }
-
-    _lastLocationData = data;
-    return data;
-  }
-
-  double _calculateDistance(
-      double lat1, double lon1, double lat2, double lon2) {
-    const double R = 6371;
-    double dLat = _degreesToRadians(lat2 - lat1);
-    double dLon = _degreesToRadians(lon2 - lon1);
-
-    lat1 = _degreesToRadians(lat1);
-    lat2 = _degreesToRadians(lat2);
-
-    double a = sin(dLat / 2) * sin(dLat / 2) +
-        sin(dLon / 2) * sin(dLon / 2) * cos(lat1) * cos(lat2);
-    double c = 2 * atan2(sqrt(a), sqrt(1 - a));
-
-    return R * c * 1000;
-  }
-
-  double _calculateBearing(double lat1, double lon1, double lat2, double lon2) {
-    lat1 = _degreesToRadians(lat1);
-    lat2 = _degreesToRadians(lat2);
-    double dLon = _degreesToRadians(lon2 - lon1);
-
-    double y = sin(dLon) * cos(lat2);
-    double x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(dLon);
-
-    double bearing = _radiansToDegrees(atan2(y, x));
-
-    return (bearing + 360) % 360;
-  }
-
-  double _degreesToRadians(double degrees) {
-    return degrees * pi / 180;
-  }
-
-  double _radiansToDegrees(double radians) {
-    return radians * 180 / pi;
   }
 }
