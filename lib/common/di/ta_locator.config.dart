@@ -105,7 +105,6 @@ extension GetItInjectableX on _i1.GetIt {
           gh<_i7.Flavor>(),
         ));
     gh.factory<_i22.GpsCubit>(() => _i22.GpsCubit(
-          gh<_i13.SharedPreferences>(),
           gh<_i17.WebLocation>(),
           gh<_i9.GpsTransport>(),
         ));

@@ -20,7 +20,7 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
       : super(DisplayConfigurationStateInitial());
 
   void fetchConfiguration() async {
-    emit(DisplayConfigurationStateLoading());
+    if (!isClosed) emit(DisplayConfigurationStateLoading());
     try {
       _currentConfig = await _repository.getDisplayState();
       emit(
@@ -34,9 +34,11 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
         exception: exception,
         stackTrace: stacktrace,
       );
-      emit(
+      if (!isClosed) {
+        emit(
         DisplayConfigurationStateError(),
       );
+      }
     }
   }
 
@@ -44,17 +46,19 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
     var config = _currentConfig;
     if (config != null) {
       config = config.updateResolution(newPreset: newPreset);
-      emit(DisplayConfigurationStateSettingsUpdateInProgress());
+      if (!isClosed) emit(DisplayConfigurationStateSettingsUpdateInProgress());
       try {
         await _repository.updateDisplayConfiguration(config);
-        emit(DisplayConfigurationStateSettingsFetched(
+        if (!isClosed) {
+          emit(DisplayConfigurationStateSettingsFetched(
           lowResModePreset: newPreset,
           renderer: _currentConfig!.renderer,
         ));
+        }
       } catch (exception, stackTrace) {
         logExceptionAndUploadToSentry(
             exception: exception, stackTrace: stackTrace);
-        emit(DisplayConfigurationStateError());
+        if (!isClosed) emit(DisplayConfigurationStateError());
       }
     } else {
       log("_currentConfig not available");
@@ -65,13 +69,15 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
     var config = _currentConfig;
     if (config != null) {
       config = config.updateRenderer(newType: newType);
-      emit(DisplayConfigurationStateSettingsUpdateInProgress());
+      if (!isClosed) emit(DisplayConfigurationStateSettingsUpdateInProgress());
       try {
         await _repository.updateDisplayConfiguration(config);
-        emit(DisplayConfigurationStateSettingsFetched(
+        if (!isClosed) {
+          emit(DisplayConfigurationStateSettingsFetched(
           lowResModePreset: _currentConfig!.lowRes,
           renderer: newType,
         ));
+        }
         final context = _navigatorKey.currentContext;
         if (context != null && context.mounted) {
           ScaffoldMessenger.of(context).showMaterialBanner(
@@ -92,7 +98,7 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
       } catch (exception, stackTrace) {
         logExceptionAndUploadToSentry(
             exception: exception, stackTrace: stackTrace);
-        emit(DisplayConfigurationStateError());
+        if (!isClosed) emit(DisplayConfigurationStateError());
       }
     } else {
       log("_currentConfig not available");
