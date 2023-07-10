@@ -69,10 +69,10 @@ class WebLocation with Logger {
 
   void _startLocationUpdates() {
     _locationTimer ??= Timer.periodic(
-      const Duration(milliseconds: 3000),
+      const Duration(milliseconds: 500),
       (Timer t) => getLocation(
-              timeout: const Duration(milliseconds: 1000),
-              maximumAge: const Duration(milliseconds: 1000))
+              timeout: const Duration(milliseconds: 450),
+              maximumAge: const Duration(milliseconds: 450))
           .then((locationData) {
         _locationStreamController!.add(locationData);
       }).catchError((error) {
