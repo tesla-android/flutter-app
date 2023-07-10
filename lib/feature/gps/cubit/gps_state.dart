@@ -1,6 +1,12 @@
+import 'package:equatable/equatable.dart';
 import 'package:tesla_android/feature/gps/util/web_location_data.dart';
 
-abstract class GpsState {}
+abstract class GpsState extends Equatable {
+  const GpsState();
+
+  @override
+  List<Object?> get props => [];
+}
 
 class GpsStateInitial extends GpsState {}
 
@@ -10,15 +16,7 @@ class GpsStatePermissionNotGranted extends GpsState {}
 
 class GpsStateManuallyDisabled extends GpsState {}
 
-class GpsStateActive extends GpsState {
-  final WebLocationData currentLocation;
-  final double? averageUpdateIntervalInSeconds;
-
-  GpsStateActive({
-    required this.currentLocation,
-    this.averageUpdateIntervalInSeconds,
-  });
-}
+class GpsStateActive extends GpsState {}
 
 WebLocationData get initialLocationData {
   return WebLocationData(

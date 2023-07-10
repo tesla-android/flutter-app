@@ -28,11 +28,14 @@ class SystemConfigurationCubit extends Cubit<SystemConfigurationState> with Logg
 
   void updateSoftApBand(SoftApBandType newBand) {
     if (state is SystemConfigurationStateSettingsModified) {
-      emit((state as SystemConfigurationStateSettingsModified)
+      if (!isClosed) {
+        emit((state as SystemConfigurationStateSettingsModified)
           .copyWith(newBandType: newBand));
+      }
     }
     if (state is SystemConfigurationStateSettingsFetched) {
-      emit(
+      if (!isClosed) {
+        emit(
         SystemConfigurationStateSettingsModified.fromCurrentConfiguration(
           currentConfiguration:
               (state as SystemConfigurationStateSettingsFetched)
@@ -41,80 +44,97 @@ class SystemConfigurationCubit extends Cubit<SystemConfigurationState> with Logg
           isSoftApEnabled: true,
         ),
       );
+      }
     }
     showConfigurationChangedBanner();
   }
 
   void updateSoftApState(bool isEnabled) {
     if (state is SystemConfigurationStateSettingsModified) {
-      emit((state as SystemConfigurationStateSettingsModified)
+      if (!isClosed) {
+        emit((state as SystemConfigurationStateSettingsModified)
           .copyWith(isSoftApEnabled: isEnabled));
+      }
     }
     if (state is SystemConfigurationStateSettingsFetched) {
       final configuration = (state as SystemConfigurationStateSettingsFetched)
           .currentConfiguration;
       final band = configuration.currentSoftApBandType;
-      emit(
+      if (!isClosed) {
+        emit(
         SystemConfigurationStateSettingsModified.fromCurrentConfiguration(
           currentConfiguration: configuration,
           newBandType: band,
           isSoftApEnabled: isEnabled,
         ),
       );
+      }
     }
     showConfigurationChangedBanner();
   }
 
   void updateOfflineModeState(bool isEnabled) {
     if (state is SystemConfigurationStateSettingsModified) {
-      emit((state as SystemConfigurationStateSettingsModified)
+      if (!isClosed) {
+        emit((state as SystemConfigurationStateSettingsModified)
           .copyWith(isOfflineModeEnabled: isEnabled));
+      }
     }
     if (state is SystemConfigurationStateSettingsFetched) {
       final configuration = (state as SystemConfigurationStateSettingsFetched)
           .currentConfiguration;
-      emit(
+      if (!isClosed) {
+        emit(
         SystemConfigurationStateSettingsModified.fromCurrentConfiguration(
           currentConfiguration: configuration,
           isOfflineModeEnabled: isEnabled,
         ),
       );
+      }
     }
     showConfigurationChangedBanner();
   }
 
   void updateOfflineModeTelemetryState(bool isEnabled) {
     if (state is SystemConfigurationStateSettingsModified) {
-      emit((state as SystemConfigurationStateSettingsModified)
+      if (!isClosed) {
+        emit((state as SystemConfigurationStateSettingsModified)
           .copyWith(isOfflineModeTelemetryEnabled: isEnabled));
+      }
     }
     if (state is SystemConfigurationStateSettingsFetched) {
       final configuration = (state as SystemConfigurationStateSettingsFetched)
           .currentConfiguration;
-      emit(
+      if (!isClosed) {
+        emit(
         SystemConfigurationStateSettingsModified.fromCurrentConfiguration(
           currentConfiguration: configuration,
           isOfflineModeTelemetryEnabled: isEnabled,
         ),
       );
+      }
     }
     showConfigurationChangedBanner();
   }
 
   void updateOfflineModeTeslaFirmwareDownloadsState(bool isEnabled) {
     if (state is SystemConfigurationStateSettingsModified) {
-      emit((state as SystemConfigurationStateSettingsModified)
+      if (!isClosed) {
+        emit((state as SystemConfigurationStateSettingsModified)
           .copyWith(isOfflineModeTeslaFirmwareDownloadsEnabled: isEnabled));
+      }
     }
     if (state is SystemConfigurationStateSettingsFetched) {
       final configuration = (state as SystemConfigurationStateSettingsFetched)
           .currentConfiguration;
-      emit(
+      if (!isClosed) {
+        emit(
         SystemConfigurationStateSettingsModified.fromCurrentConfiguration(
           currentConfiguration: configuration,
           isOfflineModeTeslaFirmwareDownloadsEnabled: isEnabled,
         ),
       );
+      }
     }
     showConfigurationChangedBanner();
   }

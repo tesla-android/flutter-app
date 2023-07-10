@@ -38,17 +38,9 @@ class GpsSettings extends SettingsSection {
   }
 
   Widget _stateTrailing(GpsCubit cubit, GpsState state) {
-    if (state is GpsStateManuallyDisabled || state is GpsStateActive) {
-      return Switch(
-          value: state is GpsStateActive,
-          onChanged: (value) {
-            if (value) {
-              cubit.enableGps();
-            } else {
-              cubit.disableGPS();
-            }
-          });
-    } else if (state is GpsStatePermissionNotGranted) {
+    if (state is GpsStateActive) {
+      return const Text("Active");
+    } else if (state is GpsStatePermissionNotGranted || state is GpsStateManuallyDisabled) {
       return const Text("Permission not granted");
     } else if (state is GpsStateInitialisationError) {
       return const Text("Initialisation error");
