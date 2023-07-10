@@ -5,8 +5,6 @@ class WebLocationData extends Equatable {
     this.latitude,
     this.longitude,
     this.verticalAccuracy,
-    this.approximatedSpeed,
-    this.approximatedBearing,
   }) : time = DateTime.now();
 
   /// Latitude in degrees
@@ -21,32 +19,11 @@ class WebLocationData extends Equatable {
   /// Time of the WebLocationData
   final DateTime time;
 
-  /// Estimated speed, in meters per second
-  final double? approximatedSpeed;
-
-  /// Estimated bearing, in degrees
-  final double? approximatedBearing;
-
   @override
   List<Object?> get props => [
         latitude,
         longitude,
         verticalAccuracy,
         time,
-        approximatedSpeed,
-        approximatedBearing,
       ];
-
-  WebLocationData addApproximatedData({
-    required double approximatedSpeed,
-    required double approximatedBearing,
-  }) {
-    return WebLocationData(
-      latitude: latitude,
-      longitude: longitude,
-      verticalAccuracy: verticalAccuracy,
-      approximatedSpeed: approximatedSpeed,
-      approximatedBearing: approximatedBearing,
-    );
-  }
 }

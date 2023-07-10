@@ -9,8 +9,6 @@ class GpsData {
   final String longitude;
   @JsonKey(name: "vertical_accuracy")
   final String verticalAccuracy;
-  final String bearing;
-  final String speed;
   final String timestamp;
 
   const GpsData({
@@ -18,8 +16,6 @@ class GpsData {
     required this.longitude,
     required this.verticalAccuracy,
     required this.timestamp,
-    this.bearing = "not-available",
-    this.speed = "not-available",
   });
 
   factory GpsData.fromJson(Map<String, dynamic> json) =>
@@ -31,8 +27,6 @@ class GpsData {
       longitude: locationData.longitude.toString(),
       verticalAccuracy: locationData.verticalAccuracy.toString(),
       timestamp: locationData.time.millisecondsSinceEpoch.toString(),
-      speed: locationData.approximatedSpeed.toString(),
-      bearing: locationData.approximatedBearing.toString(),
     );
   }
 

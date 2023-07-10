@@ -32,10 +32,10 @@ class DonationPage extends StatelessWidget {
             SizedBox(
               width: TADimens.donationQRSize,
               height: TADimens.donationQRSize,
-              child: QrImage(
+              child: QrImageView(
                 data: "https://teslaandroid.com/donations",
                 version: QrVersions.auto,
-              ),
+              )
             ),
           ],
         ),
