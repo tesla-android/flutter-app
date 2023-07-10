@@ -64,13 +64,13 @@ extension GetItInjectableX on _i1.GetIt {
     final appModule = _$AppModule();
     final networkModule = _$NetworkModule();
     gh.singletonAsync<_i3.Aptabase>(() => appModule.provideAptabase());
-    gh.lazySingleton<_i4.AudioTransport>(() => _i4.AudioTransport());
+    gh.factory<_i4.AudioTransport>(() => _i4.AudioTransport());
     gh.singleton<_i5.Dio>(networkModule.dio);
-    gh.lazySingleton<_i6.DisplayTransport>(() => _i6.DisplayTransport());
+    gh.factory<_i6.DisplayTransport>(() => _i6.DisplayTransport());
     gh.singleton<_i7.Flavor>(appModule.provideFlavor);
     gh.lazySingleton<_i8.GlobalKey<_i8.NavigatorState>>(
         () => appModule.navigatorKey);
-    gh.lazySingleton<_i9.GpsTransport>(() => _i9.GpsTransport());
+    gh.factory<_i9.GpsTransport>(() => _i9.GpsTransport());
     gh.factory<_i10.HealthService>(() => _i10.HealthService(
           gh<_i5.Dio>(),
           gh<_i7.Flavor>(),
@@ -83,8 +83,7 @@ extension GetItInjectableX on _i1.GetIt {
       preResolve: true,
     );
     gh.factory<_i14.TAPageFactory>(() => _i14.TAPageFactory());
-    gh.lazySingleton<_i15.TouchScreenTransport>(
-        () => _i15.TouchScreenTransport());
+    gh.factory<_i15.TouchScreenTransport>(() => _i15.TouchScreenTransport());
     gh.factory<_i16.TouchscreenCubit>(
         () => _i16.TouchscreenCubit(gh<_i15.TouchScreenTransport>()));
     gh.factory<_i17.WebLocation>(() => _i17.WebLocation());
