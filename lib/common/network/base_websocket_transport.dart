@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html';
 import 'dart:math' show min;
@@ -12,8 +14,8 @@ import 'package:tesla_android/feature/connectivityCheck/model/connectivity_state
 
 abstract class BaseWebsocketTransport with Logger {
   final String flavorUrlKey;
-  final String? binaryType;
   final bool sendKeepAlive;
+  String? binaryType;
 
   static const _disposeCloseCode = 3000;
   int _reconnectDelay = 1;
@@ -25,6 +27,7 @@ abstract class BaseWebsocketTransport with Logger {
 
   ConnectivityState _connectivityState = ConnectivityState.backendAccessible;
   WebSocket? _webSocketChannel;
+  Timer? _keepAliveTimer;
   bool _keepConnectionAlive = false;
   bool _waitingForConnectivityToRestore = false;
 
@@ -44,8 +47,14 @@ abstract class BaseWebsocketTransport with Logger {
 
   void disconnect() {
     _keepConnectionAlive = false;
+    _keepAliveTimer?.cancel();
     _webSocketChannel?.close(_disposeCloseCode);
     _webSocketChannel = null;
+  }
+
+  void changeBinaryType(String newBinaryType) {
+    binaryType = newBinaryType;
+    _webSocketChannel?.binaryType = newBinaryType;
   }
 
   void _observeConnectivityState() {
@@ -69,13 +78,11 @@ abstract class BaseWebsocketTransport with Logger {
   }
 
   Future<void> _sendKeepAliveMessages() async {
-    while (_keepConnectionAlive && sendKeepAlive) {
-      await Future.delayed(const Duration(seconds: 10), () {
-        if (_keepConnectionAlive && sendKeepAlive) {
-          sendString("ping");
-        }
-      });
-    }
+    _keepAliveTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      if (_keepConnectionAlive && sendKeepAlive && _isConnected) {
+        sendString("ping");
+      }
+    });
   }
 
   Future<void> _connect() async {

@@ -21,8 +21,7 @@
             window.parent.addEventListener("message", handleMessage, false);
 
             function handleMessage(evt) {
-                var arrayBuffer = evt.data;
-                var blob = new Blob([arrayBuffer]);
+                var blob = evt.data;
                 var urlCreator = window.URL || window.webkitURL;
                 var imageUrl = urlCreator.createObjectURL(blob);
 

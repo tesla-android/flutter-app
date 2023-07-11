@@ -10,14 +10,14 @@ abstract class DisplayState extends Equatable {
 class DisplayStateInitial extends DisplayState {}
 
 class DisplayStateResizeCoolDown extends DisplayState {
-  final BoxConstraints viewConstraints;
+  final Size viewSize;
   final Size adjustedSize;
   final DisplayResolutionModePreset resolutionPreset;
   final DisplayRendererType rendererType;
   final DateTime timestamp;
 
   DisplayStateResizeCoolDown({
-    required this.viewConstraints,
+    required this.viewSize,
     required this.adjustedSize,
     required this.resolutionPreset,
     required this.rendererType,
@@ -25,7 +25,7 @@ class DisplayStateResizeCoolDown extends DisplayState {
 
   @override
   List<Object?> get props => [
-        viewConstraints,
+        viewSize,
         adjustedSize,
         timestamp,
         resolutionPreset,
@@ -38,18 +38,18 @@ class DisplayStateResizeInProgress extends DisplayState {
 }
 
 class DisplayStateNormal extends DisplayState {
-  final BoxConstraints viewConstraints;
+  final Size viewSize;
   final Size adjustedSize;
   final DisplayRendererType rendererType;
 
   DisplayStateNormal(
-      {required this.viewConstraints,
+      {required this.viewSize,
       required this.adjustedSize,
       required this.rendererType});
 
   @override
   List<Object?> get props => [
-        viewConstraints,
+        viewSize,
         adjustedSize,
         rendererType,
       ];
