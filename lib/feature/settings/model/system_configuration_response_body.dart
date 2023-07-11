@@ -19,6 +19,16 @@ class SystemConfigurationResponseBody {
   final int isOfflineModeTelemetryEnabledFlag;
   @JsonKey(name: "persist.tesla-android.offline-mode.tesla-firmware-downloads")
   final int isOfflineModeTeslaFirmwareDownloadsEnabledFlag;
+  @JsonKey(
+    name: "persist.tesla-android.browser_audio.is_enabled",
+    defaultValue: 1,
+  )
+  final int browserAudioIsEnabled;
+  @JsonKey(
+    name: "persist.tesla-android.browser_audio.volume",
+    defaultValue: 100,
+  )
+  final int browserAudioVolume;
 
   SystemConfigurationResponseBody({
     required this.bandType,
@@ -28,6 +38,8 @@ class SystemConfigurationResponseBody {
     required this.isOfflineModeEnabledFlag,
     required this.isOfflineModeTelemetryEnabledFlag,
     required this.isOfflineModeTeslaFirmwareDownloadsEnabledFlag,
+    required this.browserAudioIsEnabled,
+    required this.browserAudioVolume
   });
 
   factory SystemConfigurationResponseBody.fromJson(Map<String, dynamic> json) =>

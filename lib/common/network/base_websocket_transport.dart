@@ -40,6 +40,9 @@ abstract class BaseWebsocketTransport with Logger {
   });
 
   void connect() {
+    if(_isConnected) {
+      return;
+    }
     _observeConnectivityState();
     _maintainConnection();
     _sendKeepAliveMessages();

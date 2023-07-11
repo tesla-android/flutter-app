@@ -18,17 +18,20 @@ class GpsCubit extends Cubit<GpsState> with Logger {
 
   StreamSubscription? _locationUpdatesStreamSubscription;
 
-  GpsCubit(this._location, this._gpsTransport) : super(GpsStateInitial()) {
-    _gpsTransport.connect();
-    enableGps();
-  }
+  GpsCubit(this._location, this._gpsTransport) : super(GpsStateInitial());
 
   @override
   Future<void> close() {
+    log("close");
     _gpsTransport.disconnect();
     _locationUpdatesStreamSubscription?.cancel();
     _locationUpdatesStreamSubscription = null;
     return super.close();
+  }
+
+  void enableIfNeeded() {
+    _gpsTransport.connect();
+    enableGps();
   }
 
   Future<void> enableGps() async {

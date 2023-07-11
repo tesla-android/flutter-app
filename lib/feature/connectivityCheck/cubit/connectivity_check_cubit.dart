@@ -7,7 +7,7 @@ import 'package:injectable/injectable.dart';
 import 'package:tesla_android/common/network/health_service.dart';
 import 'package:tesla_android/feature/connectivityCheck/model/connectivity_state.dart';
 
-@singleton
+@injectable
 class ConnectivityCheckCubit extends Cubit<ConnectivityState> {
   final HealthService _healthService;
 
