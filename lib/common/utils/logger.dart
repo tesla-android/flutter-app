@@ -7,7 +7,7 @@ import 'package:tesla_android/common/di/ta_locator.dart';
 
 mixin Logger {
   void log(String message) {
-    print("[$runtimeType] $message");
+    print("[$runtimeType $hashCode] $message" );
   }
 
   void logException({exception, StackTrace? stackTrace}) {

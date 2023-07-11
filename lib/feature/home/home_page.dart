@@ -33,35 +33,29 @@ class HomePage extends StatelessWidget {
               body: isBackendAccessible
                   ? Stack(
                       children: [
-                        Center(child: Builder(builder: (context) {
-                          final cubit = BlocProvider.of<DisplayCubit>(context);
-                          return LayoutBuilder(builder: (context, constraints) {
-                            cubit.resizeDisplay(viewConstraints: constraints);
-                            return Center(
-                              child: BlocBuilder<DisplayCubit, DisplayState>(
-                                  builder: (context, state) {
-                                if (state is DisplayStateNormal) {
-                                  return AspectRatio(
-                                    aspectRatio: state.adjustedSize.width /
-                                        state.adjustedSize.height,
-                                    child: Stack(
-                                      fit: StackFit.expand,
-                                      children: [
-                                        DisplayView(type: state.rendererType),
-                                        PointerInterceptor(
-                                          child: TouchScreenView(
-                                              displaySize: state.adjustedSize),
-                                        ),
-                                      ],
+                        Center(
+                          child: BlocBuilder<DisplayCubit, DisplayState>(
+                              builder: (context, state) {
+                            if (state is DisplayStateNormal) {
+                              return AspectRatio(
+                                aspectRatio: state.adjustedSize.width /
+                                    state.adjustedSize.height,
+                                child: Stack(
+                                  fit: StackFit.expand,
+                                  children: [
+                                    DisplayView(type: state.rendererType),
+                                    PointerInterceptor(
+                                      child: TouchScreenView(
+                                          displaySize: state.adjustedSize),
                                     ),
-                                  );
-                                } else {
-                                  return const CircularProgressIndicator();
-                                }
-                              }),
-                            );
-                          });
-                        })),
+                                  ],
+                                ),
+                              );
+                            } else {
+                              return const CircularProgressIndicator();
+                            }
+                          }),
+                        ),
                         const Positioned(
                             right: 0, top: 0, child: VersionRibbon())
                       ],

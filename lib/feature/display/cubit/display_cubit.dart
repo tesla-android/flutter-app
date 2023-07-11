@@ -2,9 +2,9 @@ import 'dart:async';
 
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html';
+import 'dart:ui' hide window;
 
 import 'package:flavor/flavor.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:tesla_android/common/utils/logger.dart';
@@ -22,6 +22,8 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
   DisplayCubit(this._repository, this._transport, this._flavor)
       : super(DisplayStateInitial()) {
     _transport.connect();
+    _subscribeToTransportStream();
+    _subscribeToWindowSizeChanges();
   }
 
   StreamSubscription? _transportStreamSubscription;
@@ -33,41 +35,55 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
     _resizeCoolDownTimer?.cancel();
     _transportStreamSubscription?.cancel();
     _transport.disconnect();
+    log("close");
     return super.close();
   }
 
-  void resizeDisplay({required BoxConstraints viewConstraints}) {
-    _subscribeToTransportStream();
-
+  void resizeDisplay({required Size viewSize}) {
     if (state is DisplayStateResizeInProgress) {
-      log(
-          "Display resize can't happen now (state == DisplayStateResizeInProgress)");
+      log("Display resize can't happen now (state == DisplayStateResizeInProgress)");
       return;
     }
 
     if (state is DisplayStateNormal) {
       final currentState = state as DisplayStateNormal;
-      if (currentState.viewConstraints == viewConstraints) {
+      if (currentState.viewSize == viewSize) {
         log("Display resize not needed (state == DisplayStateNormal)");
         return;
       }
     }
-    _startResize(viewConstraints: viewConstraints);
+    _startResize(viewSize: viewSize);
   }
 
   void _subscribeToTransportStream() {
     _transportStreamSubscription ??=
         _transport.jpegDataSubject.listen((imageData) {
-          window.postMessage(imageData, "*");
-        });
+      if (state is DisplayStateNormal) {
+        window.postMessage(imageData, "*");
+      }
+    });
   }
 
-  void _startResize({required BoxConstraints viewConstraints}) async {
+  void _subscribeToWindowSizeChanges() {
+    _windowResizeCallback();
+    final onMetricsChanged = PlatformDispatcher.instance.onMetricsChanged!;
+    PlatformDispatcher.instance.onMetricsChanged = () {
+      _windowResizeCallback();
+      onMetricsChanged();
+    };
+  }
+
+  void _windowResizeCallback() {
+    final size = PlatformDispatcher.instance.views.first.physicalSize;
+    log('`physicalSize`: $size');
+    _startResize(viewSize: size);
+  }
+
+  void _startResize({required Size viewSize}) async {
     if (state is DisplayStateResizeCoolDown) {
       final currentState = state as DisplayStateResizeCoolDown;
-      if (currentState.viewConstraints == viewConstraints) {
-        log(
-            "Display resize already scheduled (state == DisplayStateResizeCoolDown)");
+      if (currentState.viewSize == viewSize) {
+        log("Display resize already scheduled (state == DisplayStateResizeCoolDown)");
         return;
       } else {
         _resizeCoolDownTimer?.cancel();
@@ -80,9 +96,10 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
 
     final isHeadless = (remoteState.isHeadless ?? 1) == 1;
     final renderer = _getRenderer(remoteState);
+    _transport.changeBinaryType(renderer.binaryType());
 
     final desiredSize = _calculateOptimalSize(
-      viewConstraints,
+      viewSize,
       resolutionPreset: resolutionPreset,
       isHeadless: isHeadless,
     );
@@ -94,15 +111,16 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
       _resizeCoolDownTimer = null;
       emit(
         DisplayStateNormal(
-          viewConstraints: viewConstraints,
+          viewSize: viewSize,
           adjustedSize: desiredSize,
           rendererType: renderer,
         ),
       );
+      return;
     }
 
     emit(DisplayStateResizeCoolDown(
-      viewConstraints: viewConstraints,
+      viewSize: viewSize,
       adjustedSize: desiredSize,
       resolutionPreset: resolutionPreset,
       rendererType: renderer,
@@ -113,7 +131,7 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
   void _sendResizeRequest() async {
     if (state is DisplayStateResizeCoolDown) {
       final currentState = state as DisplayStateResizeCoolDown;
-      final viewConstraints = currentState.viewConstraints;
+      final viewSize = currentState.viewSize;
       final adjustedSize = currentState.adjustedSize;
       final lowResModePreset = currentState.resolutionPreset;
       final renderer = currentState.rendererType;
@@ -130,7 +148,7 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
         await Future.delayed(_coolDownDuration, () {
           if (isClosed) return;
           emit(DisplayStateNormal(
-              viewConstraints: viewConstraints,
+              viewSize: viewSize,
               adjustedSize: adjustedSize,
               rendererType: renderer));
         });
@@ -139,8 +157,8 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
           props: {
             "width": adjustedSize.width,
             "height": adjustedSize.height,
-            "viewportWidth": viewConstraints.maxWidth,
-            "viewportHeight": viewConstraints.maxHeight,
+            "viewportWidth": viewSize.width,
+            "viewportHeight": viewSize.height,
             "density": density,
             "lowRes": lowResModePreset.maxHeight(),
             "renderer": renderer.name(),
@@ -164,7 +182,7 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
     final isSSL = _flavor.getBool("isSSL") ?? false;
     final rendererNeedsSSL = renderer.needsSSL();
     final isRendererSupported = isSSL && rendererNeedsSSL || !rendererNeedsSSL;
-    if(!isRendererSupported) {
+    if (!isRendererSupported) {
       log("Renderer needs SSL, returning to default");
       renderer = DisplayRendererType.imgTag;
     }
@@ -175,7 +193,8 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
   /// Display resolution needs to be aligned by 16 for the hardware encoder
   /// Not going below 1280 x 832 just to be safe
   ///
-  Size _calculateOptimalSize(BoxConstraints constraints, {
+  Size _calculateOptimalSize(
+    Size viewSize, {
     required DisplayResolutionModePreset resolutionPreset,
     required bool isHeadless,
   }) {
@@ -187,23 +206,21 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
 
     double maxShortestSide = resolutionPreset.maxHeight();
 
-    if (constraints.maxWidth > constraints.maxHeight) {
-      maxWidth = constraints.maxWidth > 1280 ? 1280 : constraints.maxWidth;
-      maxHeight = constraints.maxHeight > maxShortestSide
-          ? maxShortestSide
-          : constraints.maxHeight;
+    if (viewSize.width > viewSize.height) {
+      maxWidth = viewSize.width > 1280 ? 1280 : viewSize.width;
+      maxHeight =
+          viewSize.height > maxShortestSide ? maxShortestSide : viewSize.height;
     } else {
-      maxWidth = constraints.maxWidth > maxShortestSide
-          ? maxShortestSide
-          : constraints.maxWidth;
-      maxHeight = constraints.maxHeight > 1280 ? 1280 : constraints.maxHeight;
+      maxWidth =
+          viewSize.width > maxShortestSide ? maxShortestSide : viewSize.width;
+      maxHeight = viewSize.height > 1280 ? 1280 : viewSize.height;
     }
 
     if (maxWidth < 320 || maxHeight < 320) {
       return const Size(320, 320);
     }
 
-    double aspectRatio = constraints.maxWidth / constraints.maxHeight;
+    double aspectRatio = viewSize.width / viewSize.height;
 
     double bestWidth = maxWidth;
     double bestHeight = maxHeight;

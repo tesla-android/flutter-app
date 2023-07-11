@@ -7,13 +7,12 @@ import 'package:tesla_android/common/network/base_websocket_transport.dart';
 
 @injectable
 class DisplayTransport extends BaseWebsocketTransport {
-  final BehaviorSubject jpegDataSubject = BehaviorSubject();
+  final PublishSubject jpegDataSubject = PublishSubject();
 
   DisplayTransport()
       : super(
           flavorUrlKey: "displayWebSocket",
           sendKeepAlive: true,
-          binaryType: 'arraybuffer',
         );
 
   @override
