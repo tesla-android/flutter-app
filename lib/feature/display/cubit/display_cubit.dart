@@ -5,6 +5,7 @@ import 'dart:html';
 import 'dart:ui' hide window;
 
 import 'package:flavor/flavor.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:tesla_android/common/utils/logger.dart';
@@ -23,7 +24,6 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
       : super(DisplayStateInitial()) {
     _transport.connect();
     _subscribeToTransportStream();
-    _subscribeToWindowSizeChanges();
   }
 
   StreamSubscription? _transportStreamSubscription;
@@ -64,19 +64,9 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
     });
   }
 
-  void _subscribeToWindowSizeChanges() {
-    _windowResizeCallback();
-    final onMetricsChanged = PlatformDispatcher.instance.onMetricsChanged!;
-    PlatformDispatcher.instance.onMetricsChanged = () {
-      _windowResizeCallback();
-      onMetricsChanged();
-    };
-  }
-
-  void _windowResizeCallback() {
-    final size = PlatformDispatcher.instance.views.first.physicalSize;
-    log('`physicalSize`: $size');
-    _startResize(viewSize: size);
+  void onWindowSizeChanged(Size updatedSize) {
+    log('`physicalSize`: $updatedSize');
+    _startResize(viewSize: updatedSize);
   }
 
   void _startResize({required Size viewSize}) async {
@@ -109,22 +99,26 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
       log("Display resize not needed remote size == desired size");
       _resizeCoolDownTimer?.cancel();
       _resizeCoolDownTimer = null;
-      emit(
+      if(!isClosed ) {
+        emit(
         DisplayStateNormal(
           viewSize: viewSize,
           adjustedSize: desiredSize,
           rendererType: renderer,
         ),
       );
+      }
       return;
     }
 
-    emit(DisplayStateResizeCoolDown(
+    if(!isClosed) {
+      emit(DisplayStateResizeCoolDown(
       viewSize: viewSize,
       adjustedSize: desiredSize,
       resolutionPreset: resolutionPreset,
       rendererType: renderer,
     ));
+    }
     _resizeCoolDownTimer = Timer(_coolDownDuration, _sendResizeRequest);
   }
 

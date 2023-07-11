@@ -2,25 +2,24 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tesla_android/common/utils/logger.dart';
 import 'package:tesla_android/feature/audio/cubit/audio_state.dart';
 import 'package:tesla_android/feature/audio/transport/audio_transport.dart';
 import 'package:tesla_android/feature/audio/utils/pcm_player.dart';
+import 'package:tesla_android/feature/settings/repository/system_configuration_repository.dart';
 
 @injectable
-class AudioCubit extends Cubit<AudioState> {
+class AudioCubit extends Cubit<AudioState> with Logger {
   final AudioTransport _audioTransport;
   final PcmAudioPlayer _pcmAudioPlayer;
-  final SharedPreferences _sharedPreferences;
+  final SystemConfigurationRepository _systemConfigurationRepository;
 
   StreamSubscription? _audioTransportPcmDataStreamSubscription;
-
-  static const _sharedPreferencesKey = 'AudioCubit_isActive';
 
   AudioCubit(
     this._audioTransport,
     this._pcmAudioPlayer,
-    this._sharedPreferences,
+    this._systemConfigurationRepository,
   ) : super(AudioState(isEnabled: false));
 
   @override
@@ -30,30 +29,28 @@ class AudioCubit extends Cubit<AudioState> {
     return super.close();
   }
 
-  void init() {
-    _setInitialState();
+  void enableIfNeeded() async {
+    if (state.isEnabled == true) return;
+    try {
+      final configuration =
+          await _systemConfigurationRepository.getConfiguration();
+      final isEnabled = configuration.browserAudioIsEnabled == 1;
+      final volume = configuration.browserAudioVolume;
+      if (isEnabled) {
+        enableAudio();
+        setVolume(volume / 100);
+      }
+    } catch (exception, stackTrace) {
+      logException(
+        exception: exception,
+        stackTrace: stackTrace,
+      );
+    }
   }
 
   void enableAudio() {
-    if(state.isEnabled == true) return;
     _subscribeToAudioTransport();
-    _sharedPreferences.setBool(
-      _sharedPreferencesKey,
-      true,
-    );
     emit(state.copyWith(isEnabled: true));
-  }
-
-  void disableAudio() {
-    if (state.isEnabled) {
-      _audioTransport.disconnect();
-      _audioTransportPcmDataStreamSubscription?.cancel();
-    }
-    _sharedPreferences.setBool(
-      _sharedPreferencesKey,
-      false,
-    );
-    emit(state.copyWith(isEnabled: false));
   }
 
   void setVolume(double volume) {
@@ -61,17 +58,8 @@ class AudioCubit extends Cubit<AudioState> {
     _pcmAudioPlayer.setVolume(volume);
   }
 
-  void _setInitialState() {
-    final shouldEnable =
-        _sharedPreferences.getBool(_sharedPreferencesKey) ?? false;
-    if (shouldEnable) {
-      enableAudio();
-    } else {
-      disableAudio();
-    }
-  }
-
   void _subscribeToAudioTransport() {
+    _audioTransport.connect();
     _audioTransportPcmDataStreamSubscription =
         _audioTransport.pcmDataSubject.listen((data) {
       _feedAudioPlayer(data);

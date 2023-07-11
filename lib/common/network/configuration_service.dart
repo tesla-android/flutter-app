@@ -64,4 +64,16 @@ abstract class ConfigurationService {
     "Content-Type": "text/plain",
   })
   Future setOfflineModeTeslaFirmwareDownloads(@Body() int isEnabledFlag);
+
+  @POST("/browserAudioState")
+  @Headers({
+    "Content-Type": "text/plain",
+  })
+  Future setBrowserAudioState(@Body() int isEnabledFlag);
+
+  @POST("/browserAudioVolume")
+  @Headers({
+    "Content-Type": "text/plain",
+  })
+  Future setBrowserAudioVolume(@Body() int volume);
 }

@@ -11,6 +11,7 @@ import 'package:tesla_android/feature/gps/cubit/gps_cubit.dart';
 import 'package:tesla_android/feature/home/home_page.dart';
 import 'package:tesla_android/feature/releaseNotes/cubit/release_notes_cubit.dart';
 import 'package:tesla_android/feature/releaseNotes/widget/release_notes_page.dart';
+import 'package:tesla_android/feature/settings/bloc/audio_configuration_cubit.dart';
 import 'package:tesla_android/feature/settings/bloc/display_configuration_cubit.dart';
 import 'package:tesla_android/feature/settings/bloc/system_configuration_cubit.dart';
 import 'package:tesla_android/feature/settings/widget/settings_page.dart';
@@ -30,8 +31,7 @@ class TAPageFactory {
     return (context) {
       switch (page) {
         case TAPage.home:
-          return _injectSingletons(
-              child: MultiBlocProvider(
+          return MultiBlocProvider(
             providers: [
               BlocProvider(
                 create: (_) => getIt<TouchscreenCubit>(),
@@ -39,9 +39,15 @@ class TAPageFactory {
               BlocProvider(
                 create: (_) => getIt<DisplayCubit>(),
               ),
+              BlocProvider(
+                create: (_) => getIt<AudioCubit>(),
+              ),
+              BlocProvider(
+                create: (_) => getIt<GpsCubit>(),
+              ),
             ],
             child: const HomePage(),
-          ));
+          );
         case TAPage.releaseNotes:
           return BlocProvider(
             create: (_) => getIt<ReleaseNotesCubit>(),
@@ -52,39 +58,27 @@ class TAPageFactory {
         case TAPage.donations:
           return const DonationPage();
         case TAPage.settings:
-          return _injectSingletons(
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider(
-                  create: (_) =>
-                      getIt<DisplayConfigurationCubit>()..fetchConfiguration(),
-                ),
-                BlocProvider(
-                  create: (_) =>
-                      getIt<SystemConfigurationCubit>()..fetchConfiguration(),
-                ),
-              ],
-              child: const SettingsPage(),
-            ),
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) =>
+                    getIt<AudioConfigurationCubit>()..fetchConfiguration(),
+              ),
+              BlocProvider(
+                create: (_) =>
+                    getIt<DisplayConfigurationCubit>()..fetchConfiguration(),
+              ),
+              BlocProvider(
+                create: (_) =>
+                    getIt<SystemConfigurationCubit>()..fetchConfiguration(),
+              ),
+            ],
+            child: const SettingsPage(),
           );
         case TAPage.empty:
         default:
           return const SizedBox();
       }
     };
-  }
-
-  Widget _injectSingletons({required Widget child}) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => getIt<AudioCubit>()..init(),
-        ),
-        BlocProvider(
-          create: (_) => getIt<GpsCubit>(),
-        ),
-      ],
-      child: child,
-    );
   }
 }

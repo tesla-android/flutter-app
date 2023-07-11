@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
-import 'package:tesla_android/feature/audio/cubit/audio_cubit.dart';
-import 'package:tesla_android/feature/audio/cubit/audio_state.dart';
+import 'package:tesla_android/feature/settings/bloc/audio_configuration_cubit.dart';
+import 'package:tesla_android/feature/settings/bloc/audio_configuration_state.dart';
 import 'package:tesla_android/feature/settings/widget/settings_section.dart';
 import 'package:tesla_android/feature/settings/widget/settings_tile.dart';
 
@@ -15,9 +15,9 @@ class SoundSettings extends SettingsSection {
 
   @override
   Widget body(BuildContext context) {
-    final cubit = BlocProvider.of<AudioCubit>(context);
+    final cubit = BlocProvider.of<AudioConfigurationCubit>(context);
 
-    return BlocBuilder<AudioCubit, AudioState>(
+    return BlocBuilder<AudioConfigurationCubit, AudioConfigurationState>(
       builder: (context, state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -26,29 +26,13 @@ class SoundSettings extends SettingsSection {
                 icon: Icons.speaker,
                 title: 'Browser audio',
                 subtitle: 'Disable if you intend to use Bluetooth audio',
-                trailing: Switch(
-                    value: state.isEnabled,
-                    onChanged: (value) {
-                      if (value) {
-                        cubit.enableAudio();
-                      } else {
-                        cubit.disableAudio();
-                      }
-                    })),
-            if (state.isEnabled) divider,
-            if (state.isEnabled)
-              SettingsTile(
-                  icon: Icons.volume_down,
-                  title: 'Volume',
-                  trailing: Slider(
-                    divisions: 25,
-                    min: 0.0,
-                    max: 1.0,
-                    value: state.volume,
-                    onChanged: (double value) {
-                      cubit.setVolume(value);
-                    },
-                  )),
+                trailing: _audioStateSwitch(context, cubit, state)),
+            divider,
+            SettingsTile(
+              icon: Icons.volume_down,
+              title: 'Volume',
+              trailing: _audioStateSlider(context, cubit, state),
+            ),
             const Padding(
               padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
               child: Text(
@@ -63,5 +47,43 @@ class SoundSettings extends SettingsSection {
         );
       },
     );
+  }
+
+  Widget _audioStateSwitch(BuildContext context, AudioConfigurationCubit cubit,
+      AudioConfigurationState state) {
+    if (state is AudioConfigurationStateSettingsFetched) {
+      return Switch(
+          value: state.isEnabled,
+          onChanged: (value) {
+            cubit.setState(value);
+          });
+    } else if (state is AudioConfigurationStateSettingsUpdateInProgress ||
+        state is AudioConfigurationStateLoading) {
+      return const CircularProgressIndicator();
+    } else if (state is AudioConfigurationStateError) {
+      return const Text("Service error");
+    }
+    return const SizedBox.shrink();
+  }
+
+  Widget _audioStateSlider(BuildContext context, AudioConfigurationCubit cubit,
+      AudioConfigurationState state) {
+    if (state is AudioConfigurationStateSettingsFetched) {
+      return Slider(
+        divisions: 10,
+        min: 0,
+        max: 100,
+        value: state.volume.toDouble(),
+        onChanged: (double value) {
+          cubit.setVolume(value.toInt());
+        },
+      );
+    } else if (state is AudioConfigurationStateSettingsUpdateInProgress ||
+        state is AudioConfigurationStateLoading) {
+      return const CircularProgressIndicator();
+    } else if (state is AudioConfigurationStateError) {
+      return const Text("Service error");
+    }
+    return const SizedBox.shrink();
   }
 }

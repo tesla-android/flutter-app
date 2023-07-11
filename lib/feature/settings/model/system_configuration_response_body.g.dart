@@ -21,6 +21,10 @@ SystemConfigurationResponseBody _$SystemConfigurationResponseBodyFromJson(
       isOfflineModeTeslaFirmwareDownloadsEnabledFlag:
           json['persist.tesla-android.offline-mode.tesla-firmware-downloads']
               as int,
+      browserAudioIsEnabled:
+          json['persist.tesla-android.browser_audio.is_enabled'] as int? ?? 1,
+      browserAudioVolume:
+          json['persist.tesla-android.browser_audio.volume'] as int? ?? 100,
     );
 
 Map<String, dynamic> _$SystemConfigurationResponseBodyToJson(
@@ -36,4 +40,7 @@ Map<String, dynamic> _$SystemConfigurationResponseBodyToJson(
           instance.isOfflineModeTelemetryEnabledFlag,
       'persist.tesla-android.offline-mode.tesla-firmware-downloads':
           instance.isOfflineModeTeslaFirmwareDownloadsEnabledFlag,
+      'persist.tesla-android.browser_audio.is_enabled':
+          instance.browserAudioIsEnabled,
+      'persist.tesla-android.browser_audio.volume': instance.browserAudioVolume,
     };

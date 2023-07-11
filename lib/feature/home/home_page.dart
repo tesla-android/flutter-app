@@ -18,8 +18,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<GpsCubit>(context);
-    BlocProvider.of<AudioCubit>(context);
+    BlocProvider.of<GpsCubit>(context).enableIfNeeded();
+    BlocProvider.of<AudioCubit>(context).enableIfNeeded();
     final connectivityCheck = getIt<ConnectivityCheckCubit>();
     return BlocBuilder<ConnectivityCheckCubit, ConnectivityState>(
         bloc: connectivityCheck,
@@ -33,29 +33,35 @@ class HomePage extends StatelessWidget {
               body: isBackendAccessible
                   ? Stack(
                       children: [
-                        Center(
-                          child: BlocBuilder<DisplayCubit, DisplayState>(
-                              builder: (context, state) {
-                            if (state is DisplayStateNormal) {
-                              return AspectRatio(
-                                aspectRatio: state.adjustedSize.width /
-                                    state.adjustedSize.height,
-                                child: Stack(
-                                  fit: StackFit.expand,
-                                  children: [
-                                    DisplayView(type: state.rendererType),
-                                    PointerInterceptor(
-                                      child: TouchScreenView(
-                                          displaySize: state.adjustedSize),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            } else {
-                              return const CircularProgressIndicator();
-                            }
-                          }),
-                        ),
+                        LayoutBuilder(builder: (context, constraints) {
+                          BlocProvider.of<DisplayCubit>(context)
+                              .onWindowSizeChanged(
+                            Size(constraints.maxWidth, constraints.maxHeight),
+                          );
+                          return Center(
+                            child: BlocBuilder<DisplayCubit, DisplayState>(
+                                builder: (context, state) {
+                              if (state is DisplayStateNormal) {
+                                return AspectRatio(
+                                  aspectRatio: state.adjustedSize.width /
+                                      state.adjustedSize.height,
+                                  child: Stack(
+                                    fit: StackFit.expand,
+                                    children: [
+                                      DisplayView(type: state.rendererType),
+                                      PointerInterceptor(
+                                        child: TouchScreenView(
+                                            displaySize: state.adjustedSize),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              } else {
+                                return const CircularProgressIndicator();
+                              }
+                            }),
+                          );
+                        }),
                         const Positioned(
                             right: 0, top: 0, child: VersionRibbon())
                       ],
