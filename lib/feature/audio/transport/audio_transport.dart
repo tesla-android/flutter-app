@@ -17,9 +17,8 @@ class AudioTransport extends BaseWebsocketTransport {
         );
 
   @override
-  void onMessage(MessageEvent event) {
-    ByteBuffer buf = event.data;
-    pcmDataSubject.add(buf.asByteData());
+  void onMessage(event) {
+    pcmDataSubject.add(event);
     super.onMessage(event);
   }
 }

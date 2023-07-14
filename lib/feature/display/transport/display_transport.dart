@@ -6,18 +6,37 @@ import 'package:rxdart/subjects.dart';
 import 'package:tesla_android/common/network/base_websocket_transport.dart';
 
 @injectable
-class DisplayTransport extends BaseWebsocketTransport {
+class DisplayTransportBlob extends BaseWebsocketTransport {
   final PublishSubject jpegDataSubject = PublishSubject();
 
-  DisplayTransport()
+  DisplayTransportBlob()
       : super(
           flavorUrlKey: "displayWebSocket",
           sendKeepAlive: true,
+          binaryType: "blob"
         );
 
   @override
-  void onMessage(MessageEvent event) {
-    jpegDataSubject.add(event.data);
+  void onMessage(event) {
+    jpegDataSubject.add(event);
+    super.onMessage(event);
+  }
+}
+
+@lazySingleton
+class DisplayTransportArrayBuffer extends BaseWebsocketTransport {
+  final PublishSubject jpegDataSubject = PublishSubject();
+
+  DisplayTransportArrayBuffer()
+      : super(
+      flavorUrlKey: "displayWebSocket",
+      sendKeepAlive: true,
+      binaryType: "arraybuffer"
+  );
+
+  @override
+  void onMessage(event) {
+    jpegDataSubject.add(event);
     super.onMessage(event);
   }
 }
