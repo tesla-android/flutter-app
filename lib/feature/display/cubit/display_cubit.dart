@@ -8,6 +8,7 @@ import 'package:flavor/flavor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:tesla_android/common/network/base_websocket_transport.dart';
 import 'package:tesla_android/common/utils/logger.dart';
 import 'package:tesla_android/feature/display/cubit/display_state.dart';
 import 'package:tesla_android/feature/display/model/remote_display_state.dart';
@@ -17,14 +18,15 @@ import 'package:tesla_android/feature/display/transport/display_transport.dart';
 @injectable
 class DisplayCubit extends Cubit<DisplayState> with Logger {
   final DisplayRepository _repository;
-  final DisplayTransport _transport;
+  final DisplayTransportBlob _transportBlob;
+  final DisplayTransportArrayBuffer _transportArrayBuffer;
   final Flavor _flavor;
 
-  DisplayCubit(this._repository, this._transport, this._flavor)
-      : super(DisplayStateInitial()) {
-    _transport.connect();
-    _subscribeToTransportStream();
-  }
+  DisplayCubit(this._repository, this._transportBlob,
+      this._transportArrayBuffer, this._flavor)
+      : super(DisplayStateInitial());
+
+  BaseWebsocketTransport? activeTransport;
 
   StreamSubscription? _transportStreamSubscription;
   Timer? _resizeCoolDownTimer;
@@ -34,7 +36,8 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
   Future<void> close() {
     _resizeCoolDownTimer?.cancel();
     _transportStreamSubscription?.cancel();
-    _transport.disconnect();
+    _transportArrayBuffer.disconnect();
+    _transportBlob.disconnect();
     log("close");
     return super.close();
   }
@@ -55,13 +58,36 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
     _startResize(viewSize: viewSize);
   }
 
-  void _subscribeToTransportStream() {
-    _transportStreamSubscription ??=
-        _transport.jpegDataSubject.listen((imageData) {
-      if (state is DisplayStateNormal) {
-        window.postMessage(imageData, "*");
+  void _subscribeToTransportStream(bool isBlob) {
+    if (activeTransport is DisplayTransportBlob && isBlob) {
+      log("blob transport already selected");
+    } else if (activeTransport is DisplayTransportArrayBuffer && !isBlob) {
+      log("arraybuffer transport already selected");
+    } else {
+      activeTransport?.disconnect();
+      activeTransport == null;
+      _transportStreamSubscription?.cancel();
+      _transportStreamSubscription = null;
+      if (isBlob) {
+        _transportBlob.connect();
+        _transportStreamSubscription ??=
+            _transportBlob.jpegDataSubject.listen((imageData) {
+          if (state is DisplayStateNormal) {
+            window.postMessage(imageData, "*");
+          }
+        });
+        activeTransport = _transportBlob;
+      } else {
+        _transportArrayBuffer.connect();
+        _transportStreamSubscription ??=
+            _transportArrayBuffer.jpegDataSubject.listen((imageData) {
+          if (state is DisplayStateNormal) {
+            window.postMessage(imageData, "*");
+          }
+        });
+        activeTransport = _transportArrayBuffer;
       }
-    });
+    }
   }
 
   void onWindowSizeChanged(Size updatedSize) {
@@ -86,7 +112,7 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
 
     final isHeadless = (remoteState.isHeadless ?? 1) == 1;
     final renderer = _getRenderer(remoteState);
-    _transport.changeBinaryType(renderer.binaryType());
+    _subscribeToTransportStream(renderer.binaryType() == "blob");
 
     final desiredSize = _calculateOptimalSize(
       viewSize,
@@ -99,25 +125,25 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
       log("Display resize not needed remote size == desired size");
       _resizeCoolDownTimer?.cancel();
       _resizeCoolDownTimer = null;
-      if(!isClosed ) {
+      if (!isClosed) {
         emit(
-        DisplayStateNormal(
-          viewSize: viewSize,
-          adjustedSize: desiredSize,
-          rendererType: renderer,
-        ),
-      );
+          DisplayStateNormal(
+            viewSize: viewSize,
+            adjustedSize: desiredSize,
+            rendererType: renderer,
+          ),
+        );
       }
       return;
     }
 
-    if(!isClosed) {
+    if (!isClosed) {
       emit(DisplayStateResizeCoolDown(
-      viewSize: viewSize,
-      adjustedSize: desiredSize,
-      resolutionPreset: resolutionPreset,
-      rendererType: renderer,
-    ));
+        viewSize: viewSize,
+        adjustedSize: desiredSize,
+        resolutionPreset: resolutionPreset,
+        rendererType: renderer,
+      ));
     }
     _resizeCoolDownTimer = Timer(_coolDownDuration, _sendResizeRequest);
   }
