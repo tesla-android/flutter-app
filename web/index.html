@@ -103,7 +103,7 @@
                     })
                     .then(function (engineInitializer) {
                         loading.classList.add("main_done");
-                        return engineInitializer.initializeEngine({renderer: "html"});
+                        return engineInitializer.initializeEngine();
                     })
                     .then(function (appRunner) {
                         loading.classList.add("init_done");

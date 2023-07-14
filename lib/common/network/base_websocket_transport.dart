@@ -46,7 +46,7 @@ abstract class BaseWebsocketTransport with Logger {
         flavorUrlKey,
       )!),
       binaryType: binaryType ?? "blob",
-      pingInterval: const Duration(seconds: 10),
+      pingInterval: const Duration(seconds: 30),
       timeout: const Duration(seconds: 10),
       backoff: BinaryExponentialBackoff(
         initial: const Duration(seconds: 1),
