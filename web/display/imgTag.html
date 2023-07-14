@@ -15,25 +15,23 @@
 <body>
 <img id="image" />
 <script>
-            var img = document.getElementById("image");
-            var currentImageUrl;
+    var img = document.getElementById("image");
+    var currentImageUrl;
 
-            window.parent.addEventListener("message", handleMessage, false);
+    window.parent.addEventListener("message", handleMessage, false);
 
-            function handleMessage(evt) {
-                var blob = evt.data;
-                var urlCreator = window.URL || window.webkitURL;
-                var imageUrl = urlCreator.createObjectURL(blob);
+    function handleMessage(evt) {
+        if (currentImageUrl) {
+            (window.URL || window.webkitURL).revokeObjectURL(currentImageUrl);
+        }
 
-                img.onload = function () {
-                    if (currentImageUrl) {
-                        urlCreator.revokeObjectURL(currentImageUrl);
-                    }
-                    currentImageUrl = imageUrl;
-                };
+        var blob = evt.data;
+        var urlCreator = window.URL || window.webkitURL;
+        var imageUrl = urlCreator.createObjectURL(blob);
+        currentImageUrl = imageUrl;
 
-                img.src = imageUrl; // Set the new image URL
-            }
-        </script>
+        img.src = imageUrl; // Set the new image URL
+    }
+</script>
 </body>
 </html>
