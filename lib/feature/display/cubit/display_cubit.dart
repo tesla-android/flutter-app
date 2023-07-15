@@ -1,7 +1,5 @@
 import 'dart:async';
 
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html';
 import 'dart:ui' hide window;
 
 import 'package:flavor/flavor.dart';
@@ -13,17 +11,13 @@ import 'package:tesla_android/common/utils/logger.dart';
 import 'package:tesla_android/feature/display/cubit/display_state.dart';
 import 'package:tesla_android/feature/display/model/remote_display_state.dart';
 import 'package:tesla_android/feature/display/repository/display_repository.dart';
-import 'package:tesla_android/feature/display/transport/display_transport.dart';
 
 @injectable
 class DisplayCubit extends Cubit<DisplayState> with Logger {
   final DisplayRepository _repository;
-  final DisplayTransportBlob _transportBlob;
-  final DisplayTransportArrayBuffer _transportArrayBuffer;
   final Flavor _flavor;
 
-  DisplayCubit(this._repository, this._transportBlob,
-      this._transportArrayBuffer, this._flavor)
+  DisplayCubit(this._repository, this._flavor)
       : super(DisplayStateInitial());
 
   BaseWebsocketTransport? activeTransport;
@@ -36,8 +30,6 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
   Future<void> close() {
     _resizeCoolDownTimer?.cancel();
     _transportStreamSubscription?.cancel();
-    _transportArrayBuffer.disconnect();
-    _transportBlob.disconnect();
     log("close");
     return super.close();
   }
@@ -56,38 +48,6 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
       }
     }
     _startResize(viewSize: viewSize);
-  }
-
-  void _subscribeToTransportStream(bool isBlob) {
-    if (activeTransport is DisplayTransportBlob && isBlob) {
-      log("blob transport already selected");
-    } else if (activeTransport is DisplayTransportArrayBuffer && !isBlob) {
-      log("arraybuffer transport already selected");
-    } else {
-      activeTransport?.disconnect();
-      activeTransport == null;
-      _transportStreamSubscription?.cancel();
-      _transportStreamSubscription = null;
-      if (isBlob) {
-        _transportBlob.connect();
-        _transportStreamSubscription ??=
-            _transportBlob.jpegDataSubject.listen((imageData) {
-          if (state is DisplayStateNormal) {
-            window.postMessage(imageData, "*");
-          }
-        });
-        activeTransport = _transportBlob;
-      } else {
-        _transportArrayBuffer.connect();
-        _transportStreamSubscription ??=
-            _transportArrayBuffer.jpegDataSubject.listen((imageData) {
-          if (state is DisplayStateNormal) {
-            window.postMessage(imageData, "*");
-          }
-        });
-        activeTransport = _transportArrayBuffer;
-      }
-    }
   }
 
   void onWindowSizeChanged(Size updatedSize) {
@@ -112,7 +72,6 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
 
     final isHeadless = (remoteState.isHeadless ?? 1) == 1;
     final renderer = _getRenderer(remoteState);
-    _subscribeToTransportStream(renderer.binaryType() == "blob");
 
     final desiredSize = _calculateOptimalSize(
       viewSize,

@@ -1,25 +1,21 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:tesla_android/common/utils/logger.dart';
 import 'package:tesla_android/feature/touchscreen/model/virtual_touchscreen_slot_state.dart';
 import 'package:tesla_android/feature/touchscreen/model/virtual_touchscreen_command.dart';
-import 'package:tesla_android/feature/touchscreen/transport/touchscreen_transport.dart';
 
 @injectable
 class TouchscreenCubit extends Cubit<bool> with Logger {
   final List<VirtualTouchscreenSlotState> slotsState =
       VirtualTouchscreenSlotState.generateSlots();
-  final TouchScreenTransport _transport;
-
-  TouchscreenCubit(this._transport) : super(false) {
-    _transport.connect();
-  }
+  TouchscreenCubit() : super(false);
 
   @override
   Future<void> close() {
     log("close");
-    _transport.disconnect();
     return super.close();
   }
 
@@ -41,7 +37,7 @@ class TouchscreenCubit extends Cubit<bool> with Logger {
         absMtPositionY: slot.position.dy.toInt(),
         synReport: true);
 
-    _transport.sendCommand(command);
+    sendCommand(command);
   }
 
   void handlePointerMoveEvent(
@@ -60,7 +56,7 @@ class TouchscreenCubit extends Cubit<bool> with Logger {
         absMtPositionY: slot.position.dy.toInt(),
         synReport: true);
 
-    _transport.sendCommand(command);
+    sendCommand(command);
   }
 
   void handlePointerUpEvent(PointerEvent event, BoxConstraints constraints) {
@@ -76,7 +72,7 @@ class TouchscreenCubit extends Cubit<bool> with Logger {
         absMtTrackingId: slot.trackingId,
         synReport: true);
 
-    _transport.sendCommand(command);
+    sendCommand(command);
   }
 
   VirtualTouchscreenSlotState? _getFirstUnusedSlot() {
@@ -111,5 +107,28 @@ class TouchscreenCubit extends Cubit<bool> with Logger {
       scaledOffset = Offset(scaledOffset.dx, 0);
     }
     return scaledOffset;
+  }
+
+  void resetTouchScreen() {
+    List<VirtualTouchScreenCommand> commands = [];
+    for (final slot in VirtualTouchscreenSlotState.generateSlots()) {
+      commands.add(VirtualTouchScreenCommand(
+          absMtSlot: slot.slotIndex, absMtTrackingId: slot.trackingId));
+    }
+    sendCommands(commands: commands);
+  }
+
+  void sendCommands({required List<VirtualTouchScreenCommand> commands}) {
+    commands.add(VirtualTouchScreenCommand(synReport: true));
+
+    var message = '';
+    for (final command in commands) {
+      message += command.build();
+    }
+    window.postMessage(message, '*');
+  }
+
+  void sendCommand(VirtualTouchScreenCommand command) {
+    window.postMessage(command.build(), '*');
   }
 }

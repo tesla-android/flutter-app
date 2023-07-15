@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tesla_android/common/di/ta_locator.dart';
 import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
-import 'package:tesla_android/feature/audio/cubit/audio_cubit.dart';
 import 'package:tesla_android/feature/connectivityCheck/cubit/connectivity_check_cubit.dart';
 import 'package:tesla_android/feature/connectivityCheck/model/connectivity_state.dart';
 import 'package:tesla_android/feature/display/cubit/display_cubit.dart';
 import 'package:tesla_android/feature/display/cubit/display_state.dart';
 import 'package:tesla_android/feature/display/widget/display_view.dart';
-import 'package:tesla_android/feature/gps/cubit/gps_cubit.dart';
 import 'package:tesla_android/feature/releaseNotes/widget/versionRibbon/version_ribbon.dart';
 import 'package:tesla_android/feature/touchscreen/touchscreen_view.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
@@ -18,8 +16,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<GpsCubit>(context).enableIfNeeded();
-    BlocProvider.of<AudioCubit>(context).enableIfNeeded();
     final connectivityCheck = getIt<ConnectivityCheckCubit>();
     return BlocBuilder<ConnectivityCheckCubit, ConnectivityState>(
         bloc: connectivityCheck,

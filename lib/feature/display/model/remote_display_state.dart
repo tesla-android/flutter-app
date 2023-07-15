@@ -155,19 +155,19 @@ enum DisplayRendererType {
   String resourcePath() {
     switch (index) {
       case 0:
-        return "/display/imgTag.html";
+        return "imgTag";
       case 1:
-        return "/display/workerWebGLWebCodecs.html";
+        return "workerWebGLWebCodecs";
       case 2:
-        return "/display/webGLWebCodecs.html";
+        return "webGLWebCodecs";
       case 3:
-        return "/display/webGL.html";
+        return "webGL";
       case 4:
-        return "/display/canvasWebCodecs.html";
+        return "canvasWebCodecs";
       case 5:
-        return "/display/canvas.html";
+        return "canvas";
       default:
-        return "/display/imgTag.html";
+        return "imgTag";
     }
   }
 
