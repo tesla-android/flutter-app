@@ -3,7 +3,7 @@ description: Tesla Android
 
 publish_to: 'none'
 
-version: 2023.28.1
+version: 2023.28.2
 
 environment:
   flutter: "3.10.5"
