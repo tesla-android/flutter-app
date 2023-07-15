@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tesla_android/common/di/ta_locator.dart';
 import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
-import 'package:tesla_android/feature/gps/util/web_location.dart';
 import 'package:tesla_android/feature/settings/widget/settings_section.dart';
 import 'package:tesla_android/feature/settings/widget/settings_tile.dart';
 
@@ -29,20 +27,22 @@ class GpsSettings extends SettingsSection {
   }
 
   Widget _stateTrailing() {
-    final WebLocation location = getIt<WebLocation>();
-    return FutureBuilder(
-        future: location.getPermissionStatus(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final data = snapshot.data;
-            if (data ?? false) {
-              return const Text("Active");
-            } else {
-              return const Text("Permission not granted");
-            }
-          } else {
-            return const SizedBox();
-          }
-        });
+    // final WebLocation location = getIt<WebLocation>();
+    // wind
+    // return FutureBuilder(
+    //     future: location.getPermissionStatus(),
+    //     builder: (context, snapshot) {
+    //       if (snapshot.hasData) {
+    //         final data = snapshot.data;
+    //         if (data ?? false) {
+    //           return const Text("Active");
+    //         } else {
+    //           return const Text("Permission not granted");
+    //         }
+    //       } else {
+    //         return const SizedBox();
+    //       }
+    //     });
+    return SizedBox.shrink();
   }
 }

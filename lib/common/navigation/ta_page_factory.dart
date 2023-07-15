@@ -4,10 +4,8 @@ import 'package:injectable/injectable.dart';
 import 'package:tesla_android/common/di/ta_locator.dart';
 import 'package:tesla_android/common/navigation/ta_page.dart';
 import 'package:tesla_android/feature/about/about_page.dart';
-import 'package:tesla_android/feature/audio/cubit/audio_cubit.dart';
 import 'package:tesla_android/feature/display/cubit/display_cubit.dart';
 import 'package:tesla_android/feature/donations/widget/donation_page.dart';
-import 'package:tesla_android/feature/gps/cubit/gps_cubit.dart';
 import 'package:tesla_android/feature/home/home_page.dart';
 import 'package:tesla_android/feature/releaseNotes/cubit/release_notes_cubit.dart';
 import 'package:tesla_android/feature/releaseNotes/widget/release_notes_page.dart';
@@ -34,16 +32,14 @@ class TAPageFactory {
           return MultiBlocProvider(
             providers: [
               BlocProvider(
+                create: (_) =>
+                getIt<AudioConfigurationCubit>(),
+              ),
+              BlocProvider(
                 create: (_) => getIt<TouchscreenCubit>(),
               ),
               BlocProvider(
                 create: (_) => getIt<DisplayCubit>(),
-              ),
-              BlocProvider(
-                create: (_) => getIt<AudioCubit>(),
-              ),
-              BlocProvider(
-                create: (_) => getIt<GpsCubit>(),
               ),
             ],
             child: const HomePage(),
