@@ -31,6 +31,8 @@
   <img id="image" />
   <canvas id="canvas"></canvas>
   <script>
+    var audioPlayer;
+
     var audioWebsocketUrl;
     var displayWebsocketUrl;
     var gpsWebsocketUrl;
@@ -86,9 +88,11 @@
 
 
     function createAudioSocket(url) {
-      audioSocket = new ReconnectingWebSocket(url);
+      if(!isAudioEnabled) {
+        return;
+      }
+      audioSocket = new ReconnectingWebSocket(url, null, {debug: true, binaryType: 'arraybuffer'});
       audioSocket.debug = true;
-      audioSocket.timeoutInterval = 3000;
 
       audioSocket.onopen = () => {
         console.log("Audio: Websocket connection established")
@@ -103,7 +107,7 @@
       };
 
       audioSocket.onmessage = (event) => {
-        if (typeof player != "undefined" && event.data instanceof ArrayBuffer) {
+        if (typeof audioPlayer != "undefined" && event.data instanceof ArrayBuffer) {
           audioPlayer.feed(event.data);
         }
       };
@@ -179,10 +183,8 @@
         console.log("Touch: " + message);
       };
     }
-  </script>
-  <script>
-    var audioPlayer;
-    window.addEventListener("click", function (e) {
+
+    window.parent.addEventListener("click", function (e) {
       if (typeof audioPlayer == "undefined" && isAudioEnabled) {
         audioPlayer = new PCMPlayer({
           inputCodec: "Float32",
@@ -218,7 +220,7 @@
 
     locationTimer = setInterval(async () => {
       try {
-        const locationData = await getLocation(450, 450);
+        const locationData = await getLocation(1500, 500);
         gpsSocket.send(locationData);
       } catch (error) {
         // Ignore failures
