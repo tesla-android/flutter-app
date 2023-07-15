@@ -54,7 +54,7 @@ class _IframeViewState extends State<DisplayView> {
             viewType: _uuid,
             onPlatformViewCreated: (_) {
               WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                Future.delayed(const Duration(milliseconds: 100), () {
+                Future.delayed(const Duration(milliseconds: 350), () {
                   final Map<String, dynamic> config = {
                     'audioWebsocketUrl': flavor.getString("audioWebSocket"),
                     'displayWebsocketUrl': flavor.getString("displayWebSocket"),
