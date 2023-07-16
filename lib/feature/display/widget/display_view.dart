@@ -45,6 +45,8 @@ class _IframeViewState extends State<DisplayView> {
   @override
   Widget build(BuildContext context) {
     final flavor = getIt<Flavor>();
+    final displayState =
+        BlocProvider.of<DisplayCubit>(context).state as DisplayStateNormal;
     return BlocBuilder<AudioConfigurationCubit, AudioConfigurationState>(
       bloc: BlocProvider.of<AudioConfigurationCubit>(context)
         ..fetchConfiguration(),
@@ -65,6 +67,8 @@ class _IframeViewState extends State<DisplayView> {
                     'audioVolume': 1.0,
                     'displayRenderer': widget.type.resourcePath(),
                     'displayBinaryType': widget.type.binaryType(),
+                    "displayWidth": displayState.adjustedSize.width,
+                    "displayHeight": displayState.adjustedSize.height,
                   };
 
                   window.postMessage(jsonEncode(config), '*');

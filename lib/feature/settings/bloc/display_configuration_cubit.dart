@@ -12,23 +12,17 @@ import 'package:tesla_android/feature/settings/bloc/display_configuration_state.
 class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
     with Logger {
   final DisplayRepository _repository;
-  final GlobalKey<NavigatorState> _navigatorKey;
 
   RemoteDisplayState? _currentConfig;
 
-  DisplayConfigurationCubit(this._repository, this._navigatorKey)
+  DisplayConfigurationCubit(this._repository)
       : super(DisplayConfigurationStateInitial());
 
   void fetchConfiguration() async {
     if (!isClosed) emit(DisplayConfigurationStateLoading());
     try {
       _currentConfig = await _repository.getDisplayState();
-      emit(
-        DisplayConfigurationStateSettingsFetched(
-          lowResModePreset: _currentConfig!.lowRes,
-          renderer: _currentConfig!.renderer,
-        ),
-      );
+      _emitCurrentConfig();
     } catch (exception, stacktrace) {
       logException(
         exception: exception,
@@ -36,9 +30,29 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
       );
       if (!isClosed) {
         emit(
-        DisplayConfigurationStateError(),
-      );
+          DisplayConfigurationStateError(),
+        );
       }
+    }
+  }
+
+  void setResponsiveness(bool newSetting) async {
+    var config = _currentConfig;
+    final isResponsive = newSetting ? 1 : 0;
+    if (config != null) {
+      config = config.copyWith(isResponsive: isResponsive);
+      if (!isClosed) emit(DisplayConfigurationStateSettingsUpdateInProgress());
+      try {
+        await _repository.updateDisplayConfiguration(config);
+        _currentConfig = _currentConfig?.copyWith(isResponsive: isResponsive);
+        _emitCurrentConfig();
+      } catch (exception, stackTrace) {
+        logExceptionAndUploadToSentry(
+            exception: exception, stackTrace: stackTrace);
+        if (!isClosed) emit(DisplayConfigurationStateError());
+      }
+    } else {
+      log("_currentConfig not available");
     }
   }
 
@@ -49,12 +63,8 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
       if (!isClosed) emit(DisplayConfigurationStateSettingsUpdateInProgress());
       try {
         await _repository.updateDisplayConfiguration(config);
-        if (!isClosed) {
-          emit(DisplayConfigurationStateSettingsFetched(
-          lowResModePreset: newPreset,
-          renderer: _currentConfig!.renderer,
-        ));
-        }
+        _currentConfig = _currentConfig?.copyWith(lowRes: newPreset);
+        _emitCurrentConfig();
       } catch (exception, stackTrace) {
         logExceptionAndUploadToSentry(
             exception: exception, stackTrace: stackTrace);
@@ -72,29 +82,8 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
       if (!isClosed) emit(DisplayConfigurationStateSettingsUpdateInProgress());
       try {
         await _repository.updateDisplayConfiguration(config);
-        if (!isClosed) {
-          emit(DisplayConfigurationStateSettingsFetched(
-          lowResModePreset: _currentConfig!.lowRes,
-          renderer: newType,
-        ));
-        }
-        final context = _navigatorKey.currentContext;
-        if (context != null && context.mounted) {
-          ScaffoldMessenger.of(context).showMaterialBanner(
-            MaterialBanner(
-              content: const Text(
-                  'Renderer has been changed. Restarting the Flutter app is recommended'),
-              leading: const Icon(Icons.settings),
-              actions: [
-                IconButton(
-                    onPressed: () {
-                      window.location.reload();
-                    },
-                    icon: const Icon(Icons.restart_alt)),
-              ],
-            ),
-          );
-        }
+        _currentConfig = _currentConfig?.copyWith(renderer: newType);
+        _emitCurrentConfig();
       } catch (exception, stackTrace) {
         logExceptionAndUploadToSentry(
             exception: exception, stackTrace: stackTrace);
@@ -102,6 +91,16 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
       }
     } else {
       log("_currentConfig not available");
+    }
+  }
+
+  void _emitCurrentConfig() {
+    if (!isClosed) {
+      emit(DisplayConfigurationStateSettingsFetched(
+        lowResModePreset: _currentConfig!.lowRes,
+        renderer: _currentConfig!.renderer,
+        isResponsive: _currentConfig!.isResponsive == 1,
+      ));
     }
   }
 }

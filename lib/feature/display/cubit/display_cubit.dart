@@ -10,6 +10,7 @@ import 'package:tesla_android/common/network/base_websocket_transport.dart';
 import 'package:tesla_android/common/utils/logger.dart';
 import 'package:tesla_android/feature/display/cubit/display_state.dart';
 import 'package:tesla_android/feature/display/model/remote_display_state.dart';
+import 'package:tesla_android/feature/display/model/remote_display_state.dart';
 import 'package:tesla_android/feature/display/repository/display_repository.dart';
 
 @injectable
@@ -72,9 +73,10 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
 
     final isHeadless = (remoteState.isHeadless ?? 1) == 1;
     final renderer = _getRenderer(remoteState);
+    final isResponsive = remoteState.isResponsive == 1;
 
     final desiredSize = _calculateOptimalSize(
-      viewSize,
+      isResponsive ? viewSize : const Size(1088,832),
       resolutionPreset: resolutionPreset,
       isHeadless: isHeadless,
     );
@@ -102,6 +104,8 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
         adjustedSize: desiredSize,
         resolutionPreset: resolutionPreset,
         rendererType: renderer,
+        isH264: remoteState.isH264 == 1,
+        isResponsive: remoteState.isResponsive == 1,
       ));
     }
     _resizeCoolDownTimer = Timer(_coolDownDuration, _sendResizeRequest);
@@ -115,6 +119,8 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
       final lowResModePreset = currentState.resolutionPreset;
       final renderer = currentState.rendererType;
       final density = lowResModePreset.density();
+      final isH264 = renderer == DisplayRendererType.h264WebCodecs;
+
       emit(DisplayStateResizeInProgress());
       try {
         await _repository.updateDisplayConfiguration(RemoteDisplayState(
@@ -123,6 +129,8 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
           density: density,
           lowRes: lowResModePreset,
           renderer: renderer,
+          isResponsive: currentState.isResponsive ? 1 : 0,
+          isH264: isH264 ? 1 : 0,
         ));
         await Future.delayed(_coolDownDuration, () {
           if (isClosed) return;
@@ -178,7 +186,7 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
     required bool isHeadless,
   }) {
     if (!isHeadless) {
-      return const Size(1024, 480);
+      return const Size(1024, 768);
     }
     double maxWidth;
     double maxHeight;

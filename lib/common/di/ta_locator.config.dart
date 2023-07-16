@@ -96,10 +96,7 @@ extension GetItInjectableX on _i1.GetIt {
               gh<_i6.GlobalKey<_i6.NavigatorState>>(),
             ));
     gh.factory<_i20.DisplayConfigurationCubit>(
-        () => _i20.DisplayConfigurationCubit(
-              gh<_i18.DisplayRepository>(),
-              gh<_i6.GlobalKey<_i6.NavigatorState>>(),
-            ));
+        () => _i20.DisplayConfigurationCubit(gh<_i18.DisplayRepository>()));
     gh.factory<_i21.DisplayCubit>(() => _i21.DisplayCubit(
           gh<_i18.DisplayRepository>(),
           gh<_i5.Flavor>(),

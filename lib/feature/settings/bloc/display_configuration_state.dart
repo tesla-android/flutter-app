@@ -10,10 +10,12 @@ class DisplayConfigurationStateSettingsFetched
     extends DisplayConfigurationState {
   final DisplayResolutionModePreset lowResModePreset;
   final DisplayRendererType renderer;
+  final bool isResponsive;
 
   DisplayConfigurationStateSettingsFetched({
     required this.lowResModePreset,
     required this.renderer,
+    required this.isResponsive,
   });
 }
 
