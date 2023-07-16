@@ -24,8 +24,8 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void initState() {
     _sections = [
-      const HotspotSettings(),
       const DisplaySettings(),
+      const HotspotSettings(),
       const SoundSettings(),
       const GpsSettings(),
     ];

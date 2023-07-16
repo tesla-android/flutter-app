@@ -48,6 +48,8 @@
 
     var displayRenderer;
     var displayBinaryType;
+    var displayWidth;
+    var displayHeight;
 
     window.parent.addEventListener(
       "message",
@@ -68,6 +70,8 @@
         audioVolume = config.audioVolume;
         displayRenderer = config.displayRenderer;
         displayBinaryType = config.displayBinaryType;
+        displayWidth = config.displayWidth;
+        displayHeight = config.displayHeight;
 
         if (document.readyState === "complete") {
           createAudioSocket(audioWebsocketUrl);
@@ -86,13 +90,11 @@
       false
     );
 
-
     function createAudioSocket(url) {
       if(!isAudioEnabled) {
         return;
       }
-      audioSocket = new ReconnectingWebSocket(url, null, {debug: true, binaryType: 'arraybuffer'});
-      audioSocket.debug = true;
+      audioSocket = new ReconnectingWebSocket(url, null, {binaryType: 'arraybuffer'});
 
       audioSocket.onopen = () => {
         console.log("Audio: Websocket connection established")
@@ -115,13 +117,10 @@
 
     function createDisplaySocket(url, renderer, binaryType) {
       var rendererScript = document.createElement('script');
-      rendererScript.src = '/display/' + renderer + '.js';
+      rendererScript.src = renderer + '.js';
       document.head.appendChild(rendererScript);
 
-      displaySocket = new ReconnectingWebSocket(url, null, {debug: true, reconnectInterval: 3000, binaryType: binaryType});
-
-      displaySocket.debug = true;
-      displaySocket.timeoutInterval = 3000;
+      displaySocket = new ReconnectingWebSocket(url, null, { binaryType: binaryType });
 
       displaySocket.onopen = () => {
         console.log("Display: Websocket connection established");
@@ -142,8 +141,6 @@
 
     function createGpsSocket(url) {
       gpsSocket = new ReconnectingWebSocket(url);
-      gpsSocket.debug = true;
-      gpsSocket.timeoutInterval = 3000;
 
       gpsSocket.onopen = () => {
         console.log("GPS: Websocket connection established")
@@ -164,8 +161,6 @@
 
     function createTouchScreenSocket(url) {
       touchScreenSocket = new ReconnectingWebSocket(url);
-      touchScreenSocket.debug = true;
-      touchScreenSocket.timeoutInterval = 3000;
 
       touchScreenSocket.onopen = () => {
         console.log("Touch: Websocket connection established")
@@ -204,9 +199,6 @@
         audioPlayer.volume(volume);
       }
     }
-  </script>
-  <script>
-    let locationTimer;
 
     function getLocation(maximumAge, timeout) {
       return new Promise((resolve, reject) => {
@@ -218,14 +210,18 @@
       });
     }
 
-    locationTimer = setInterval(async () => {
-      try {
-        const locationData = await getLocation(1500, 500);
-        gpsSocket.send(locationData);
-      } catch (error) {
-        // Ignore failures
-      }
-    }, 500);
+    function fetchLocationAndSend() {
+      getLocation(1500, 1500)
+        .then(locationData => {
+          gpsSocket.send(locationData);
+          setTimeout(fetchLocationAndSend, 1500);
+        })
+        .catch(error => {
+          setTimeout(fetchLocationAndSend, 1500);
+        });
+    }
+
+    fetchLocationAndSend();
 
     function toLocationData(position) {
       const locationData = {
@@ -236,7 +232,6 @@
       };
       return JSON.stringify(locationData);
     }
-
   </script>
 </body>
 

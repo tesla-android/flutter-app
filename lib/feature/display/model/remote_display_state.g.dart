@@ -15,6 +15,8 @@ RemoteDisplayState _$RemoteDisplayStateFromJson(Map<String, dynamic> json) =>
       renderer:
           $enumDecodeNullable(_$DisplayRendererTypeEnumMap, json['renderer']) ??
               DisplayRendererType.imgTag,
+      isResponsive: json['isResponsive'] as int? ?? 1,
+      isH264: json['isH264'] as int? ?? 1,
       isHeadless: json['isHeadless'] as int?,
     );
 
@@ -26,20 +28,20 @@ Map<String, dynamic> _$RemoteDisplayStateToJson(RemoteDisplayState instance) =>
       'lowres': _$DisplayResolutionModePresetEnumMap[instance.lowRes]!,
       'renderer': _$DisplayRendererTypeEnumMap[instance.renderer]!,
       'isHeadless': instance.isHeadless,
+      'isResponsive': instance.isResponsive,
+      'isH264': instance.isH264,
     };
 
 const _$DisplayResolutionModePresetEnumMap = {
   DisplayResolutionModePreset.res832p: 0,
-  DisplayResolutionModePreset.res640p: 1,
-  DisplayResolutionModePreset.res544p: 2,
-  DisplayResolutionModePreset.res480p: 3,
+  DisplayResolutionModePreset.res720p: 1,
+  DisplayResolutionModePreset.res640p: 2,
+  DisplayResolutionModePreset.res544p: 3,
+  DisplayResolutionModePreset.res480p: 4,
 };
 
 const _$DisplayRendererTypeEnumMap = {
   DisplayRendererType.imgTag: 0,
   DisplayRendererType.workerWebGLWebCodecs: 1,
-  DisplayRendererType.webGLWebCodecs: 2,
-  DisplayRendererType.webGL: 3,
-  DisplayRendererType.canvasWebCodecs: 4,
-  DisplayRendererType.canvas: 5,
+  DisplayRendererType.h264WebCodecs: 2,
 };

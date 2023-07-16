@@ -13,6 +13,10 @@ class RemoteDisplayState extends Equatable {
   @JsonKey(defaultValue: DisplayRendererType.imgTag)
   final DisplayRendererType renderer;
   final int? isHeadless;
+  @JsonKey(defaultValue: 1)
+  final int isResponsive;
+  @JsonKey(defaultValue: 1)
+  final int isH264;
 
   const RemoteDisplayState({
     required this.width,
@@ -20,6 +24,8 @@ class RemoteDisplayState extends Equatable {
     required this.density,
     required this.lowRes,
     required this.renderer,
+    required this.isResponsive,
+    required this.isH264,
     this.isHeadless,
   });
 
@@ -29,7 +35,8 @@ class RemoteDisplayState extends Equatable {
   Map<String, dynamic> toJson() => _$RemoteDisplayStateToJson(this);
 
   @override
-  List<Object?> get props => [width, height, density, lowRes, renderer, isHeadless];
+  List<Object?> get props =>
+      [width, height, density, lowRes, renderer, isHeadless];
 
   RemoteDisplayState updateResolution(
       {required DisplayResolutionModePreset newPreset}) {
@@ -39,9 +46,8 @@ class RemoteDisplayState extends Equatable {
     );
   }
 
-  RemoteDisplayState updateRenderer(
-      {required DisplayRendererType newType}) {
-    return copyWith(renderer: newType);
+  RemoteDisplayState updateRenderer({required DisplayRendererType newType}) {
+    return copyWith(renderer: newType, isH264: newType == DisplayRendererType.h264WebCodecs ? 1 : 0);
   }
 
   RemoteDisplayState copyWith({
@@ -51,6 +57,8 @@ class RemoteDisplayState extends Equatable {
     int? isHeadless,
     DisplayResolutionModePreset? lowRes,
     DisplayRendererType? renderer,
+    int? isH264,
+    int? isResponsive,
   }) {
     return RemoteDisplayState(
       width: width ?? this.width,
@@ -59,6 +67,8 @@ class RemoteDisplayState extends Equatable {
       lowRes: lowRes ?? this.lowRes,
       isHeadless: isHeadless ?? this.isHeadless,
       renderer: renderer ?? this.renderer,
+      isH264: isH264 ?? this.isH264,
+      isResponsive: isResponsive ?? this.isResponsive,
     );
   }
 }
@@ -67,10 +77,12 @@ enum DisplayResolutionModePreset {
   @JsonValue(0)
   res832p,
   @JsonValue(1)
-  res640p,
+  res720p,
   @JsonValue(2)
-  res544p,
+  res640p,
   @JsonValue(3)
+  res544p,
+  @JsonValue(4)
   res480p;
 
   double maxHeight() {
@@ -78,10 +90,12 @@ enum DisplayResolutionModePreset {
       case 0:
         return 832;
       case 1:
-        return 640;
+        return 720;
       case 2:
-        return 544;
+        return 640;
       case 3:
+        return 544;
+      case 4:
         return 480;
       default:
         return 832;
@@ -93,11 +107,13 @@ enum DisplayResolutionModePreset {
       case 0:
         return 200;
       case 1:
-        return 180;
+        return 175;
       case 2:
-        return 170;
+        return 155;
       case 3:
-        return 160;
+        return 130;
+      case 4:
+        return 115;
       default:
         return 832;
     }
@@ -108,10 +124,12 @@ enum DisplayResolutionModePreset {
       case 0:
         return "832p";
       case 1:
-        return "640p";
+        return "720p";
       case 2:
-        return "544p";
+        return "640p";
       case 3:
+        return "544p";
+      case 4:
         return "480p";
       default:
         return "832p";
@@ -125,30 +143,18 @@ enum DisplayRendererType {
   @JsonValue(1)
   workerWebGLWebCodecs,
   @JsonValue(2)
-  webGLWebCodecs,
-  @JsonValue(3)
-  webGL,
-  @JsonValue(4)
-  canvasWebCodecs,
-  @JsonValue(5)
-  canvas;
+  h264WebCodecs;
 
   String name() {
     switch (index) {
       case 0:
-        return "Image tag";
+        return "Motion JPEG - Image tag (legacy)";
       case 1:
-        return "Worker + WebGL + WebCodecs";
+        return "Motion JPEG - WebCodecs/WebGL";
       case 2:
-        return "WebGL + WebCodecs";
-      case 3:
-        return "WebGL";
-      case 4:
-        return "2D Canvas + WebCodecs";
-      case 5:
-        return "2D Canvas";
+        return "H264 video - WebCodecs/WebGL";
       default:
-        return "Image tag";
+        return "Motion JPEG - Image tag (legacy)";
     }
   }
 
@@ -157,15 +163,9 @@ enum DisplayRendererType {
       case 0:
         return "imgTag";
       case 1:
-        return "workerWebGLWebCodecs";
-      case 2:
         return "webGLWebCodecs";
-      case 3:
-        return "webGL";
-      case 4:
-        return "canvasWebCodecs";
-      case 5:
-        return "canvas";
+      case 2:
+        return "h264";
       default:
         return "imgTag";
     }
@@ -177,14 +177,6 @@ enum DisplayRendererType {
         return false;
       case 1:
         return true;
-      case 2:
-        return true;
-      case 3:
-        return false;
-      case 4:
-        return true;
-      case 5:
-        return false;
       default:
         return false;
     }
@@ -198,12 +190,6 @@ enum DisplayRendererType {
         return "arraybuffer";
       case 2:
         return "arraybuffer";
-      case 3:
-        return "blob";
-      case 4:
-        return "arraybuffer";
-      case 5:
-        return "blob";
       default:
         return "blob";
     }

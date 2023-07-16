@@ -34,6 +34,16 @@ class DisplaySettings extends SettingsSection {
             ),
             divider,
             SettingsTile(
+                icon: Icons.photo_size_select_large,
+                title: 'Dynamic aspect ratio',
+                trailing: _responsivenessSwitch(context, cubit, state)),
+            const Padding(
+              padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
+              child: Text(
+                  'Advanced setting, Tesla Android can automatically resize the virtual display when the browser window size changes. If you disable this option, the display aspect will be locked on the current value.'),
+            ),
+            divider,
+            SettingsTile(
                 icon: Icons.texture,
                 title: 'Renderer',
                 dense: false,
@@ -49,8 +59,26 @@ class DisplaySettings extends SettingsSection {
     );
   }
 
-  Widget _resolutionDropdown(BuildContext context, DisplayConfigurationCubit cubit,
-      DisplayConfigurationState state) {
+  Widget _responsivenessSwitch(BuildContext context,
+      DisplayConfigurationCubit cubit, DisplayConfigurationState state) {
+    if (state is DisplayConfigurationStateSettingsFetched) {
+      return Switch(
+        value: state.isResponsive,
+        onChanged: (bool value) {
+          cubit.setResponsiveness(value);
+        },
+      );
+    } else if (state is DisplayConfigurationStateSettingsUpdateInProgress ||
+        state is DisplayConfigurationStateLoading) {
+      return const CircularProgressIndicator();
+    } else if (state is DisplayConfigurationStateError) {
+      return const Text("Service error");
+    }
+    return const SizedBox.shrink();
+  }
+
+  Widget _resolutionDropdown(BuildContext context,
+      DisplayConfigurationCubit cubit, DisplayConfigurationState state) {
     if (state is DisplayConfigurationStateSettingsFetched) {
       return DropdownButton<DisplayResolutionModePreset>(
         value: state.lowResModePreset,
