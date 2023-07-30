@@ -5,39 +5,45 @@ let pendingFrames = [],
     socket,
     height,
     width,
+    windowHeight,
+    windowWidth,
     ctx;
 
-const vertexShaderSrc = `
-        attribute vec2 aVertex;
-        attribute vec2 aUV;
-        varying vec2 vTex;
-        uniform vec2 pos;
-        void main(void) {
-          gl_Position = vec4(aVertex + pos, 0.0, 1.0);
-          vTex = aUV;
-        }`,
-    fragmentShaderSrc = `
-        precision highp float;
-        varying vec2 vTex;
-        uniform sampler2D sampler0;
-        void main(void){
-          gl_FragColor = texture2D(sampler0, vTex);
-        }`;
+const MAX_BUFFER_SIZE = 50;
 
 async function renderFrame() {
-    underflow = pendingFrames.length === 0;
-    if (underflow) {
+    if (pendingFrames.length === 0) {
         return;
     }
     const frame = pendingFrames.shift();
-    ctx.texImage2D(ctx.TEXTURE_2D, 0, ctx.RGBA, ctx.RGBA, ctx.UNSIGNED_BYTE, frame);
-    ctx.drawArrays(ctx.TRIANGLE_FAN, 0, 4);
-    frame.close();
-    renderFrame();
+    drawImageToCanvas(gl, frame);
+    sendStatsToMainThread();
+
+    if (pendingFrames.length > 0) {
+        await renderFrame();
+    }
 }
 
 
-function videoMagic(dat){
+function drawImageToCanvas(gl, image) {
+    const texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+
+    if (isPowerOf2(width) && isPowerOf2(height)) {
+        gl.generateMipmap(gl.TEXTURE_2D);
+    }
+
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+    image.close();
+}
+
+function videoMagic(dat) {
     let unittype = (dat[4] & 0x1f);
     if (unittype === 1) {
         let chunk = new EncodedVideoChunk({
@@ -49,7 +55,7 @@ function videoMagic(dat){
         if (decoder.state === 'configured') {
             decoder.decode(chunk);
         } else {
-            self.postMessage({error: true});
+            self.postMessage({ error: true });
         }
         return;
     }
@@ -66,7 +72,7 @@ function videoMagic(dat){
         if (decoder.state === 'configured') {
             decoder.decode(chunk);
         } else {
-            self.postMessage({error: true});
+            self.postMessage({ error: true });
         }
     }
 }
@@ -78,6 +84,10 @@ function headerMagic(dat) {
             codec: "avc1.",
             codedHeight: height,
             codedWidth: width,
+            displayAspectWidth: windowWidth,
+            displayAspectHeight: windowHeight,
+            hardwareAcceleration: "prefer-hardware",
+            optimizeForLatency: true
         }
         for (let i = 5; i < 8; ++i) {
             var h = dat[i].toString(16);
@@ -92,7 +102,7 @@ function headerMagic(dat) {
         return;
     }
     else if (unittype === 8)
-        sps=appendByteArray(sps,dat)
+        sps = appendByteArray(sps, dat)
     else
         videoMagic(dat);
 }
@@ -104,56 +114,7 @@ function appendByteArray(buffer1, buffer2) {
     return tmp;
 }
 
-
-function initCanvas(canvas) {
-    ctx = canvas.getContext('webgl2');
-    const tex = ctx.createTexture();
-
-    const vertShaderObj = ctx.createShader(ctx.VERTEX_SHADER);
-    const fragShaderObj = ctx.createShader(ctx.FRAGMENT_SHADER);
-
-    ctx.shaderSource(vertShaderObj, vertexShaderSrc);
-    ctx.shaderSource(fragShaderObj, fragmentShaderSrc);
-    ctx.compileShader(vertShaderObj);
-    ctx.compileShader(fragShaderObj);
-
-    const progObj = ctx.createProgram();
-    ctx.attachShader(progObj, vertShaderObj);
-    ctx.attachShader(progObj, fragShaderObj);
-
-    ctx.linkProgram(progObj);
-    ctx.useProgram(progObj);
-
-    ctx.viewport(0, 0, canvas.width, canvas.height);
-
-    const vertexBuff = ctx.createBuffer();
-    ctx.bindBuffer(ctx.ARRAY_BUFFER, vertexBuff);
-    ctx.bufferData(ctx.ARRAY_BUFFER, new Float32Array([-1, 1, -1, -1, 1, -1, 1, 1]), ctx.STATIC_DRAW);
-
-    const texBuff = ctx.createBuffer();
-    ctx.bindBuffer(ctx.ARRAY_BUFFER, texBuff);
-    ctx.bufferData(ctx.ARRAY_BUFFER, new Float32Array([0, 1, 0, 0, 1, 0, 1, 1]), ctx.STATIC_DRAW);
-
-    const vloc = ctx.getAttribLocation(progObj, "aVertex");
-    const tloc = ctx.getAttribLocation(progObj, "aUV");
-
-    ctx.bindTexture(ctx.TEXTURE_2D, tex);
-    ctx.texParameteri(ctx.TEXTURE_2D, ctx.TEXTURE_MIN_FILTER, ctx.NEAREST);
-    ctx.texParameteri(ctx.TEXTURE_2D, ctx.TEXTURE_MAG_FILTER, ctx.NEAREST);
-    ctx.texParameteri(ctx.TEXTURE_2D, ctx.TEXTURE_WRAP_S, ctx.CLAMP_TO_EDGE);
-    ctx.texParameteri(ctx.TEXTURE_2D, ctx.TEXTURE_WRAP_T, ctx.CLAMP_TO_EDGE);
-    ctx.pixelStorei(ctx.UNPACK_FLIP_Y_WEBGL, true);
-    ctx.pixelStorei(ctx.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
-    ctx.enableVertexAttribArray(vloc);
-    ctx.bindBuffer(ctx.ARRAY_BUFFER, vertexBuff);
-    ctx.vertexAttribPointer(vloc, 2, ctx.FLOAT, false, 0, 0);
-    ctx.enableVertexAttribArray(tloc);
-    ctx.bindBuffer(ctx.ARRAY_BUFFER, texBuff);
-    ctx.bindTexture(ctx.TEXTURE_2D, tex);
-    ctx.vertexAttribPointer(tloc, 2, ctx.FLOAT, false, 0, 0);
-}
-
-function separateNalUnits(data){
+function separateNalUnits(data) {
     let i = -1;
     return new Uint8Array(data)
         .reduce((output, value, index, self) => {
@@ -169,21 +130,108 @@ function separateNalUnits(data){
         .map(dat => Uint8Array.from(dat));
 }
 
+let skippedFrames = 0;
+
 function handleMessage(dat) {
     let unittype = (dat[4] & 0x1f);
 
     if (unittype === 1 || unittype === 5) {
         videoMagic(dat)
     } else {
-      separateNalUnits(dat).forEach(headerMagic)
+        separateNalUnits(dat).forEach(headerMagic)
+    }
+
+    if (pendingFrames.length > MAX_BUFFER_SIZE) {
+        let foundIframe = false;
+        while (!foundIframe && pendingFrames.length > 0) {
+            let frame = pendingFrames.shift();
+            if (frame.type === 'key') {
+                foundIframe = true;
+                pendingFrames.unshift(frame);
+            } else {
+                skippedFrames++;
+            }
+            frame.close();
+        }
     }
 }
 
-self.onmessage = function(event) {
+function sendStatsToMainThread() {
+    const stats = {
+        skippedFrames: skippedFrames,
+        bufferLength: pendingFrames.length,
+    };
+    postMessage(stats);
+}
+
+function initializeGL(gl) {
+    const vertexSource = `
+        attribute vec2 a_position;
+        attribute vec2 a_texCoord;
+        varying vec2 v_texCoord;
+        void main() {
+            gl_Position = vec4(a_position, 0, 1);
+            v_texCoord = a_texCoord;
+        }
+    `;
+    const fragmentSource = `
+        precision mediump float;
+        uniform sampler2D u_image;
+        varying vec2 v_texCoord;
+        void main() {
+            gl_FragColor = texture2D(u_image, v_texCoord);
+        }
+    `;
+
+    const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexSource);
+    const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentSource);
+
+    const program = gl.createProgram();
+    gl.attachShader(program, vertexShader);
+    gl.attachShader(program, fragmentShader);
+    gl.linkProgram(program);
+
+    positionLocation = gl.getAttribLocation(program, "a_position");
+    texcoordLocation = gl.getAttribLocation(program, "a_texCoord");
+
+    positionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0]), gl.STATIC_DRAW);
+
+    texcoordBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0]), gl.STATIC_DRAW);
+
+    gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+    gl.clearColor(0.0, 0.0, 0.0, 0.0);
+    gl.useProgram(program);
+    gl.enableVertexAttribArray(positionLocation);
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(texcoordLocation);
+    gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
+    gl.vertexAttribPointer(texcoordLocation, 2, gl.FLOAT, false, 0, 0);
+}
+
+function createShader(gl, type, source) {
+    const shader = gl.createShader(type);
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    const success = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
+    if (success) {
+        return shader;
+    }
+    console.log(gl.getShaderInfoLog(shader));
+    gl.deleteShader(shader);
+}
+
+self.onmessage = function (event) {
     if (event.data.canvas && event.data.displayWidth && event.data.displayHeight) {
         const offscreenCanvas = event.data.canvas;
         height = event.data.displayHeight;
         width = event.data.displayWidth;
+        windowHeight = event.data.windowHeight;
+        windowWidth = event.data.windowWidth;
         gl = offscreenCanvas.getContext("webgl2");
         if (!gl) {
             gl = offscreenCanvas.getContext("webgl");
@@ -192,17 +240,21 @@ self.onmessage = function(event) {
             throw new Error("Failed to get WebGL context.");
         }
 
-        initCanvas(offscreenCanvas);
+        initializeGL(gl);
         decoder = new VideoDecoder({
-                output: (frame) => {
-                    pendingFrames.push(frame);
-                    if (underflow) {
-                        renderFrame();
-                    }
-                },
-                error: e => self.postMessage({error: e}),
-            });
+            output: (frame) => {
+                pendingFrames.push(frame);
+                if (underflow) {
+                    renderFrame();
+                }
+            },
+            error: e => self.postMessage({ error: e }),
+        });
     } else if (event.data.h264Data) {
         handleMessage(event.data.h264Data);
     }
+}
+
+function isPowerOf2(value) {
+    return (value & (value - 1)) == 0;
 }
