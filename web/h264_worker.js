@@ -10,6 +10,22 @@ let pendingFrames = [],
     ctx;
 
 const MAX_BUFFER_SIZE = 50;
+const MAX_TEXTURE_POOL_SIZE = 5;
+
+const texturePool = [];
+
+function getTexture(gl) {
+    if(texturePool.length > 0) return texturePool.pop();
+    return gl.createTexture();
+}
+
+function releaseTexture(gl, texture) {
+    if (texturePool.length < MAX_TEXTURE_POOL_SIZE) {
+        texturePool.push(texture);
+    } else {
+        gl.deleteTexture(texture);
+    }
+}
 
 async function renderFrame() {
     if (pendingFrames.length === 0) {
@@ -24,9 +40,8 @@ async function renderFrame() {
     }
 }
 
-
 function drawImageToCanvas(gl, image) {
-    const texture = gl.createTexture();
+    const texture = getTexture(gl);
     gl.bindTexture(gl.TEXTURE_2D, texture);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
@@ -40,7 +55,12 @@ function drawImageToCanvas(gl, image) {
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
 
-    image.close();
+    gl.bindTexture(gl.TEXTURE_2D, null);
+    releaseTexture(gl, texture);
+
+    if (image.close) {
+        image.close();
+    }
 }
 
 function videoMagic(dat) {

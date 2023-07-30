@@ -236,14 +236,14 @@
 
     let locationTimer = setInterval(async () => {
       if (!locationData) {
-        await updateLocation(1500, 5000);
+        await updateLocation(2500, 2500);
       }
 
       if (locationData) {
         gpsSocket.send(locationData);
         locationData = null;
       }
-    }, 2000);
+    }, 2500);
 
     function toLocationData(position) {
       const locationData = {

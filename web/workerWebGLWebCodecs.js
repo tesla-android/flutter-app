@@ -3,6 +3,8 @@ let positionLocation;
 let texcoordLocation;
 let positionBuffer;
 let texcoordBuffer;
+let texturePool = [];
+let texturePoolSize = 5;
 const maxFramesInBuffer = 5;
 const frameBuffer = [];
 let skippedFrames = 0;
@@ -73,6 +75,15 @@ function initializeGL(gl) {
   gl.enableVertexAttribArray(texcoordLocation);
   gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
   gl.vertexAttribPointer(texcoordLocation, 2, gl.FLOAT, false, 0, 0);
+
+  for (let i = 0; i < texturePoolSize; i++) {
+    let texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    texturePool.push(texture);
+  }
 }
 
 function createShader(gl, type, source) {
@@ -109,7 +120,9 @@ function processFrames() {
       .decode()
       .then((result) => {
         var imageBitmap = result.image;
-        drawImageToCanvas(gl, imageBitmap, imageBitmap.width, imageBitmap.height);
+        let texture = texturePool.pop();
+        drawImageToCanvas(gl, imageBitmap, texture, imageBitmap.width, imageBitmap.height);
+        texturePool.unshift(texture);
         processFrames();
       })
       .catch((error) => {
@@ -119,8 +132,7 @@ function processFrames() {
   }
 }
 
-function drawImageToCanvas(gl, image, width, height) {
-  const texture = gl.createTexture();
+function drawImageToCanvas(gl, image, texture, width, height) {
   gl.bindTexture(gl.TEXTURE_2D, texture);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
