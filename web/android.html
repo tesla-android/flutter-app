@@ -132,29 +132,34 @@
 
     function createDisplaySocket(url, renderer, binaryType) {
       if (!displayRendererAdded) {
-        var rendererScript = document.createElement('script');
-        rendererScript.src = renderer + '.js';
-        document.head.appendChild(rendererScript);
+        //var rendererScript = document.createElement('script');
+        //rendererScript.src = renderer + '.js';
+        //document.head.appendChild(rendererScript);
+        var img = document.getElementById("image");
+        var canvas = document.getElementById("canvas");
+        img.style.display = "block";
+        img.src = url;
+        canvas.style.display = "none";
         displayRendererAdded = true;
       }
 
-      displaySocket = new ReconnectingWebSocket(url, null, { binaryType: binaryType });
+      //displaySocket = new ReconnectingWebSocket(url, null, { binaryType: binaryType });
 
-      displaySocket.onopen = () => {
-        console.log("Display: Websocket connection established");
-      };
+      //displaySocket.onopen = () => {
+      //  console.log("Display: Websocket connection established");
+      //};
 
-      displaySocket.onclose = () => {
-        console.log("Display: Websocket connection closed")
-      };
+      //displaySocket.onclose = () => {
+      //  console.log("Display: Websocket connection closed")
+      //};
 
-      displaySocket.onerror = error => {
-        console.log("Display: " + error)
-      };
+      //displaySocket.onerror = error => {
+      //  console.log("Display: " + error)
+      //};
 
-      displaySocket.onmessage = (event) => {
-        drawDisplayFrame(event.data);
-      };
+      //displaySocket.onmessage = (event) => {
+      //  drawDisplayFrame(event.data);
+      //};
     }
 
     function createGpsSocket(url) {
@@ -218,41 +223,64 @@
       }
     }
 
-    let locationData;
+let locationData;
 
-    async function updateLocation(maximumAge, timeout) {
-      try {
-        locationData = await new Promise((resolve, reject) => {
-          navigator.geolocation.getCurrentPosition(
-            (position) => resolve(toLocationData(position)),
-            (error) => reject(error),
-            { enableHighAccuracy: true, maximumAge, timeout }
-          );
-        });
-      } catch (error) {
-        console.error(error);
-      }
+async function updateLocation(maximumAge, timeout) {
+  try {
+    locationData = await new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(
+        (position) => resolve(toLocationData(position)),
+        (error) => reject(error),
+        { enableHighAccuracy: true, maximumAge, timeout }
+      );
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function checkPermissionAndStartUpdates() {
+  const permissionStatus = await navigator.permissions.query({name:'geolocation'});
+
+  if (permissionStatus.state === 'prompt') {
+    navigator.geolocation.getCurrentPosition(async (position) => {
+      // If the permission was just granted, start the location updates
+      startLocationUpdates();
+    }, (error) => {
+      console.log('Location access has been denied.');
+    });
+  } else if (permissionStatus.state === 'granted') {
+    startLocationUpdates();
+  } else {
+    console.log('Location access has been denied.');
+  }
+}
+
+function startLocationUpdates() {
+  let locationTimer = setInterval(async () => {
+    if (!locationData) {
+      await updateLocation(2500, 2500);
     }
 
-    let locationTimer = setInterval(async () => {
-      if (!locationData) {
-        await updateLocation(2500, 2500);
-      }
-
-      if (locationData) {
-        gpsSocket.send(locationData);
-        locationData = null;
-      }
-    }, 2500);
-
-    function toLocationData(position) {
-      const locationData = {
-        latitude: String(position.coords.latitude),
-        longitude: String(position.coords.longitude),
-      };
-
-      return JSON.stringify(locationData);
+    if (locationData) {
+      gpsSocket.send(locationData);
+      locationData = null;
     }
+  }, 2500);
+}
+
+function toLocationData(position) {
+  const locationData = {
+    latitude: String(position.coords.latitude),
+    longitude: String(position.coords.longitude),
+  };
+
+  return JSON.stringify(locationData);
+}
+
+// Start the permission check and potentially start location updates
+checkPermissionAndStartUpdates();
+
   </script>
 </body>
 
