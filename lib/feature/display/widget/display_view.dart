@@ -12,7 +12,6 @@ import 'package:tesla_android/feature/display/cubit/display_state.dart';
 import 'package:tesla_android/feature/display/model/remote_display_state.dart';
 import 'package:tesla_android/feature/settings/bloc/audio_configuration_cubit.dart';
 import 'package:tesla_android/feature/settings/bloc/audio_configuration_state.dart';
-import 'package:uuid/uuid.dart';
 
 class DisplayView extends StatefulWidget {
   final DisplayRendererType type;
@@ -26,18 +25,17 @@ class DisplayView extends StatefulWidget {
 class _IframeViewState extends State<DisplayView> {
   final IFrameElement _iframeElement = IFrameElement();
 
-  late String _uuid;
+  static const String _src = "/android.html";
 
   @override
   void initState() {
     super.initState();
-    _uuid = const Uuid().v1();
-    _iframeElement.src = "/android.html";
+    _iframeElement.src = _src;
     _iframeElement.style.border = 'none';
 
     //ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory(
-      _uuid,
+      _src,
       (int viewId) => _iframeElement,
     );
   }
@@ -53,7 +51,7 @@ class _IframeViewState extends State<DisplayView> {
       builder: (context, state) {
         if (state is AudioConfigurationStateSettingsFetched) {
           return HtmlElementView(
-            viewType: _uuid,
+            viewType: _src,
             onPlatformViewCreated: (_) {
               WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
                 Future.delayed(const Duration(milliseconds: 350), () {

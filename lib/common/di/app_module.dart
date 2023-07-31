@@ -26,7 +26,8 @@ abstract class AppModule {
         'touchscreenWebSocket': '$webSocketProtocol$domain/sockets/touchscreen',
         'gpsWebSocket': '$webSocketProtocol$domain/sockets/gps',
         'audioWebSocket': '$webSocketProtocol$domain/sockets/audio',
-        'displayWebSocket': '$webSocketProtocol$domain/sockets/display',
+        //'displayWebSocket': '$webSocketProtocol$domain/sockets/display',
+        'displayWebSocket': '$httpProtocol$domain/stream',
         'configurationApiBaseUrl': '$httpProtocol$domain/api',
       },
     );

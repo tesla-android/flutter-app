@@ -42,17 +42,17 @@ class DisplaySettings extends SettingsSection {
               child: Text(
                   'Advanced setting, Tesla Android can automatically resize the virtual display when the browser window size changes. If you disable this option, the display aspect will be locked on the current value.'),
             ),
-            divider,
-            SettingsTile(
-                icon: Icons.texture,
-                title: 'Renderer',
-                dense: false,
-                trailing: _rendererDropdown(context, cubit, state)),
-            const Padding(
-              padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
-              child: Text(
-                  'Advanced setting, Tesla Android supports multiple renderers for different operating environments. Some of them are slower in Drive and faster in Park. There are also differences in CPU/GPU usage. May the best one win!'),
-            ),
+            // divider,
+            // SettingsTile(
+            //     icon: Icons.texture,
+            //     title: 'Renderer',
+            //     dense: false,
+            //     trailing: _rendererDropdown(context, cubit, state)),
+            // const Padding(
+            //   padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
+            //   child: Text(
+            //       'Advanced setting, Tesla Android supports multiple renderers for different operating environments. Some of them are slower in Drive and faster in Park. There are also differences in CPU/GPU usage. May the best one win!'),
+            // ),
           ],
         );
       },
