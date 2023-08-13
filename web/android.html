@@ -38,13 +38,14 @@
   </style>
   <script src="pcmplayer.js"></script>
   <script src="reconnecting-websocket.js"></script>
+  <script src="estimator.js"></script>
 </head>
 
 <body>
-<span id="stats"></span>
-<img id="image" />
-<canvas id="canvas"></canvas>
-<script>
+  <span id="stats"></span>
+  <img id="image" />
+  <canvas id="canvas"></canvas>
+  <script>
     var audioPlayer;
 
     var audioWebsocketUrl;
@@ -65,6 +66,8 @@
     var displayWidth;
     var displayHeight;
     var displayRendererAdded = false;
+    var gpsEstimator;
+    var gpsRunning = false;
 
     window.parent.addEventListener(
       "message",
@@ -112,15 +115,15 @@
       audioSocket = new ReconnectingWebSocket(url, null, { binaryType: 'arraybuffer' });
 
       audioSocket.onopen = () => {
-        console.log("Audio: Websocket connection established")
+        log("Audio: Websocket connection established")
       };
 
       audioSocket.onclose = () => {
-        console.log("Audio: Websocket connection closed")
+        log("Audio: Websocket connection closed")
       };
 
       audioSocket.onerror = error => {
-        console.log("Audio: " + error)
+        log("Audio: " + error)
       };
 
       audioSocket.onmessage = (event) => {
@@ -146,15 +149,15 @@
       //displaySocket = new ReconnectingWebSocket(url, null, { binaryType: binaryType });
 
       //displaySocket.onopen = () => {
-      //  console.log("Display: Websocket connection established");
+      //  log("Display: Websocket connection established");
       //};
 
       //displaySocket.onclose = () => {
-      //  console.log("Display: Websocket connection closed")
+      //  log("Display: Websocket connection closed")
       //};
 
       //displaySocket.onerror = error => {
-      //  console.log("Display: " + error)
+      //  log("Display: " + error)
       //};
 
       //displaySocket.onmessage = (event) => {
@@ -164,21 +167,24 @@
 
     function createGpsSocket(url) {
       gpsSocket = new ReconnectingWebSocket(url);
+      gpsEstimator = new GpsEstimator();
 
       gpsSocket.onopen = () => {
-        console.log("GPS: Websocket connection established")
+        log("GPS: Websocket connection established")
+        gpsRunning = true;
       };
 
       gpsSocket.onclose = () => {
-        console.log("GPS: Websocket connection closed")
+        log("GPS: Websocket connection closed")
+        gpsRunning = false;
       };
 
       gpsSocket.onerror = error => {
-        console.log("GPS: " + error);
+        log("GPS: " + error);
       };
 
       gpsSocket.onmessage = (event) => {
-        console.log("GPS: " + message);
+        log("GPS: " + message);
       };
     }
 
@@ -186,19 +192,19 @@
       touchScreenSocket = new ReconnectingWebSocket(url);
 
       touchScreenSocket.onopen = () => {
-        console.log("Touch: Websocket connection established")
+        log("Touch: Websocket connection established")
       };
 
       touchScreenSocket.onclose = () => {
-        console.log("Touch: Websocket connection closed")
+        log("Touch: Websocket connection closed")
       };
 
       touchScreenSocket.onerror = error => {
-        console.log("Touch: " + error);
+        log("Touch: " + error);
       };
 
       touchScreenSocket.onmessage = (event) => {
-        console.log("Touch: " + message);
+        log("Touch: " + message);
       };
     }
 
@@ -223,63 +229,68 @@
       }
     }
 
-let locationData;
+    async function checkPermissionAndStartUpdates() {
+      const permissionStatus = await navigator.permissions.query({ name: 'geolocation' });
 
-async function updateLocation(maximumAge, timeout) {
-  try {
-    locationData = await new Promise((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(
-        (position) => resolve(toLocationData(position)),
-        (error) => reject(error),
-        { enableHighAccuracy: true, maximumAge, timeout }
-      );
-    });
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-async function checkPermissionAndStartUpdates() {
-  const permissionStatus = await navigator.permissions.query({name:'geolocation'});
-
-  if (permissionStatus.state === 'prompt') {
-    navigator.geolocation.getCurrentPosition(async (position) => {
-      // If the permission was just granted, start the location updates
-      startLocationUpdates();
-    }, (error) => {
-      console.log('Location access has been denied.');
-    });
-  } else if (permissionStatus.state === 'granted') {
-    startLocationUpdates();
-  } else {
-    console.log('Location access has been denied.');
-  }
-}
-
-function startLocationUpdates() {
-  let locationTimer = setInterval(async () => {
-    if (!locationData) {
-      await updateLocation(2500, 2500);
+      if (permissionStatus.state === 'prompt') {
+        navigator.geolocation.getCurrentPosition(async (position) => {
+          // If the permission was just granted, start the location updates
+          startLocationUpdates();
+        }, (error) => {
+          log('Location access has been denied.');
+        });
+      } else if (permissionStatus.state === 'granted') {
+        startLocationUpdates();
+      } else {
+        log('Location access has been denied.');
+      }
     }
 
-    if (locationData) {
-      gpsSocket.send(locationData);
-      locationData = null;
+    function updateLocation(position) {
+      if (!gpsRunning) return;
+      if (!position.coords) return
+
+      gpsSocket.send(toLocationData(position));
     }
-  }, 2500);
-}
 
-function toLocationData(position) {
-  const locationData = {
-    latitude: String(position.coords.latitude),
-    longitude: String(position.coords.longitude),
-  };
+    function logError(error) {
+      log(error);
+    }
 
-  return JSON.stringify(locationData);
-}
+    function updateHandler() {
+      // We want to timeout the call just before the next one appears, so they don't stack up.. if it arrives
+      // that late it's useless anyway
+      navigator.geolocation.getCurrentPosition(updateLocation, logError, { enableHighAccuracy: true, maximumAge: 0, timeout: 900 });
+    }
 
-// Start the permission check and potentially start location updates
-checkPermissionAndStartUpdates();
+    function startLocationUpdates() {
+      setInterval(updateHandler, 1000);
+    }
+
+    function toLocationData(position) {
+      // We need to set the timestamp anyway, so just reconstruct the structure..
+      const pos = { latitude: position.coords.latitude, longitude: position.coords.longitude, accuracy: position.coords.accuracy, timestamp: Date.now() };
+
+      const estimate = gpsEstimator.estimate(pos);
+
+      const locationData = JSON.stringify({
+        latitude: String(pos.latitude),
+        longitude: String(pos.longitude),
+        speed: String(estimate.speed),
+        bearing: String(estimate.heading),
+        vertical_accuracy: String(pos.accuracy),
+        timestamp: String(pos.timestamp)
+      });
+
+      return locationData;
+    }
+
+    function log(string) {
+      //  console.log(string);
+    }
+
+    // Start the permission check and potentially start location updates
+    checkPermissionAndStartUpdates();
 
   </script>
 </body>
