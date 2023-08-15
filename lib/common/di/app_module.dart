@@ -44,7 +44,7 @@ abstract class AppModule {
   @singleton
   Future<Aptabase> provideAptabase() async {
     await Aptabase.init(
-        "A-SH-9186809739",
+        "A-SH-6015564984",
         const InitOptions(
           host: "https://aptabase.teslaandroid.com",
         ));
