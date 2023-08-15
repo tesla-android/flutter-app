@@ -6,8 +6,8 @@ class GpsEstimator {
   }
 
   estimate(source) {
-    const latitude = source.coords.latitude;
-    const longitude = source.coords.longitude;
+    const latitude = source.latitude;
+    const longitude = source.longitude;
     const updateTime = source.timestamp
 
     // Lat and Lon are in degrees, so first go to radians

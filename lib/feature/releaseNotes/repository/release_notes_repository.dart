@@ -6,6 +6,80 @@ import 'package:tesla_android/feature/releaseNotes/model/version.dart';
 @injectable
 class ReleaseNotesRepository {
   static const ReleaseNotes _releaseNotes = ReleaseNotes(versions: [
+    Version(versionName: "2023.32.1", changelogItems: [
+      ChangelogItem(
+          title: "Virtual Display",
+          shortDescription: "Performance and Usability Improvements",
+          descriptionMarkdown:
+          "The virtual display can now adjust to the size of your browser window, enhancing the full-screen mode experience. This feature is disabled by default but can be enabled in the Tesla Android Settings. Be aware that frequently resizing the window on your PC/Mac may cause instability.\n\n"
+              "Tesla Android now offers resolution presets. You can choose from several settings ranging from 480p to 832p, which can boost performance on MCU2-equipped vehicles."
+      ),
+      ChangelogItem(
+          title: "GPS Support",
+          shortDescription: "Usability Improvements",
+          descriptionMarkdown:
+          "Version 2023.32.1 utilizes vehicle location data to emulate GPS hardware in the Android OS. Apps like Waze or Google Maps are now supported, making CarPlay/Android Auto non-essential for navigation. Occasionally, the car's browser may close when GPS is enabled, an issue not strictly browser-related and it occurs in the Tesla OS. GPS can be turned off by revoking permission in the address bar."
+      ),
+      ChangelogItem(
+          title: "Browser Audio",
+          shortDescription: "Stability Improvements",
+          descriptionMarkdown:
+          "This version introduces multiple enhancements to browser audio, resulting in better reliability."
+      ),
+      ChangelogItem(
+          title: "Wi-Fi Hotspot",
+          shortDescription: "Performance Improvements",
+          descriptionMarkdown:
+          "Tesla Android now operates with AC Wi-Fi in 5GHz mode, changing the channel to prevent interference from CarPlay dongles. 5GHz is the default mode for new users."
+      ),
+      ChangelogItem(
+          title: "Virtual Touchscreen",
+          shortDescription: "Usability Improvements",
+          descriptionMarkdown:
+          "The touchscreen's input accuracy has seen significant improvement. Its input surface dynamically adjusts to match the display size, eliminating client-side scaling."
+      ),
+      ChangelogItem(
+          title: "SSL Support",
+          shortDescription: "Security Improvements",
+          descriptionMarkdown:
+          "Tesla Android services are now channeled through a reverse-http proxy set up by the web server. This modification was necessitated by the GPS API's secure context requirements. However, users can still opt for the http version to bypass encryption overhead."
+      ),
+      ChangelogItem(
+          title: "Networking",
+          shortDescription: "Architectural Changes",
+          descriptionMarkdown:
+          "Tesla Android no longer assigns public range IP addresses to make the frontend accessible via the car's browser. Instead, a singular IP (104.248.101.213) redirects to the device with iptables. For accessing the Tesla Android app, please use https://device.teslaandroid.com."
+      ),
+      ChangelogItem(
+          title: "App Launcher",
+          shortDescription: "Usability Improvements",
+          descriptionMarkdown:
+          "Users no longer have to wait for Tesla Android to boot to start the frontend. Simply access https://device.teslaandroid.com, and the launcher will automatically redirect you to the Flutter App once your car connects to the device's network."
+      ),
+      ChangelogItem(
+          title: "Full Screen Mode",
+          shortDescription: "Stability Improvements",
+          descriptionMarkdown:
+          "Transitioning to full screen while parked has been refined and is more reliable."
+      ),
+      ChangelogItem(
+          title: "Flutter App",
+          shortDescription: "Performance and Usability Improvements",
+          descriptionMarkdown:
+          "The Flutter app comes with several updates in this release:\n"
+              "- Framework and dependencies are updated to the latest versions.\n"
+              "- Full implementation of Material 3.\n"
+              "- The splash screen now supports Dark Mode.\n"
+              "- The settings page is now categorized into various sections.\n"
+              "- The Android OS module is streamlined. All functionalities dependent on standard Web APIs are managed within the iframe hosting the virtual display, including GPS, Audio, and WebSocket-based transport."
+      ),
+      ChangelogItem(
+          title: "Android OS",
+          shortDescription: "Stability Improvements",
+          descriptionMarkdown:
+          "The Android base is now updated to the latest version, incorporating the August 2023 security patches. Upstream modifications to kernel/drivers have also been merged."
+      ),
+    ]),
     Version(versionName: "2023.20.1", changelogItems: [
       ChangelogItem(
           title: "Offline mode",
