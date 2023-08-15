@@ -46,6 +46,12 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
         await _repository.updateDisplayConfiguration(config);
         _currentConfig = _currentConfig?.copyWith(isResponsive: isResponsive);
         _emitCurrentConfig();
+        dispatchAnalyticsEvent(
+          eventName: "display_configuration_set_responsiveness",
+          props: {
+            "isResponsive": newSetting,
+          },
+        );
       } catch (exception, stackTrace) {
         logExceptionAndUploadToSentry(
             exception: exception, stackTrace: stackTrace);
@@ -65,6 +71,12 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
         await _repository.updateDisplayConfiguration(config);
         _currentConfig = _currentConfig?.copyWith(lowRes: newPreset);
         _emitCurrentConfig();
+        dispatchAnalyticsEvent(
+          eventName: "display_configuration_set_resolution",
+          props: {
+            "newPreset": newPreset.name(),
+          },
+        );
       } catch (exception, stackTrace) {
         logExceptionAndUploadToSentry(
             exception: exception, stackTrace: stackTrace);
@@ -84,6 +96,12 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
         await _repository.updateDisplayConfiguration(config);
         _currentConfig = _currentConfig?.copyWith(renderer: newType);
         _emitCurrentConfig();
+        dispatchAnalyticsEvent(
+          eventName: "display_configuration_set_renderer",
+          props: {
+            "newType": newType.name(),
+          },
+        );
       } catch (exception, stackTrace) {
         logExceptionAndUploadToSentry(
             exception: exception, stackTrace: stackTrace);

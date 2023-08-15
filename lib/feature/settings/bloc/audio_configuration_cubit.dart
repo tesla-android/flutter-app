@@ -5,10 +5,12 @@ import 'package:tesla_android/feature/settings/bloc/audio_configuration_state.da
 import 'package:tesla_android/feature/settings/repository/system_configuration_repository.dart';
 
 @injectable
-class AudioConfigurationCubit extends Cubit<AudioConfigurationState> with Logger {
+class AudioConfigurationCubit extends Cubit<AudioConfigurationState>
+    with Logger {
   final SystemConfigurationRepository _repository;
 
-  AudioConfigurationCubit(this._repository) : super(AudioConfigurationStateInitial());
+  AudioConfigurationCubit(this._repository)
+      : super(AudioConfigurationStateInitial());
 
   void fetchConfiguration() async {
     if (!isClosed) emit(AudioConfigurationStateLoading());
@@ -16,9 +18,8 @@ class AudioConfigurationCubit extends Cubit<AudioConfigurationState> with Logger
       final configuration = await _repository.getConfiguration();
       emit(
         AudioConfigurationStateSettingsFetched(
-          isEnabled: configuration.browserAudioIsEnabled == 1,
-          volume: configuration.browserAudioVolume
-        ),
+            isEnabled: configuration.browserAudioIsEnabled == 1,
+            volume: configuration.browserAudioVolume),
       );
     } catch (exception, stacktrace) {
       logException(
@@ -41,9 +42,13 @@ class AudioConfigurationCubit extends Cubit<AudioConfigurationState> with Logger
       if (!isClosed) {
         emit(
           AudioConfigurationStateSettingsFetched(
-              isEnabled: true,
-              volume: newVolume
-          ),
+              isEnabled: true, volume: newVolume),
+        );
+        dispatchAnalyticsEvent(
+          eventName: "audio_configuration_volume",
+          props: {
+            "volume": newVolume,
+          },
         );
       }
     } catch (exception, stackTrace) {
@@ -59,11 +64,15 @@ class AudioConfigurationCubit extends Cubit<AudioConfigurationState> with Logger
       await _repository.setBrowserAudioState(isEnabled ? 1 : 0);
       await _repository.setBrowserAudioVolume(100);
       if (!isClosed) {
+        dispatchAnalyticsEvent(
+          eventName: "audio_configuration_state",
+          props: {
+            "isEnabled": isEnabled,
+          },
+        );
         emit(
           AudioConfigurationStateSettingsFetched(
-              isEnabled: isEnabled,
-              volume: 100
-          ),
+              isEnabled: isEnabled, volume: 100),
         );
       }
     } catch (exception, stackTrace) {

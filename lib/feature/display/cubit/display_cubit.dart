@@ -10,7 +10,6 @@ import 'package:tesla_android/common/network/base_websocket_transport.dart';
 import 'package:tesla_android/common/utils/logger.dart';
 import 'package:tesla_android/feature/display/cubit/display_state.dart';
 import 'package:tesla_android/feature/display/model/remote_display_state.dart';
-import 'package:tesla_android/feature/display/model/remote_display_state.dart';
 import 'package:tesla_android/feature/display/repository/display_repository.dart';
 
 @injectable

@@ -56,7 +56,10 @@ extension GetItInjectableX on _i1.GetIt {
     );
     final appModule = _$AppModule();
     final networkModule = _$NetworkModule();
-    gh.singletonAsync<_i3.Aptabase>(() => appModule.provideAptabase());
+    await gh.singletonAsync<_i3.Aptabase>(
+      () => appModule.provideAptabase(),
+      preResolve: true,
+    );
     gh.singleton<_i4.Dio>(networkModule.dio);
     gh.singleton<_i5.Flavor>(appModule.provideFlavor);
     gh.lazySingleton<_i6.GlobalKey<_i6.NavigatorState>>(

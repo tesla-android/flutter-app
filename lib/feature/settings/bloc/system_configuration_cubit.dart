@@ -7,7 +7,8 @@ import 'package:tesla_android/feature/settings/model/softap_band_type.dart';
 import 'package:tesla_android/feature/settings/repository/system_configuration_repository.dart';
 
 @injectable
-class SystemConfigurationCubit extends Cubit<SystemConfigurationState> with Logger {
+class SystemConfigurationCubit extends Cubit<SystemConfigurationState>
+    with Logger {
   final SystemConfigurationRepository _repository;
   final GlobalKey<NavigatorState> _navigatorState;
 
@@ -21,7 +22,8 @@ class SystemConfigurationCubit extends Cubit<SystemConfigurationState> with Logg
       emit(SystemConfigurationStateSettingsFetched(
           currentConfiguration: configuration));
     } catch (exception, stackTrace) {
-      logExceptionAndUploadToSentry(exception: exception, stackTrace: stackTrace);
+      logExceptionAndUploadToSentry(
+          exception: exception, stackTrace: stackTrace);
       if (!isClosed) emit(SystemConfigurationStateSettingsFetchingError());
     }
   }
@@ -30,20 +32,20 @@ class SystemConfigurationCubit extends Cubit<SystemConfigurationState> with Logg
     if (state is SystemConfigurationStateSettingsModified) {
       if (!isClosed) {
         emit((state as SystemConfigurationStateSettingsModified)
-          .copyWith(newBandType: newBand));
+            .copyWith(newBandType: newBand));
       }
     }
     if (state is SystemConfigurationStateSettingsFetched) {
       if (!isClosed) {
         emit(
-        SystemConfigurationStateSettingsModified.fromCurrentConfiguration(
-          currentConfiguration:
-              (state as SystemConfigurationStateSettingsFetched)
-                  .currentConfiguration,
-          newBandType: newBand,
-          isSoftApEnabled: true,
-        ),
-      );
+          SystemConfigurationStateSettingsModified.fromCurrentConfiguration(
+            currentConfiguration:
+                (state as SystemConfigurationStateSettingsFetched)
+                    .currentConfiguration,
+            newBandType: newBand,
+            isSoftApEnabled: true,
+          ),
+        );
       }
     }
     showConfigurationChangedBanner();
@@ -53,7 +55,7 @@ class SystemConfigurationCubit extends Cubit<SystemConfigurationState> with Logg
     if (state is SystemConfigurationStateSettingsModified) {
       if (!isClosed) {
         emit((state as SystemConfigurationStateSettingsModified)
-          .copyWith(isSoftApEnabled: isEnabled));
+            .copyWith(isSoftApEnabled: isEnabled));
       }
     }
     if (state is SystemConfigurationStateSettingsFetched) {
@@ -62,12 +64,12 @@ class SystemConfigurationCubit extends Cubit<SystemConfigurationState> with Logg
       final band = configuration.currentSoftApBandType;
       if (!isClosed) {
         emit(
-        SystemConfigurationStateSettingsModified.fromCurrentConfiguration(
-          currentConfiguration: configuration,
-          newBandType: band,
-          isSoftApEnabled: isEnabled,
-        ),
-      );
+          SystemConfigurationStateSettingsModified.fromCurrentConfiguration(
+            currentConfiguration: configuration,
+            newBandType: band,
+            isSoftApEnabled: isEnabled,
+          ),
+        );
       }
     }
     showConfigurationChangedBanner();
@@ -77,7 +79,7 @@ class SystemConfigurationCubit extends Cubit<SystemConfigurationState> with Logg
     if (state is SystemConfigurationStateSettingsModified) {
       if (!isClosed) {
         emit((state as SystemConfigurationStateSettingsModified)
-          .copyWith(isOfflineModeEnabled: isEnabled));
+            .copyWith(isOfflineModeEnabled: isEnabled));
       }
     }
     if (state is SystemConfigurationStateSettingsFetched) {
@@ -85,11 +87,11 @@ class SystemConfigurationCubit extends Cubit<SystemConfigurationState> with Logg
           .currentConfiguration;
       if (!isClosed) {
         emit(
-        SystemConfigurationStateSettingsModified.fromCurrentConfiguration(
-          currentConfiguration: configuration,
-          isOfflineModeEnabled: isEnabled,
-        ),
-      );
+          SystemConfigurationStateSettingsModified.fromCurrentConfiguration(
+            currentConfiguration: configuration,
+            isOfflineModeEnabled: isEnabled,
+          ),
+        );
       }
     }
     showConfigurationChangedBanner();
@@ -99,7 +101,7 @@ class SystemConfigurationCubit extends Cubit<SystemConfigurationState> with Logg
     if (state is SystemConfigurationStateSettingsModified) {
       if (!isClosed) {
         emit((state as SystemConfigurationStateSettingsModified)
-          .copyWith(isOfflineModeTelemetryEnabled: isEnabled));
+            .copyWith(isOfflineModeTelemetryEnabled: isEnabled));
       }
     }
     if (state is SystemConfigurationStateSettingsFetched) {
@@ -107,11 +109,11 @@ class SystemConfigurationCubit extends Cubit<SystemConfigurationState> with Logg
           .currentConfiguration;
       if (!isClosed) {
         emit(
-        SystemConfigurationStateSettingsModified.fromCurrentConfiguration(
-          currentConfiguration: configuration,
-          isOfflineModeTelemetryEnabled: isEnabled,
-        ),
-      );
+          SystemConfigurationStateSettingsModified.fromCurrentConfiguration(
+            currentConfiguration: configuration,
+            isOfflineModeTelemetryEnabled: isEnabled,
+          ),
+        );
       }
     }
     showConfigurationChangedBanner();
@@ -121,7 +123,7 @@ class SystemConfigurationCubit extends Cubit<SystemConfigurationState> with Logg
     if (state is SystemConfigurationStateSettingsModified) {
       if (!isClosed) {
         emit((state as SystemConfigurationStateSettingsModified)
-          .copyWith(isOfflineModeTeslaFirmwareDownloadsEnabled: isEnabled));
+            .copyWith(isOfflineModeTeslaFirmwareDownloadsEnabled: isEnabled));
       }
     }
     if (state is SystemConfigurationStateSettingsFetched) {
@@ -129,11 +131,11 @@ class SystemConfigurationCubit extends Cubit<SystemConfigurationState> with Logg
           .currentConfiguration;
       if (!isClosed) {
         emit(
-        SystemConfigurationStateSettingsModified.fromCurrentConfiguration(
-          currentConfiguration: configuration,
-          isOfflineModeTeslaFirmwareDownloadsEnabled: isEnabled,
-        ),
-      );
+          SystemConfigurationStateSettingsModified.fromCurrentConfiguration(
+            currentConfiguration: configuration,
+            isOfflineModeTeslaFirmwareDownloadsEnabled: isEnabled,
+          ),
+        );
       }
     }
     showConfigurationChangedBanner();
@@ -178,9 +180,24 @@ class SystemConfigurationCubit extends Cubit<SystemConfigurationState> with Logg
             isOfflineModeTelemetryEnabledFlag ? 1 : 0);
         await _repository.setOfflineModeTeslaFirmwareDownloads(
             isOfflineModeTeslaFirmwareDownloadsEnabledFlag ? 1 : 0);
+        dispatchAnalyticsEvent(
+          eventName: "system_configuration_apply",
+          props: {
+            "setSoftApBand": newBand.band,
+            "softApChannelWidth": newBand.channelWidth,
+            "softApChannel": newBand.channel,
+            "softApState": isEnabledFlag,
+            "offlineModeState": isOfflineModeEnabledFlag,
+            "offlineModeTelemetryState": isOfflineModeTelemetryEnabledFlag,
+            "offlineModeTeslaFirmwareDownloads":
+                isOfflineModeTeslaFirmwareDownloadsEnabledFlag,
+          },
+        );
       } catch (exception, stackTrace) {
-        logExceptionAndUploadToSentry(exception: exception, stackTrace: stackTrace);
-        if (!isClosed) emit(SystemConfigurationStateSettingsSavingFailedError());
+        logExceptionAndUploadToSentry(
+            exception: exception, stackTrace: stackTrace);
+        if (!isClosed)
+          emit(SystemConfigurationStateSettingsSavingFailedError());
       }
     }
   }

@@ -7,6 +7,7 @@ import 'package:flavor/flavor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tesla_android/common/di/ta_locator.dart';
+import 'package:tesla_android/common/utils/logger.dart';
 import 'package:tesla_android/feature/display/cubit/display_cubit.dart';
 import 'package:tesla_android/feature/display/cubit/display_state.dart';
 import 'package:tesla_android/feature/display/model/remote_display_state.dart';
@@ -22,7 +23,7 @@ class DisplayView extends StatefulWidget {
   State<DisplayView> createState() => _IframeViewState();
 }
 
-class _IframeViewState extends State<DisplayView> {
+class _IframeViewState extends State<DisplayView> with Logger {
   final IFrameElement _iframeElement = IFrameElement();
 
   static const String _src = "/android.html";
@@ -68,6 +69,11 @@ class _IframeViewState extends State<DisplayView> {
                     "displayWidth": displayState.adjustedSize.width,
                     "displayHeight": displayState.adjustedSize.height,
                   };
+
+                  dispatchAnalyticsEvent(
+                    eventName: "display_started",
+                    props: config,
+                  );
 
                   window.postMessage(jsonEncode(config), '*');
                 });

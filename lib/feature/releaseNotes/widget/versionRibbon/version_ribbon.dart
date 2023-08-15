@@ -5,8 +5,9 @@ import 'package:tesla_android/common/di/ta_locator.dart';
 import 'package:tesla_android/common/navigation/ta_navigator.dart';
 import 'package:tesla_android/common/navigation/ta_page.dart';
 import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
+import 'package:tesla_android/common/utils/logger.dart';
 
-class VersionRibbon extends StatelessWidget {
+class VersionRibbon extends StatelessWidget with Logger {
   const VersionRibbon({Key? key}) : super(key: key);
 
   @override
@@ -16,10 +17,16 @@ class VersionRibbon extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return GestureDetector(
-              onTap: () => TANavigator.pushReplacement(
-                context: context,
-                page: TAPage.about,
-              ),
+              onTap: () {
+                dispatchAnalyticsEvent(
+                  eventName: "version_ribbon_tapped",
+                  props: {},
+                );
+                TANavigator.pushReplacement(
+                  context: context,
+                  page: TAPage.about,
+                );
+              },
               child: Directionality(
                 textDirection: TextDirection.ltr,
                 child: Banner(

@@ -1,8 +1,11 @@
+import 'dart:html';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:tesla_android/common/di/ta_locator.dart';
 import 'package:tesla_android/common/navigation/ta_page_factory.dart';
+import 'package:tesla_android/common/utils/logger.dart';
 
 Future<void> main() async {
   await SentryFlutter.init(
@@ -28,15 +31,21 @@ Future<void> _runMyApp() async {
   );
 }
 
-class TeslaAndroid extends StatelessWidget {
+class TeslaAndroid extends StatelessWidget with Logger {
   TeslaAndroid({Key? key}) : super(key: key);
 
   final TAPageFactory _pageFactory = getIt<TAPageFactory>();
 
   @override
   Widget build(BuildContext context) {
-    MediaQueryData windowData =
-        MediaQueryData.fromView(View.of(context));
+    MediaQueryData windowData = MediaQueryData.fromView(View.of(context));
+
+    dispatchAnalyticsEvent(
+      eventName: "app_launched",
+      props: {
+        "hostname": window.location.hostname,
+      },
+    );
 
     return MediaQuery(
       data: windowData.copyWith(textScaleFactor: 1.5, devicePixelRatio: 1.0),

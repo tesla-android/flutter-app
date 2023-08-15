@@ -42,6 +42,7 @@ abstract class AppModule {
   GlobalKey<NavigatorState> get navigatorKey => GlobalKey<NavigatorState>();
 
   @singleton
+  @preResolve
   Future<Aptabase> provideAptabase() async {
     await Aptabase.init(
         "A-SH-6015564984",
