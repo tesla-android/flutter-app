@@ -17,6 +17,7 @@ class DisplayStateResizeCoolDown extends DisplayState {
   final DateTime timestamp;
   final bool isH264;
   final bool isResponsive;
+  final bool isVariableRefresh;
 
   DisplayStateResizeCoolDown({
     required this.viewSize,
@@ -25,10 +26,12 @@ class DisplayStateResizeCoolDown extends DisplayState {
     required this.rendererType,
     required this.isH264,
     required this.isResponsive,
+    required this.isVariableRefresh,
   }) : timestamp = DateTime.now();
 
   @override
-  List<Object?> get props => [
+  List<Object?> get props =>
+      [
         viewSize,
         adjustedSize,
         timestamp,
@@ -36,6 +39,7 @@ class DisplayStateResizeCoolDown extends DisplayState {
         rendererType,
         isResponsive,
         isH264,
+        isVariableRefresh,
       ];
 }
 
@@ -48,13 +52,13 @@ class DisplayStateNormal extends DisplayState {
   final Size adjustedSize;
   final DisplayRendererType rendererType;
 
-  DisplayStateNormal(
-      {required this.viewSize,
-      required this.adjustedSize,
-      required this.rendererType});
+  DisplayStateNormal({required this.viewSize,
+    required this.adjustedSize,
+    required this.rendererType});
 
   @override
-  List<Object?> get props => [
+  List<Object?> get props =>
+      [
         viewSize,
         adjustedSize,
         rendererType,
