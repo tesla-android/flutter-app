@@ -6,6 +6,26 @@ import 'package:tesla_android/feature/releaseNotes/model/version.dart';
 @injectable
 class ReleaseNotesRepository {
   static const ReleaseNotes _releaseNotes = ReleaseNotes(versions: [
+    Version(versionName: "2023.32.2", changelogItems: [
+      ChangelogItem(
+          title: "Variable Refresh Rate",
+          shortDescription: "Performance improvements",
+          descriptionMarkdown:
+          "Tesla Android can now lower the refresh rate based on what is happening on the Virtual Display. This feature reduces the browser load and bandwidth"
+      ),
+      ChangelogItem(
+          title: "Browser Audio",
+          shortDescription: "Stability improvements",
+          descriptionMarkdown:
+          "The bug that left the audio always on regardless of the configuration is now fixed"
+      ),
+      ChangelogItem(
+          title: "Support for Vodafone K5161h",
+          shortDescription: "Connectivity improvements",
+          descriptionMarkdown:
+          "Vodafone K5161h LTE modem is now supported"
+      ),
+    ]),
     Version(versionName: "2023.32.1", changelogItems: [
       ChangelogItem(
           title: "Virtual Display",
