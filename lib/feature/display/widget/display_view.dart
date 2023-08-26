@@ -62,8 +62,8 @@ class _IframeViewState extends State<DisplayView> with Logger {
                     'gpsWebsocketUrl': flavor.getString("gpsWebSocket"),
                     'touchScreenWebsocketUrl':
                         flavor.getString("touchscreenWebSocket"),
-                    'isAudioEnabled': true,
-                    'audioVolume': 1.0,
+                    'isAudioEnabled': state.isEnabled,
+                    'audioVolume': state.volume / 100,
                     'displayRenderer': widget.type.resourcePath(),
                     'displayBinaryType': widget.type.binaryType(),
                     "displayWidth": displayState.adjustedSize.width,
