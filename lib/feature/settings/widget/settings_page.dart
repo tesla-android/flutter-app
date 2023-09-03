@@ -27,7 +27,7 @@ class _SettingsPageState extends State<SettingsPage> {
       const DisplaySettings(),
       const HotspotSettings(),
       const SoundSettings(),
-      const GpsSettings(),
+      //const GpsSettings(),
     ];
     super.initState();
   }

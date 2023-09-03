@@ -82,13 +82,13 @@
         if (document.readyState === "complete") {
           if (!audioSocket) createAudioSocket(audioWebsocketUrl);
           if (!displaySocket) createDisplaySocket(displayWebsocketUrl, displayRenderer, displayBinaryType);
-          if (!gpsSocket) createGpsSocket(gpsWebsocketUrl);
+          //if (!gpsSocket) createGpsSocket(gpsWebsocketUrl);
           if (!touchScreenSocket) createTouchScreenSocket(touchScreenWebsocketUrl);
         } else {
           document.addEventListener("DOMContentLoaded", function () {
             if (!audioSocket) createAudioSocket(audioWebsocketUrl);
             if (!displaySocket) createDisplaySocket(displayWebsocketUrl, displayRenderer, displayBinaryType);
-            if (!gpsSocket) createGpsSocket(gpsWebsocketUrl);
+            //if (!gpsSocket) createGpsSocket(gpsWebsocketUrl);
             if (!touchScreenSocket) createTouchScreenSocket(touchScreenWebsocketUrl);
           });
         }
@@ -278,7 +278,7 @@
     }
 
     // Start the permission check and potentially start location updates
-    checkPermissionAndStartUpdates();
+    //checkPermissionAndStartUpdates();
 
   </script>
 </body>
