@@ -54,29 +54,31 @@ class _IframeViewState extends State<DisplayView> with Logger {
           return HtmlElementView(
             viewType: _src,
             onPlatformViewCreated: (_) {
-              WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                Future.delayed(const Duration(milliseconds: 350), () {
-                  final Map<String, dynamic> config = {
-                    'audioWebsocketUrl': flavor.getString("audioWebSocket"),
-                    'displayWebsocketUrl': flavor.getString("displayWebSocket"),
-                    'gpsWebsocketUrl': flavor.getString("gpsWebSocket"),
-                    'touchScreenWebsocketUrl':
-                        flavor.getString("touchscreenWebSocket"),
-                    'isAudioEnabled': state.isEnabled,
-                    'audioVolume': state.volume / 100,
-                    'displayRenderer': widget.type.resourcePath(),
-                    'displayBinaryType': widget.type.binaryType(),
-                    "displayWidth": displayState.adjustedSize.width,
-                    "displayHeight": displayState.adjustedSize.height,
-                  };
+              final Map<String, dynamic> config = {
+                'audioWebsocketUrl': flavor.getString("audioWebSocket")!,
+                'displayWebsocketUrl':
+                flavor.getString("displayWebSocket")!,
+                'gpsWebsocketUrl': flavor.getString("gpsWebSocket")!,
+                'touchScreenWebsocketUrl':
+                flavor.getString("touchscreenWebSocket")!,
+                'isAudioEnabled': state.isEnabled.toString(),
+                'audioVolume': (state.volume / 100).toString(),
+                'displayRenderer': widget.type.resourcePath(),
+                'displayBinaryType': widget.type.binaryType(),
+                "displayWidth": displayState.adjustedSize.width.toString(),
+                "displayHeight":
+                displayState.adjustedSize.height.toString(),
+              };
 
-                  dispatchAnalyticsEvent(
-                    eventName: "display_started",
-                    props: config,
-                  );
-
+              dispatchAnalyticsEvent(
+                eventName: "display_started",
+                props: config,
+              );
+              window.addEventListener('message', (event) {
+                var data = (event as MessageEvent).data;
+                if (data is String && data == "iframeReady") {
                   window.postMessage(jsonEncode(config), '*');
-                });
+                }
               });
             },
           );

@@ -10,6 +10,7 @@ import 'package:tesla_android/feature/home/home_page.dart';
 import 'package:tesla_android/feature/releaseNotes/cubit/release_notes_cubit.dart';
 import 'package:tesla_android/feature/releaseNotes/widget/release_notes_page.dart';
 import 'package:tesla_android/feature/settings/bloc/audio_configuration_cubit.dart';
+import 'package:tesla_android/feature/settings/bloc/device_info_cubit.dart';
 import 'package:tesla_android/feature/settings/bloc/display_configuration_cubit.dart';
 import 'package:tesla_android/feature/settings/bloc/system_configuration_cubit.dart';
 import 'package:tesla_android/feature/settings/widget/settings_page.dart';
@@ -67,6 +68,10 @@ class TAPageFactory {
               BlocProvider(
                 create: (_) =>
                     getIt<SystemConfigurationCubit>()..fetchConfiguration(),
+              ),
+              BlocProvider(
+                create: (_) =>
+                getIt<DeviceInfoCubit>()..fetchConfiguration(),
               ),
             ],
             child: const SettingsPage(),

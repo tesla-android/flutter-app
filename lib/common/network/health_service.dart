@@ -2,6 +2,7 @@ import 'package:dio/dio.dart' hide Headers;
 import 'package:flavor/flavor.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
+import 'package:tesla_android/feature/connectivityCheck/model/health_state.dart';
 
 part 'health_service.g.dart';
 
@@ -19,6 +20,6 @@ abstract class HealthService {
       );
 
   @GET("/health")
-  @DioResponseType(ResponseType.plain)
-  Future getHealthCheck();
+  @DioResponseType(ResponseType.json)
+  Future<HealthState> getHealthCheck();
 }
