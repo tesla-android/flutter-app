@@ -3,6 +3,7 @@ import 'package:tesla_android/common/navigation/ta_page.dart';
 import 'package:tesla_android/common/ui/components/ta_app_bar.dart';
 import 'package:tesla_android/common/ui/components/ta_bottom_navigation_bar.dart';
 import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
+import 'package:tesla_android/feature/settings/widget/device_settings.dart';
 import 'package:tesla_android/feature/settings/widget/display_settings.dart';
 import 'package:tesla_android/feature/settings/widget/gps_settings.dart';
 import 'package:tesla_android/feature/settings/widget/hotspot_settings.dart';
@@ -28,6 +29,7 @@ class _SettingsPageState extends State<SettingsPage> {
       const HotspotSettings(),
       const SoundSettings(),
       const GpsSettings(),
+      const DeviceSettings(),
     ];
     super.initState();
   }

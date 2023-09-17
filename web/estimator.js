@@ -3,6 +3,7 @@ class GpsEstimator {
     this._lastLatitude = 0;
     this._lastLongitude = 0;
     this._lastTime = 0;
+    this._lastHeading = 0;
   }
 
   estimate(source) {
@@ -35,11 +36,17 @@ class GpsEstimator {
     const flatDistance =
       2000 * earthRadius * Math.asin(Math.sqrt(dLat * dLat + Math.cos(lat1) * Math.cos(lat2) * dLon * dLon));
 
-    const speed = flatDistance / (updateTime - this._lastTime);
+    // Corner/Bearing compensation	
+    const change = Math.abs(this._lastHeading - heading);
+    const theta = this._degToRad(change);
+    const distance = flatDistance / Math.cos(theta);
+
+    const speed = distance / (updateTime - this._lastTime);
 
     this._lastLatitude = latitude;
     this._lastLongitude = longitude;
     this._lastTime = updateTime;
+    this._lastHeading = heading; 
 
     return {
       speed: speed,

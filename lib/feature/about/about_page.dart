@@ -36,8 +36,11 @@ class AboutPage extends StatelessWidget {
               ),
               FutureBuilder<PackageInfo>(future: PackageInfo.fromPlatform(), builder: (_, snapshot){
                 return Text(snapshot.data?.version ?? '');
-
-              })
+              }),
+              const SizedBox(
+                height: TADimens.PADDING_XXL_VALUE,
+              ),
+              const Text("Tesla Android Compute Module 4 bundles are now available.\nGet yours today on https://teslaandroid.com", style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
             ],
           ),
         ),

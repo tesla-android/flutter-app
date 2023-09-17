@@ -60,6 +60,9 @@
     window.parent.addEventListener(
       "message",
       (event) => {
+        if (event.data === "iframeReady") {
+          return;
+        }
         if (event.data.includes("touchScreenCommand")) {
           if (typeof touchScreenSocket != "undefined") {
             var command = event.data.replace('touchScreenCommand:', '');
@@ -246,9 +249,7 @@
     }
 
     function updateHandler() {
-      // We want to timeout the call just before the next one appears, so they don't stack up.. if it arrives
-      // that late it's useless anyway
-      navigator.geolocation.getCurrentPosition(updateLocation, logError, { enableHighAccuracy: true, maximumAge: 0, timeout: 900 });
+      navigator.geolocation.getCurrentPosition(updateLocation, logError);
     }
 
     function startLocationUpdates() {
@@ -266,20 +267,22 @@
         longitude: String(pos.longitude),
         speed: String(estimate.speed),
         bearing: String(estimate.heading),
-        vertical_accuracy: String(pos.accuracy),
+        vertical_accuracy: String(5/*pos.accuracy*/),
         timestamp: String(pos.timestamp)
       });
-
+	  
       return locationData;
     }
 
     function log(string) {
-      //  console.log(string);
+      //console.log(string);
     }
 
-    // Start the permission check and potentially start location updates
-    checkPermissionAndStartUpdates();
-
+    window.addEventListener('load', function () {
+      // Start the permission check and potentially start location updates
+      checkPermissionAndStartUpdates();
+      window.parent.postMessage("iframeReady", "*");
+    })
   </script>
 </body>
 
