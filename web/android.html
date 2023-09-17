@@ -71,10 +71,21 @@
           return;
         }
         const config = JSON.parse(event.data);
+
         audioWebsocketUrl = config.audioWebsocketUrl;
         displayWebsocketUrl = config.displayWebsocketUrl;
         gpsWebsocketUrl = config.gpsWebsocketUrl;
         touchScreenWebsocketUrl = config.touchScreenWebsocketUrl;
+
+        //check if isAudioEnabled is a boolean
+        if (typeof config.isAudioEnabled !== "boolean") {
+          if (config.isAudioEnabled === "false") {
+            config.isAudioEnabled = false;
+          } else {
+            config.isAudioEnabled = true;
+          }
+        }
+
         isAudioEnabled = config.isAudioEnabled;
         audioVolume = config.audioVolume;
         displayRenderer = config.displayRenderer;
@@ -101,6 +112,7 @@
 
     function createAudioSocket(url) {
       if (!isAudioEnabled) {
+        console.log("Audio: Disabled");
         return;
       }
       audioSocket = new ReconnectingWebSocket(url, null, { binaryType: 'arraybuffer' });
@@ -270,7 +282,7 @@
         vertical_accuracy: String(5/*pos.accuracy*/),
         timestamp: String(pos.timestamp)
       });
-	  
+
       return locationData;
     }
 
