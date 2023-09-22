@@ -4,21 +4,22 @@ import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:tesla_android/feature/settings/model/device_info.dart';
 
-part 'health_service.g.dart';
+part 'device_info_service.g.dart';
 
 @injectable
 @RestApi()
-abstract class HealthService {
+abstract class DeviceInfoService {
   @factoryMethod
-  factory HealthService(
+  factory DeviceInfoService(
       Dio dio,
       Flavor flavor,
       ) =>
-      _HealthService(
+      _DeviceInfoService(
         dio,
         baseUrl: flavor.getString("configurationApiBaseUrl"),
       );
 
-  @GET("/health")
-  Future getHealthCheck();
+  @GET("/deviceInfo")
+  @DioResponseType(ResponseType.json)
+  Future<DeviceInfo> getDeviceInfo();
 }

@@ -18,7 +18,7 @@ class DeviceInfoCubit extends Cubit<DeviceInfoState>
       final healthState = await _repository.getDeviceInfo();
       emit(
         DeviceInfoStateLoaded(
-            healthState: healthState),
+            deviceInfo: healthState),
       );
     } catch (exception, stacktrace) {
       logException(
