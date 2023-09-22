@@ -16,5 +16,5 @@ In order to build this project for debugging make sure to disable cors in Chrome
 
 #### Please consider supporting the project: 
 
-[Donations](https://teslaandroid.eu/donations)
+[Donations](https://teslaandroid.com/donations)
 
