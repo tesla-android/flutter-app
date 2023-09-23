@@ -1,6 +1,4 @@
-import 'dart:html';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:tesla_android/common/utils/logger.dart';
@@ -70,7 +68,8 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
       if (!isClosed) emit(DisplayConfigurationStateSettingsUpdateInProgress());
       try {
         await _repository.updateDisplayConfiguration(config);
-        _currentConfig = _currentConfig?.copyWith(isVariableRefresh: isVariableRefresh);
+        _currentConfig =
+            _currentConfig?.copyWith(isVariableRefresh: isVariableRefresh);
         _emitCurrentConfig();
         dispatchAnalyticsEvent(
           eventName: "display_configuration_set_variable_refresh",
@@ -138,6 +137,33 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
     }
   }
 
+  void setVulkanState(bool isEnabled) async {
+    var config = _currentConfig;
+    if (config != null) {
+      config = config.updateVulkanState(isEnabled: isEnabled);
+      if (!isClosed) emit(DisplayConfigurationStateSettingsUpdateInProgress());
+      try {
+        await _repository.updateVulkanState(isEnabled);
+        _currentConfig = _currentConfig?.copyWith(
+          useVulkan: isEnabled ? "true" : "false",
+        );
+        _emitCurrentConfig();
+        dispatchAnalyticsEvent(
+          eventName: "display_configuration_set_vulkan_state",
+          props: {
+            "isEnabled": _currentConfig?.useVulkan,
+          },
+        );
+      } catch (exception, stackTrace) {
+        logExceptionAndUploadToSentry(
+            exception: exception, stackTrace: stackTrace);
+        if (!isClosed) emit(DisplayConfigurationStateError());
+      }
+    } else {
+      log("_currentConfig not available");
+    }
+  }
+
   void _emitCurrentConfig() {
     if (!isClosed) {
       emit(DisplayConfigurationStateSettingsFetched(
@@ -145,6 +171,7 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
         renderer: _currentConfig!.renderer,
         isResponsive: _currentConfig!.isResponsive == 1,
         isVariableRefresh: _currentConfig!.isVariableRefresh == 1,
+        useVulkan: _currentConfig!.useVulkan == "true",
       ));
     }
   }
