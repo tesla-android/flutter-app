@@ -73,7 +73,7 @@ class DeviceSettings extends SettingsSection {
             const Padding(
               padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
               child: Text(
-                  'The LTE modem is considered detected when it is properly connected, and the gateway is reachable by Android. The IP address 192.168.8.1 is used for this check (Default for E3372).'),
+                  'The LTE modem is considered detected when it is properly connected, and the gateway is reachable by Android. IP address 192.168.(0/8).1 is used for this check (Default for E3372 and Alcatel modems).'),
             ),
           ],
         );
