@@ -76,6 +76,17 @@
       } else {
         data = new Float32Array(data.buffer);
       }
+
+      //handle too many samples building up in the buffer
+      //This will allow half a second of audio to be buffered at any time.
+      const maxSamples = this.audioCtx.sampleRate / 2;
+      const totalSamples = this.samples.length + data.length;
+
+      if (totalSamples > maxSamples) {
+        const samplesToDiscard = totalSamples - maxSamples;
+        this.samples = this.samples.subarray(samplesToDiscard);
+      }
+
       // the code is starting to copy data from a buffer. It then creates a new Float32Array to store the copied data.
       const tmp = new Float32Array(this.samples.length + data.length);
 
@@ -83,6 +94,9 @@
       // Copy the new data passed in, starting from the historical buffer position
       tmp.set(data, this.samples.length);
       // code is assigning a new buffer of data to the samples variable. The interval timer will then play the data from the samples variable.
+
+
+
       this.samples = tmp;
     }
 
