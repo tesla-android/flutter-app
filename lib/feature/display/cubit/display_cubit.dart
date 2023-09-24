@@ -133,6 +133,7 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
           isResponsive: currentState.isResponsive ? 1 : 0,
           isH264: isH264 ? 1 : 0,
           isVariableRefresh: isVariableRefresh ? 1 : 0,
+          useVulkan: "-",
         ));
         await Future.delayed(_coolDownDuration, () {
           if (isClosed) return;

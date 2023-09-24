@@ -1,4 +1,4 @@
-import 'package:tesla_android/feature/connectivityCheck/model/health_state.dart';
+import 'package:tesla_android/feature/settings/model/device_info.dart';
 
 abstract class DeviceInfoState {}
 
@@ -8,10 +8,10 @@ class DeviceInfoStateLoading extends DeviceInfoState {}
 
 class DeviceInfoStateLoaded
     extends DeviceInfoState {
-  final HealthState healthState;
+  final DeviceInfo deviceInfo;
 
   DeviceInfoStateLoaded({
-    required this.healthState,
+    required this.deviceInfo,
   });
 }
 class DeviceInfoStateError extends DeviceInfoState {}

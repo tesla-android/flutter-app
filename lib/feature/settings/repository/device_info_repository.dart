@@ -1,14 +1,14 @@
 import 'package:injectable/injectable.dart';
-import 'package:tesla_android/common/network/health_service.dart';
-import 'package:tesla_android/feature/connectivityCheck/model/health_state.dart';
+import 'package:tesla_android/common/network/device_info_service.dart';
+import 'package:tesla_android/feature/settings/model/device_info.dart';
 
 @injectable
 class DeviceInfoRepository {
-  final HealthService _service;
+  final DeviceInfoService _service;
 
   DeviceInfoRepository(this._service);
 
-  Future<HealthState> getDeviceInfo(){
-    return _service.getHealthCheck();
+  Future<DeviceInfo> getDeviceInfo(){
+    return _service.getDeviceInfo();
   }
 }

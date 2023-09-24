@@ -7,6 +7,53 @@ import 'package:tesla_android/feature/releaseNotes/model/version.dart';
 class ReleaseNotesRepository {
   static const ReleaseNotes _releaseNotes = ReleaseNotes(versions: [
     Version(
+      versionName: "2023.38.1",
+      changelogItems: [
+        ChangelogItem(
+          title: "Vulkan Backend for SKIA/HWUI",
+          shortDescription: "Performance improvements",
+          descriptionMarkdown:
+          "Version 2023.38.1 adds the Vulkan Backend support for the system interface drawing. It is still considered experimental and can be enabled in the settings.",
+        ),
+        ChangelogItem(
+          title: "Local OTA Updates",
+          shortDescription: "Usability improvements",
+          descriptionMarkdown:
+          "You can now install OTA updates from external storage and save your data package. The builds are available on GitHub in the Tesla Android organisation (android-raspberry-pi-ota, android-compute-module-4-ota).",
+        ),
+        ChangelogItem(
+          title: "Offline mode",
+          shortDescription: "Stability improvements",
+          descriptionMarkdown:
+          "Offline mode has been improved in version 2023.38.1 and it will no longer interfere with the Tesla App / vehicle telemetry collection (Teslascope, TeslaFi, TeslaMate etc) when internet is accessible.",
+        ),
+        ChangelogItem(
+          title: "Device Settings",
+          shortDescription: "Usability improvements",
+          descriptionMarkdown:
+          "You can now check if the LTE modem and CarPlay module is properly detected by the system.",
+        ),
+        ChangelogItem(
+          title: "Browser Audio",
+          shortDescription: "Stability improvements",
+          descriptionMarkdown:
+          "Fixed an issue with disabling browser audio in the settings.",
+        ),
+        ChangelogItem(
+          title: "Virtual Display",
+          shortDescription: "Stability improvements",
+          descriptionMarkdown:
+          "Miscellaneous bugfixes aimed at improving display stability.",
+        ),
+        ChangelogItem(
+          title: "Argon I2C fan support",
+          shortDescription: "Usability improvements",
+          descriptionMarkdown:
+          "Argon fans controlled by I2C are now fully supported on builds meant for the Raspberry Pi 4.",
+        ),
+      ],
+    ),
+    Version(
       versionName: "2023.36.1",
       changelogItems: [
         ChangelogItem(
