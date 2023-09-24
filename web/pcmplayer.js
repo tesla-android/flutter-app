@@ -12,14 +12,14 @@
 
     init(option) {
       const defaultOption = {
-        inputCodec: 'Int16', // 传入的数据是采用多少位编码，默认16位
-        channels: 1, // 声道数
-        sampleRate: 8000, // 采样率 单位Hz
-        flushTime: 1000 // 缓存时间 单位 ms
+        inputCodec: 'Int16', // The number of bits used for encoding the input data, default is 16 bits
+        channels: 1, // Number of channels
+        sampleRate: 8000, // Sampling rate in Hz
+        flushTime: 1000 // Cache time in milliseconds
       };
 
-      this.option = Object.assign({}, defaultOption, option); // 实例最终配置参数
-      this.samples = new Float32Array(); // 样本存放区域
+      this.option = Object.assign({}, defaultOption, option); // Final configuration parameters for the instance
+      this.samples = new Float32Array(); // Sample storage area
       this.interval = setInterval(this.flush.bind(this), this.option.flushTime);
 
       this.typedArray = this.getTypedArray();
