@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'health_service.dart';
+part of 'device_info_service.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'health_service.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _HealthService implements HealthService {
-  _HealthService(
+class _DeviceInfoService implements DeviceInfoService {
+  _DeviceInfoService(
     this._dio, {
     this.baseUrl,
   });
@@ -19,28 +19,30 @@ class _HealthService implements HealthService {
   String? baseUrl;
 
   @override
-  Future<dynamic> getHealthCheck() async {
+  Future<DeviceInfo> getDeviceInfo() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<DeviceInfo>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
+      responseType: ResponseType.json,
     )
-        .compose(
-          _dio.options,
-          '/health',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        ))));
-    final value = _result.data;
+            .compose(
+              _dio.options,
+              '/deviceInfo',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = DeviceInfo.fromJson(_result.data!);
     return value;
   }
 

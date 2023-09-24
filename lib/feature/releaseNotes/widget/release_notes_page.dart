@@ -63,7 +63,7 @@ class ReleaseNotesPage extends StatelessWidget {
         SizedBox(
           width: MediaQuery.of(context).size.width * 0.30,
           child: ReleaseNotesVersionList(
-            versions: releaseNotes.versions,
+            versions: releaseNotes.versions.take(3).toList(),
             selectedVersion: selectedVersion,
             selectedChangelogItem: selectedChangelogItem,
           ),
