@@ -32,6 +32,7 @@ class SoundSettings extends SettingsSection {
               icon: Icons.volume_down,
               title: 'Volume',
               trailing: _audioStateSlider(context, cubit, state),
+              dense: false,
             ),
             const Padding(
               padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
@@ -69,14 +70,27 @@ class SoundSettings extends SettingsSection {
   Widget _audioStateSlider(BuildContext context, AudioConfigurationCubit cubit,
       AudioConfigurationState state) {
     if (state is AudioConfigurationStateSettingsFetched) {
-      return Slider(
-        divisions: 10,
-        min: 0,
-        max: 100,
-        value: state.volume.toDouble(),
-        onChanged: (double value) {
-          cubit.setVolume(value.toInt());
-        },
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text(
+            state.volume.toString() + " %",
+            style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: Colors.red.shade900),
+          ),
+          Slider(
+            divisions: 15,
+            min: 0,
+            max: 150,
+            value: state.volume.toDouble(),
+            onChanged: (double value) {
+              cubit.setVolume(value.toInt());
+            },
+            label: state.volume.toString(),
+          ),
+        ],
       );
     } else if (state is AudioConfigurationStateSettingsUpdateInProgress ||
         state is AudioConfigurationStateLoading) {
