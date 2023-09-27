@@ -11,12 +11,12 @@ let audioVolume;
 async function startAudioPlayback() {
 
     console.log('Before AudioContext start');
-    audioContext = new AudioContext({ sampleRate: 96000, channels: 2, latencyHint: 'interactive' });
+    audioContext = new AudioContext({ sampleRate: 48000, channels: 2, latencyHint: 'interactive' });
 
     await audioContext.audioWorklet.addModule('pcmplayer-processor.js');
     console.log("starting audioContext");
 
-    pcmPlayerNode = new AudioWorkletNode(audioContext, 'pcm-player-processor');
+    pcmPlayerNode = new AudioWorkletNode(audioContext, 'pcm-player-processor', { outputChannelCount: [2] });
 
     if (audioVolume != null && audioVolume !== 1) {
         let gainValue = audioVolume;

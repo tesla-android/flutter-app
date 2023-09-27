@@ -41,11 +41,19 @@ class PCMPlayerProcessor extends AudioWorkletProcessor {
 
     process(inputs, outputs, parameters) {
         const output = outputs[0];
-        const bufferSize = output[0].length;
+        const bufferSize = output[0].length * 2;
+        if (this.samples.length < bufferSize) {
+            return true;
+        }
 
+        let theseSamples = this.samples.subarray(0, bufferSize);
+        //split the samples into left and right channels
+        let left = theseSamples.filter((_, i) => i % 2 === 0);
+        let right = theseSamples.filter((_, i) => i % 2 === 1);
 
+        output[0].set(left);
+        output[1].set(right);
 
-        output[0].set(this.samples.subarray(0, bufferSize));
         this.samples = this.samples.subarray(bufferSize);
 
         return true;
