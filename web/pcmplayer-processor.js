@@ -12,7 +12,7 @@ class PCMPlayerProcessor extends AudioWorkletProcessor {
         // getting the formatted buffer.
         const formattedData = this.getFormattedValue(data);
         // truncate data if the buffer is 2x larger than the sampleRate
-        const maxSamples = this.sampleRate / 2;
+        const maxSamples = this.sampleRate * 2;
         const totalSamples = this.samples.length + data.length;
 
         if (totalSamples > maxSamples) {
