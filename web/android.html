@@ -25,8 +25,9 @@
       display: none;
     }
   </style>
-  <script src="pcmplayer.js"></script>
+
   <script src="reconnecting-websocket.js"></script>
+  <script src="audioplayback.js"></script>
   <script src="estimator.js"></script>
 </head>
 
@@ -34,14 +35,14 @@
   <img id="image" />
   <canvas id="canvas"></canvas>
   <script>
-    var audioPlayer;
+
 
     var audioWebsocketUrl;
     var displayWebsocketUrl;
     var gpsWebsocketUrl;
     var touchScreenWebsocketUrl;
 
-    var audioSocket;
+
     var displaySocket;
     var gpsSocket;
     var touchScreenSocket;
@@ -56,6 +57,8 @@
     var displayRendererAdded = false;
     var gpsEstimator;
     var gpsRunning = false;
+
+
 
     window.parent.addEventListener(
       "message",
@@ -110,31 +113,7 @@
       false
     );
 
-    function createAudioSocket(url) {
-      if (!isAudioEnabled) {
-        console.log("Audio: Disabled");
-        return;
-      }
-      audioSocket = new ReconnectingWebSocket(url, null, { binaryType: 'arraybuffer' });
 
-      audioSocket.onopen = () => {
-        log("Audio: Websocket connection established")
-      };
-
-      audioSocket.onclose = () => {
-        log("Audio: Websocket connection closed")
-      };
-
-      audioSocket.onerror = error => {
-        log("Audio: " + error)
-      };
-
-      audioSocket.onmessage = (event) => {
-        if (typeof audioPlayer != "undefined" && event.data instanceof ArrayBuffer) {
-          audioPlayer.feed(event.data);
-        }
-      };
-    }
 
     function createDisplaySocket(url, renderer, binaryType) {
       if (!displayRendererAdded) {
@@ -211,26 +190,13 @@
       };
     }
 
+
     window.parent.addEventListener("click", function (e) {
-      if (!audioPlayer && isAudioEnabled) {
-        audioPlayer = new PCMPlayer({
-          inputCodec: "Float32",
-          channels: 2,
-          sampleRate: 48000,
-          flushTime: 200,
-        });
+
+      if (pcmPlayerNode == null && isAudioEnabled) {
+        startAudioPlayback();
       }
     });
-    function feedPlayer(data) {
-      if (typeof audioPlayer != "undefined" && isAudioEnabled) {
-        audioPlayer.feed(data);
-      }
-    }
-    function setPlayerVolume(volume) {
-      if (typeof audioPlayer != "undefined" && isAudioEnabled) {
-        audioPlayer.volume(volume);
-      }
-    }
 
     async function checkPermissionAndStartUpdates() {
       const permissionStatus = await navigator.permissions.query({ name: 'geolocation' });
