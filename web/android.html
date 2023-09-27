@@ -47,8 +47,7 @@
     var gpsSocket;
     var touchScreenSocket;
 
-    var isAudioEnabled;
-    var audioVolume;
+
 
     var displayRenderer;
     var displayBinaryType;
@@ -80,17 +79,11 @@
         gpsWebsocketUrl = config.gpsWebsocketUrl;
         touchScreenWebsocketUrl = config.touchScreenWebsocketUrl;
 
-        //check if isAudioEnabled is a boolean
-        if (typeof config.isAudioEnabled !== "boolean") {
-          if (config.isAudioEnabled === "false") {
-            config.isAudioEnabled = false;
-          } else {
-            config.isAudioEnabled = true;
-          }
-        }
 
-        isAudioEnabled = config.isAudioEnabled;
-        audioVolume = config.audioVolume;
+
+        setAudioEnabled(config.isAudioEnabled);
+        setAudioVolume(config.audioVolume);
+
         displayRenderer = config.displayRenderer;
         displayBinaryType = config.displayBinaryType;
         displayWidth = config.displayWidth;

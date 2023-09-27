@@ -7,13 +7,10 @@ class PCMPlayerProcessor extends AudioWorkletProcessor {
 
     handleMessage(event) {
         const data = event.data;
-        // console.log(data.byteLength);
+
 
         // getting the formatted buffer.
         const formattedData = this.getFormattedValue(data);
-
-        // handle too many samples building up in the buffer
-        // console.log("tmp.length: " + formattedData.length)
 
         // the code is starting to copy data from a buffer. It then creates a new Float32Array to store the copied data.
         const tmp = new Float32Array(this.samples.length + formattedData.length);
@@ -38,9 +35,7 @@ class PCMPlayerProcessor extends AudioWorkletProcessor {
         const output = outputs[0];
         const bufferSize = output[0].length;
 
-        if (this.samples.length < bufferSize) {
-            return false;
-        }
+
 
         output[0].set(this.samples.subarray(0, bufferSize));
         this.samples = this.samples.subarray(bufferSize);
