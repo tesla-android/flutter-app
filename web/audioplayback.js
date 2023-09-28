@@ -28,7 +28,7 @@ async function startAudioPlayback() {
         pcmPlayerNode.connect(audioContext.destination);
     }
 
-
+    if (!audioSocket) createAudioSocket(audioWebsocketUrl);
 
     audioContext.resume();
     console.log('after AudioContext resume');
@@ -36,7 +36,7 @@ async function startAudioPlayback() {
 
 function setAudioVolume(volume) {
     console.log("Audio: Volume set to " + volume);
-    audioVolume = volume;
+    audioVolume = volume * 1.0;
 }
 
 function setAudioEnabled(enabled) {
@@ -75,9 +75,7 @@ function createAudioSocket(url) {
         };
 
         audioSocket.onmessage = (event) => {
-            if (pcmPlayerNode != null && event.data instanceof ArrayBuffer) {
-                pcmPlayerNode.port.postMessage(event.data);
-            }
+            pcmPlayerNode.port.postMessage(event.data);
         };
     }
 }

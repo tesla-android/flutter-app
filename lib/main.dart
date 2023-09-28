@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:tesla_android/common/di/ta_locator.dart';
 import 'package:tesla_android/common/navigation/ta_page_factory.dart';
+import 'package:tesla_android/common/ui/constants/ta_colors.dart';
 import 'package:tesla_android/common/utils/logger.dart';
 
 Future<void> main() async {
@@ -56,12 +57,12 @@ class TeslaAndroid extends StatelessWidget with Logger {
         theme: ThemeData(
             brightness: Brightness.light,
             useMaterial3: true,
-            colorSchemeSeed: Colors.red.shade900,
+            colorSchemeSeed: TAColors.SETTING_PRIMARY_COLOR,
             fontFamily: 'Roboto'),
         darkTheme: ThemeData(
             brightness: Brightness.dark,
             useMaterial3: true,
-            colorSchemeSeed: Colors.red.shade900,
+            colorSchemeSeed: TAColors.SETTING_PRIMARY_COLOR,
             fontFamily: 'Roboto'),
         themeMode: ThemeMode.system,
         initialRoute: _pageFactory.initialRoute,

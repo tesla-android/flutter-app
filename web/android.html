@@ -90,13 +90,13 @@
         displayHeight = config.displayHeight;
 
         if (document.readyState === "complete") {
-          if (!audioSocket) createAudioSocket(audioWebsocketUrl);
+
           if (!displaySocket) createDisplaySocket(displayWebsocketUrl, displayRenderer, displayBinaryType);
           if (!gpsSocket) createGpsSocket(gpsWebsocketUrl);
           if (!touchScreenSocket) createTouchScreenSocket(touchScreenWebsocketUrl);
         } else {
           document.addEventListener("DOMContentLoaded", function () {
-            if (!audioSocket) createAudioSocket(audioWebsocketUrl);
+
             if (!displaySocket) createDisplaySocket(displayWebsocketUrl, displayRenderer, displayBinaryType);
             if (!gpsSocket) createGpsSocket(gpsWebsocketUrl);
             if (!touchScreenSocket) createTouchScreenSocket(touchScreenWebsocketUrl);

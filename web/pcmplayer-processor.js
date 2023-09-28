@@ -6,6 +6,7 @@ class PCMPlayerProcessor extends AudioWorkletProcessor {
     }
 
     handleMessage(event) {
+
         const data = event.data;
 
 
@@ -29,6 +30,7 @@ class PCMPlayerProcessor extends AudioWorkletProcessor {
         // code is assigning a new buffer of data to the samples variable. The interval timer will then play the data from the samples variable.
 
         this.samples = tmp;
+
     }
 
     getFormattedValue(data) {

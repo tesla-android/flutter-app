@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tesla_android/common/ui/constants/ta_colors.dart';
 import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
 import 'package:tesla_android/feature/settings/bloc/audio_configuration_cubit.dart';
 import 'package:tesla_android/feature/settings/bloc/audio_configuration_state.dart';
@@ -74,11 +75,11 @@ class SoundSettings extends SettingsSection {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Text(
-            state.volume.toString() + " %",
-            style: TextStyle(
+            "${state.volume} %",
+            style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
-                color: Colors.red.shade900),
+                color: TAColors.SETTING_PRIMARY_COLOR),
           ),
           Slider(
             divisions: 15,
