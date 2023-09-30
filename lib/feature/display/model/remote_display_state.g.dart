@@ -18,7 +18,6 @@ RemoteDisplayState _$RemoteDisplayStateFromJson(Map<String, dynamic> json) =>
       isResponsive: json['isResponsive'] as int? ?? 1,
       isH264: json['isH264'] as int? ?? 1,
       isVariableRefresh: json['isVariableRefresh'] as int? ?? 0,
-      useVulkan: json['useVulkan'] as String? ?? 'false',
       isHeadless: json['isHeadless'] as int?,
     );
 
@@ -33,7 +32,6 @@ Map<String, dynamic> _$RemoteDisplayStateToJson(RemoteDisplayState instance) =>
       'isResponsive': instance.isResponsive,
       'isH264': instance.isH264,
       'isVariableRefresh': instance.isVariableRefresh,
-      'useVulkan': instance.useVulkan,
     };
 
 const _$DisplayResolutionModePresetEnumMap = {

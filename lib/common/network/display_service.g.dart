@@ -76,34 +76,6 @@ class _DisplayService implements DisplayService {
     return value;
   }
 
-  @override
-  Future<dynamic> setVulkanState(String isEnabledFlag) async {
-    const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'Content-Type': 'text/plain'};
-    _headers.removeWhere((k, v) => v == null);
-    final _data = isEnabledFlag;
-    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-      contentType: 'text/plain',
-    )
-        .compose(
-          _dio.options,
-          '/vulkanState',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        ))));
-    final value = _result.data;
-    return value;
-  }
-
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

@@ -28,10 +28,4 @@ abstract class DisplayService {
     "Content-Type": "application/json",
   })
   Future updateDisplayConfiguration(@Body() RemoteDisplayState configuration);
-
-  @POST("/vulkanState")
-  @Headers({
-    "Content-Type": "text/plain",
-  })
-  Future setVulkanState(@Body() String isEnabledFlag);
 }

@@ -15,10 +15,4 @@ class DisplayRepository {
   Future updateDisplayConfiguration(RemoteDisplayState configuration) {
     return _service.updateDisplayConfiguration(configuration);
   }
-
-  Future updateVulkanState(bool isEnabled) {
-    return _service.setVulkanState(
-      isEnabled ? "true" : "false",
-    );
-  }
 }

@@ -19,8 +19,6 @@ class RemoteDisplayState extends Equatable {
   final int isH264;
   @JsonKey(defaultValue: 0)
   final int isVariableRefresh;
-  @JsonKey(defaultValue: "false")
-  final String useVulkan;
 
   const RemoteDisplayState({
     required this.width,
@@ -31,7 +29,6 @@ class RemoteDisplayState extends Equatable {
     required this.isResponsive,
     required this.isH264,
     required this.isVariableRefresh,
-    required this.useVulkan,
     this.isHeadless,
   });
 
@@ -51,7 +48,6 @@ class RemoteDisplayState extends Equatable {
         isResponsive,
         isH264,
         isVariableRefresh,
-        useVulkan,
       ];
 
   RemoteDisplayState updateResolution(
@@ -68,12 +64,6 @@ class RemoteDisplayState extends Equatable {
         isH264: newType == DisplayRendererType.h264WebCodecs ? 1 : 0);
   }
 
-  RemoteDisplayState updateVulkanState({required bool isEnabled}) {
-    return copyWith(
-      useVulkan: isEnabled ? "true" : "false",
-    );
-  }
-
   RemoteDisplayState copyWith({
     int? width,
     int? height,
@@ -84,7 +74,6 @@ class RemoteDisplayState extends Equatable {
     int? isH264,
     int? isResponsive,
     int? isVariableRefresh,
-    String? useVulkan,
   }) {
     return RemoteDisplayState(
       width: width ?? this.width,
@@ -96,7 +85,6 @@ class RemoteDisplayState extends Equatable {
       isH264: isH264 ?? this.isH264,
       isResponsive: isResponsive ?? this.isResponsive,
       isVariableRefresh: isVariableRefresh ?? this.isVariableRefresh,
-      useVulkan: useVulkan ?? this.useVulkan,
     );
   }
 }
