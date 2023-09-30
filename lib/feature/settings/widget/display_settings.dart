@@ -42,16 +42,6 @@ class DisplaySettings extends SettingsSection {
               child: Text(
                   'Advanced setting, Tesla Android can automatically resize the virtual display when the browser window size changes. If you disable this option, the display aspect will be locked on the current value.'),
             ),
-            divider,
-            SettingsTile(
-                icon: Icons.refresh,
-                title: 'Variable refresh rate',
-                trailing: _variableRefreshSwitch(context, cubit, state)),
-            const Padding(
-              padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
-              child: Text(
-                  'Advanced setting, Tesla Android can lower the refresh rate based on what is happening on the Virtual Display. Reduces the browser load and bandwidth.'),
-            ),
             // divider,
             // SettingsTile(
             //     icon: Icons.texture,
@@ -76,24 +66,6 @@ class DisplaySettings extends SettingsSection {
         value: state.isResponsive,
         onChanged: (bool value) {
           cubit.setResponsiveness(value);
-        },
-      );
-    } else if (state is DisplayConfigurationStateSettingsUpdateInProgress ||
-        state is DisplayConfigurationStateLoading) {
-      return const CircularProgressIndicator();
-    } else if (state is DisplayConfigurationStateError) {
-      return const Text("Service error");
-    }
-    return const SizedBox.shrink();
-  }
-
-  Widget _variableRefreshSwitch(BuildContext context,
-      DisplayConfigurationCubit cubit, DisplayConfigurationState state) {
-    if (state is DisplayConfigurationStateSettingsFetched) {
-      return Switch(
-        value: state.isVariableRefresh,
-        onChanged: (bool value) {
-          cubit.setVariableRefresh(value);
         },
       );
     } else if (state is DisplayConfigurationStateSettingsUpdateInProgress ||

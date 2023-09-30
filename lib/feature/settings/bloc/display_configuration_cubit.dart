@@ -62,32 +62,6 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
     }
   }
 
-  void setVariableRefresh(bool newSetting) async {
-    var config = _currentConfig;
-    final isVariableRefresh = newSetting ? 1 : 0;
-    if (config != null) {
-      config = config.copyWith(isVariableRefresh: isVariableRefresh);
-      if (!isClosed) emit(DisplayConfigurationStateSettingsUpdateInProgress());
-      try {
-        await _repository.updateDisplayConfiguration(config);
-        _currentConfig = _currentConfig?.copyWith(isVariableRefresh: isVariableRefresh);
-        _emitCurrentConfig();
-        dispatchAnalyticsEvent(
-          eventName: "display_configuration_set_variable_refresh",
-          props: {
-            "isVariableRefresh": newSetting,
-          },
-        );
-      } catch (exception, stackTrace) {
-        logExceptionAndUploadToSentry(
-            exception: exception, stackTrace: stackTrace);
-        if (!isClosed) emit(DisplayConfigurationStateError());
-      }
-    } else {
-      log("_currentConfig not available");
-    }
-  }
-
   void setResolution(DisplayResolutionModePreset newPreset) async {
     var config = _currentConfig;
     if (config != null) {
@@ -144,7 +118,6 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
         lowResModePreset: _currentConfig!.lowRes,
         renderer: _currentConfig!.renderer,
         isResponsive: _currentConfig!.isResponsive == 1,
-        isVariableRefresh: _currentConfig!.isVariableRefresh == 1,
       ));
     }
   }

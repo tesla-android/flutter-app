@@ -11,13 +11,11 @@ class DisplayConfigurationStateSettingsFetched
   final DisplayResolutionModePreset lowResModePreset;
   final DisplayRendererType renderer;
   final bool isResponsive;
-  final bool isVariableRefresh;
 
   DisplayConfigurationStateSettingsFetched({
     required this.lowResModePreset,
     required this.renderer,
     required this.isResponsive,
-    required this.isVariableRefresh,
   });
 }
 

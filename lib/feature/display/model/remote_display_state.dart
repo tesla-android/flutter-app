@@ -17,8 +17,6 @@ class RemoteDisplayState extends Equatable {
   final int isResponsive;
   @JsonKey(defaultValue: 1)
   final int isH264;
-  @JsonKey(defaultValue: 0)
-  final int isVariableRefresh;
 
   const RemoteDisplayState({
     required this.width,
@@ -28,7 +26,6 @@ class RemoteDisplayState extends Equatable {
     required this.renderer,
     required this.isResponsive,
     required this.isH264,
-    required this.isVariableRefresh,
     this.isHeadless,
   });
 
@@ -38,17 +35,8 @@ class RemoteDisplayState extends Equatable {
   Map<String, dynamic> toJson() => _$RemoteDisplayStateToJson(this);
 
   @override
-  List<Object?> get props => [
-        width,
-        height,
-        density,
-        lowRes,
-        renderer,
-        isHeadless,
-        isResponsive,
-        isH264,
-        isVariableRefresh,
-      ];
+  List<Object?> get props =>
+      [width, height, density, lowRes, renderer, isHeadless];
 
   RemoteDisplayState updateResolution(
       {required DisplayResolutionModePreset newPreset}) {
@@ -59,9 +47,7 @@ class RemoteDisplayState extends Equatable {
   }
 
   RemoteDisplayState updateRenderer({required DisplayRendererType newType}) {
-    return copyWith(
-        renderer: newType,
-        isH264: newType == DisplayRendererType.h264WebCodecs ? 1 : 0);
+    return copyWith(renderer: newType, isH264: newType == DisplayRendererType.h264WebCodecs ? 1 : 0);
   }
 
   RemoteDisplayState copyWith({
@@ -73,7 +59,6 @@ class RemoteDisplayState extends Equatable {
     DisplayRendererType? renderer,
     int? isH264,
     int? isResponsive,
-    int? isVariableRefresh,
   }) {
     return RemoteDisplayState(
       width: width ?? this.width,
@@ -84,7 +69,6 @@ class RemoteDisplayState extends Equatable {
       renderer: renderer ?? this.renderer,
       isH264: isH264 ?? this.isH264,
       isResponsive: isResponsive ?? this.isResponsive,
-      isVariableRefresh: isVariableRefresh ?? this.isVariableRefresh,
     );
   }
 }
