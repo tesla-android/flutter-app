@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
 import 'package:tesla_android/common/utils/logger.dart';
 import 'package:tesla_android/feature/home/cubit/ota_update_cubit.dart';
 import 'package:tesla_android/feature/home/cubit/ota_update_state.dart';
@@ -23,7 +24,7 @@ class UpdateButton extends StatelessWidget with Logger {
           },
           icon: const Icon(
             Icons.download_rounded,
-            size: 20,
+            size: TADimens.statusBarIconSize,
           ),
         );
       } else {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tesla_android/common/navigation/ta_navigator.dart';
 import 'package:tesla_android/common/navigation/ta_page.dart';
+import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
 import 'package:tesla_android/common/utils/logger.dart';
 
 class SettingsButton extends StatelessWidget with Logger {
@@ -22,7 +23,7 @@ class SettingsButton extends StatelessWidget with Logger {
       },
       icon: const Icon(
         Icons.settings,
-        size: 20,
+        size: TADimens.statusBarIconSize,
       ),
     );
   }
