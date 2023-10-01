@@ -22,4 +22,7 @@ abstract class DeviceInfoService {
   @GET("/deviceInfo")
   @DioResponseType(ResponseType.json)
   Future<DeviceInfo> getDeviceInfo();
+
+  @GET("/openUpdater")
+  Future openUpdater();
 }

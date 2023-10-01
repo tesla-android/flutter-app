@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'device_info_service.dart';
+part of 'github_service.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'device_info_service.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _DeviceInfoService implements DeviceInfoService {
-  _DeviceInfoService(
+class _GitHubService implements GitHubService {
+  _GitHubService(
     this._dio, {
     this.baseUrl,
   });
@@ -19,21 +19,21 @@ class _DeviceInfoService implements DeviceInfoService {
   String? baseUrl;
 
   @override
-  Future<DeviceInfo> getDeviceInfo() async {
+  Future<GitHubRelease> getLatestRelease() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'X-GitHub-Api-Version': '2022-11-28'};
+    _headers.removeWhere((k, v) => v == null);
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<DeviceInfo>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<GitHubRelease>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
-      responseType: ResponseType.json,
     )
             .compose(
               _dio.options,
-              '/deviceInfo',
+              '/repos/tesla-android/android-raspberry-pi/releases/latest',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -42,33 +42,7 @@ class _DeviceInfoService implements DeviceInfoService {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = DeviceInfo.fromJson(_result.data!);
-    return value;
-  }
-
-  @override
-  Future<dynamic> openUpdater() async {
-    const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
-      method: 'GET',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/openUpdater',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        ))));
-    final value = _result.data;
+    final value = GitHubRelease.fromJson(_result.data!);
     return value;
   }
 

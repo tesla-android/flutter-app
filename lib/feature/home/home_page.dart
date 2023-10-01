@@ -7,7 +7,8 @@ import 'package:tesla_android/feature/connectivityCheck/model/connectivity_state
 import 'package:tesla_android/feature/display/cubit/display_cubit.dart';
 import 'package:tesla_android/feature/display/cubit/display_state.dart';
 import 'package:tesla_android/feature/display/widget/display_view.dart';
-import 'package:tesla_android/feature/releaseNotes/widget/versionRibbon/version_ribbon.dart';
+import 'package:tesla_android/feature/home/widget/settings_button.dart';
+import 'package:tesla_android/feature/home/widget/update_button.dart';
 import 'package:tesla_android/feature/touchscreen/touchscreen_view.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 
@@ -58,8 +59,21 @@ class HomePage extends StatelessWidget {
                             }),
                           );
                         }),
-                        const Positioned(
-                            right: 0, top: 0, child: VersionRibbon())
+                        Positioned(
+                            right: 0,
+                            top: 0,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.8),
+                                borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(TADimens.ROUND_BORDER_RADIUS))
+                              ),
+                              child: const Row(
+                                children: [
+                                  UpdateButton(),
+                                  SettingsButton(),
+                                ],
+                              ),
+                            ))
                       ],
                     )
                   : _backendConnectionLostWidget());
