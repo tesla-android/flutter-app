@@ -69,8 +69,6 @@ class TADimens {
   static const donationTextWidth = 300.0;
   static const donationQRSize = 250.0;
 
-  static const versionBannerTouchAreaSize = 50.0;
-
   static const backendErrorIconSize = 80.0;
 
   static const settingsTileTrailingWidthDense = 200.0;
