@@ -136,6 +136,20 @@
       };
     }
 
+    async function checkVideoStream() {
+      while (true) {
+        try {
+          await image.decode();
+        } catch {
+          let src = image.src;
+          image.src = "";
+          image.src = src;
+        }
+
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+      }
+    }
+
     function createDisplaySocket(url, renderer, binaryType) {
       if (!displayRendererAdded) {
         //var rendererScript = document.createElement('script');
@@ -147,6 +161,8 @@
         img.src = url;
         canvas.style.display = "none";
         displayRendererAdded = true;
+
+        checkVideoStream();
       }
 
       //displaySocket = new ReconnectingWebSocket(url, null, { binaryType: binaryType });
