@@ -7,6 +7,35 @@ import 'package:tesla_android/feature/releaseNotes/model/version.dart';
 class ReleaseNotesRepository {
   static const ReleaseNotes _releaseNotes = ReleaseNotes(versions: [
     Version(
+      versionName: "2023.40.1",
+      changelogItems: [
+        ChangelogItem(
+          title: "Virtual display",
+          shortDescription: "Performance improvements",
+          descriptionMarkdown:
+          "Virtual display module has been updated to take advantage of DMA buffers in the capture pipeline. The new approach lowers the CPU usage by up to 500% and improves performance. Other bugfixes and improvements have been included to enhance stability.",
+        ),
+        ChangelogItem(
+          title: "OTA Updates",
+          shortDescription: "Usability improvements",
+          descriptionMarkdown:
+          "Starting with version 2023.40.1 Tesla Android will notify you about new updates directly in the Flutter App. A familiar download icon will show up in the upper right corner of the screen.",
+        ),
+        ChangelogItem(
+          title: "Video Codecs",
+          shortDescription: "Performance improvements",
+          descriptionMarkdown:
+          "This update brings back v42l_codec2 for H264 encoding/decoding. Issues with AV1 decoding present in 2023.38.1 have been resolved.",
+        ),
+        ChangelogItem(
+          title: "Browser Audio",
+          shortDescription: "Performance improvements",
+          descriptionMarkdown:
+          "2023.40.1 comes with a new browser audio player that improves the reliability and reduces the audio drift that was noticible in MCU2 vehicles.",
+        ),
+      ],
+    ),
+    Version(
       versionName: "2023.38.1",
       changelogItems: [
         ChangelogItem(
