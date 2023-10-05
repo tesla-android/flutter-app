@@ -7,6 +7,17 @@ import 'package:tesla_android/feature/releaseNotes/model/version.dart';
 class ReleaseNotesRepository {
   static const ReleaseNotes _releaseNotes = ReleaseNotes(versions: [
     Version(
+      versionName: "2023.40.2",
+      changelogItems: [
+        ChangelogItem(
+          title: "Virtual display",
+          shortDescription: "Bugfixes",
+          descriptionMarkdown:
+          "This version contains a hotfix for DRM video playback",
+        ),
+      ],
+    ),
+    Version(
       versionName: "2023.40.1",
       changelogItems: [
         ChangelogItem(
