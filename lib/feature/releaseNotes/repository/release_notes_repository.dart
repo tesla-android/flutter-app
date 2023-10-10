@@ -7,6 +7,17 @@ import 'package:tesla_android/feature/releaseNotes/model/version.dart';
 class ReleaseNotesRepository {
   static const ReleaseNotes _releaseNotes = ReleaseNotes(versions: [
     Version(
+      versionName: "2023.41.100",
+      changelogItems: [
+        ChangelogItem(
+          title: "NVMe support",
+          shortDescription: "Performance improvements",
+          descriptionMarkdown:
+          "NVMe drives are now supported on the Compute Module 4",
+        ),
+      ],
+    ),
+    Version(
       versionName: "2023.40.2",
       changelogItems: [
         ChangelogItem(
