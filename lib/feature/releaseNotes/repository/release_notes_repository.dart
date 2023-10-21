@@ -7,6 +7,23 @@ import 'package:tesla_android/feature/releaseNotes/model/version.dart';
 class ReleaseNotesRepository {
   static const ReleaseNotes _releaseNotes = ReleaseNotes(versions: [
     Version(
+      versionName: "2023.42.1",
+      changelogItems: [
+        ChangelogItem(
+          title: "Graphics and codecs",
+          shortDescription: "Performance improvements",
+          descriptionMarkdown:
+          "The transition to updated GPU backend and optimised video codecs is now complete. Those changes improve the overall performance of the system",
+        ),
+        ChangelogItem(
+          title: "Android Platform",
+          shortDescription: "Security improvements",
+          descriptionMarkdown:
+          "The platform has been updated to the latest Android 13 release with October 2023 security patches", 
+        ),
+      ],
+    ),
+    Version(
       versionName: "2023.41.100",
       changelogItems: [
         ChangelogItem(
