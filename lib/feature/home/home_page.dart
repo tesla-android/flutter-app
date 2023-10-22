@@ -37,32 +37,29 @@ class HomePage extends StatelessWidget {
                               .onWindowSizeChanged(
                             Size(constraints.maxWidth, constraints.maxHeight),
                           );
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              BlocBuilder<DisplayCubit, DisplayState>(
-                                  builder: (context, state) {
-                                if (state is DisplayStateNormal) {
-                                  return AspectRatio(
-                                    aspectRatio: state.adjustedSize.width /
-                                        state.adjustedSize.height,
-                                    child: Stack(
-                                      fit: StackFit.expand,
-                                      children: [
-                                        DisplayView(type: state.rendererType),
-                                        PointerInterceptor(
-                                          child: TouchScreenView(
-                                              displaySize: state.adjustedSize),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                } else {
-                                  return const CircularProgressIndicator();
-                                }
-                              }),
-                            ],
+                          return Center(
+                            child: BlocBuilder<DisplayCubit, DisplayState>(
+                                builder: (context, state) {
+                              if (state is DisplayStateNormal) {
+                                return AspectRatio(
+                                  aspectRatio: state.adjustedSize.width /
+                                      state.adjustedSize.height,
+                                  child: Stack(
+                                    fit: StackFit.expand,
+                                    alignment: Alignment.topCenter,
+                                    children: [
+                                      DisplayView(type: state.rendererType),
+                                      PointerInterceptor(
+                                        child: TouchScreenView(
+                                            displaySize: state.adjustedSize),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              } else {
+                                return const CircularProgressIndicator();
+                              }
+                            }),
                           );
                         }),
                         Positioned(
