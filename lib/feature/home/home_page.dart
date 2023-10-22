@@ -27,10 +27,8 @@ class HomePage extends StatelessWidget {
             _onBackendConnectionLost(context);
           }
           return Scaffold(
-              backgroundColor: Colors.black,
               body: isBackendAccessible
                   ? Stack(
-                      alignment: Alignment.topCenter,
                       children: [
                         LayoutBuilder(builder: (context, constraints) {
                           BlocProvider.of<DisplayCubit>(context)
@@ -46,7 +44,6 @@ class HomePage extends StatelessWidget {
                                       state.adjustedSize.height,
                                   child: Stack(
                                     fit: StackFit.expand,
-                                    alignment: Alignment.topCenter,
                                     children: [
                                       DisplayView(type: state.rendererType),
                                       PointerInterceptor(
@@ -67,10 +64,9 @@ class HomePage extends StatelessWidget {
                             top: 0,
                             child: Container(
                               decoration: BoxDecoration(
-                                  color: Colors.black.withOpacity(0.8),
-                                  borderRadius: const BorderRadius.only(
-                                      bottomLeft: Radius.circular(
-                                          TADimens.ROUND_BORDER_RADIUS))),
+                                color: Colors.black.withOpacity(0.8),
+                                borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(TADimens.ROUND_BORDER_RADIUS))
+                              ),
                               child: const Row(
                                 children: [
                                   UpdateButton(),
