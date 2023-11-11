@@ -10,6 +10,23 @@ class ReleaseNotesRepository {
       versionName: "2023.42.1",
       changelogItems: [
         ChangelogItem(
+          title: "SSL certificate reneval",
+          shortDescription: "Bugfix",
+          descriptionMarkdown:
+          "The SSL certificate for the frontend expired on 11.11.2023. It has been renewed for another 90 days",
+        ),
+        ChangelogItem(
+          title: "Android Platform",
+          shortDescription: "Security improvements",
+          descriptionMarkdown:
+          "The platform has been updated to the latest Android 13 release",
+        ),
+      ],
+    ),
+    Version(
+      versionName: "2023.42.1",
+      changelogItems: [
+        ChangelogItem(
           title: "Graphics and codecs",
           shortDescription: "Performance improvements",
           descriptionMarkdown:
