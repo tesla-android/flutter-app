@@ -16,6 +16,12 @@ class ReleaseNotesRepository {
           "The SSL certificate for the frontend expired on 11.11.2023. It has been renewed for another 90 days",
         ),
         ChangelogItem(
+          title: "Offline mode",
+          shortDescription: "Bugfix",
+          descriptionMarkdown:
+          "This version includes a fix for offline mode for cars running 2023.38.x or newer",
+        ),
+        ChangelogItem(
           title: "Android Platform",
           shortDescription: "Security improvements",
           descriptionMarkdown:
