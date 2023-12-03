@@ -7,7 +7,24 @@ import 'package:tesla_android/feature/releaseNotes/model/version.dart';
 class ReleaseNotesRepository {
   static const ReleaseNotes _releaseNotes = ReleaseNotes(versions: [
     Version(
-      versionName: "2023.42.1",
+      versionName: "2023.48.1",
+      changelogItems: [
+        ChangelogItem(
+          title: "Wi-Fi Hotspot",
+          shortDescription: "Bugfix",
+          descriptionMarkdown:
+          "Some users unintentionally disabled the Hotspot without using a 3rd party router. The ability to disable the broadcasting has been removed in this version since it does not make a lot of sense with the current networking setup that does not rely on using a public IP range in the DHCP server.",
+        ),
+        ChangelogItem(
+          title: "Android Platform",
+          shortDescription: "Security improvements",
+          descriptionMarkdown:
+          "The platform has been updated to the latest Android 13 release",
+        ),
+      ],
+    ),
+    Version(
+      versionName: "2023.45.1",
       changelogItems: [
         ChangelogItem(
           title: "SSL certificate reneval",

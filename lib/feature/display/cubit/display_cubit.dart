@@ -212,7 +212,7 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
     double bestHeight = maxHeight;
     double minEmptySpace = maxWidth * maxHeight;
 
-    for (double height = maxHeight; height >= 320; height -= 16) {
+    for (double height = maxHeight; height >= 320; height -= 32) {
       double width = height * aspectRatio;
 
       if (width > maxWidth) {
@@ -223,7 +223,7 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
         continue;
       }
 
-      width = (width ~/ 16) * 16;
+      width = (width ~/ 32) * 32;
 
       double emptySpace = (maxWidth - width) * (maxHeight - height);
 
