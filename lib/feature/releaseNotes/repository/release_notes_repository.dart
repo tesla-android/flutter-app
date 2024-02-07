@@ -10,6 +10,17 @@ class ReleaseNotesRepository {
       versionName: "2023.48.1",
       changelogItems: [
         ChangelogItem(
+          title: "Android Platform",
+          shortDescription: "Security improvements",
+          descriptionMarkdown:
+          "The platform has been updated to the latest Android 14 release",
+        ),
+      ],
+    ),
+    Version(
+      versionName: "2023.48.1",
+      changelogItems: [
+        ChangelogItem(
           title: "Wi-Fi Hotspot",
           shortDescription: "Bugfix",
           descriptionMarkdown:
