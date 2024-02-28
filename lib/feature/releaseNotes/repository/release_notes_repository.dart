@@ -7,13 +7,24 @@ import 'package:tesla_android/feature/releaseNotes/model/version.dart';
 class ReleaseNotesRepository {
   static const ReleaseNotes _releaseNotes = ReleaseNotes(versions: [
     Version(
-      versionName: "2023.48.1",
+      versionName: "2024.9.1",
       changelogItems: [
         ChangelogItem(
           title: "Android Platform",
           shortDescription: "Security improvements",
           descriptionMarkdown:
           "The platform has been updated to the latest Android 14 release",
+        ),
+      ],
+    ),
+    Version(
+      versionName: "2023.48.2",
+      changelogItems: [
+        ChangelogItem( 
+          title: "SSL certificate reneval",
+          shortDescription: "Bugfix",
+          descriptionMarkdown:
+          "The SSL certificate for the frontend expired on 09.02.2024. It has been renewed for another 90 days",
         ),
       ],
     ),
