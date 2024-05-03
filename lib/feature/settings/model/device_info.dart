@@ -15,6 +15,10 @@ class DeviceInfo extends Equatable {
   final int isModemDetected;
   @JsonKey(name: "is_carplay_detected", defaultValue: 0)
   final int isCarPlayDetected;
+  @JsonKey(name: "release_type", defaultValue: "undefined")
+  final String releaseType;
+  @JsonKey(name: "ota_url", defaultValue: "undefined")
+  final String otaUrl;
 
   const DeviceInfo({
     required this.cpuTemperature,
@@ -22,6 +26,8 @@ class DeviceInfo extends Equatable {
     required this.deviceModel,
     required this.isCarPlayDetected,
     required this.isModemDetected,
+    required this.releaseType,
+    required this.otaUrl,
   });
 
   factory DeviceInfo.fromJson(Map<String, dynamic> json) =>
@@ -36,6 +42,8 @@ class DeviceInfo extends Equatable {
         deviceModel,
         isModemDetected,
         isCarPlayDetected,
+        releaseType,
+        otaUrl
       ];
 }
 

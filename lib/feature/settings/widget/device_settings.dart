@@ -75,6 +75,19 @@ class DeviceSettings extends SettingsSection {
               child: Text(
                   'The LTE modem is considered detected when it is properly connected, and the gateway is reachable by Android. IP address 192.168.(0/8).1 is used for this check (Default for E3372 and Alcatel modems).'),
             ),
+            SettingsTile(
+                dense: false,
+                icon: Icons.update,
+                title: 'Release type',
+                trailing: Text(
+                  state.deviceInfo.releaseType,
+                  style: textTheme,
+                )),
+            const Padding(
+              padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
+              child: Text(
+                  'No support is provided for devices that are running pre-release (beta) software'),
+            ),
           ],
         );
       } else {

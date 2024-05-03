@@ -7,13 +7,43 @@ import 'package:tesla_android/feature/releaseNotes/model/version.dart';
 class ReleaseNotesRepository {
   static const ReleaseNotes _releaseNotes = ReleaseNotes(versions: [
     Version(
-      versionName: "2024.9.1",
+      versionName: "2024.18.1",
       changelogItems: [
         ChangelogItem(
           title: "Android Platform",
           shortDescription: "Security improvements",
           descriptionMarkdown:
-          "The platform has been updated to the latest Android 14 release",
+          "The platform has been updated to Android 14.",
+        ),
+	ChangelogItem(
+          title: "Kernel",
+          shortDescription: "Security improvements",
+          descriptionMarkdown:
+          "Kernel has been updated from 5.15 to 6.1.",
+        ),
+        ChangelogItem(
+          title: "SSL Certificates",
+          shortDescription: "Usability improvements",
+          descriptionMarkdown:
+          "SSL certificates are now valid for 12 months instead of 3 months.",
+        ),
+        ChangelogItem(
+          title: "Raspberry Pi Firmware",
+          shortDescription: "Usability improvements",
+          descriptionMarkdown:
+          "Firmware updates are now included with Tesla Android OTA updates. Your device will restart twice during OTA updates if new firmware is available.",
+        ),
+        ChangelogItem(
+          title: "Full screen launcher",
+          shortDescription: "Usability improvements",
+          descriptionMarkdown:
+          "Full screen launcher has been removed since this feature has been added by Tesla in 2024 Spring Update.",
+        ),
+        ChangelogItem(
+          title: "Virtual Display",
+          shortDescription: "Performance improvements",
+          descriptionMarkdown:
+          "FPS limit has been bumped from 30 to 60.",
         ),
       ],
     ),
