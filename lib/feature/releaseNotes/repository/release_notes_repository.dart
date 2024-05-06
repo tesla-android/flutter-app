@@ -7,7 +7,7 @@ import 'package:tesla_android/feature/releaseNotes/model/version.dart';
 class ReleaseNotesRepository {
   static const ReleaseNotes _releaseNotes = ReleaseNotes(versions: [
     Version(
-      versionName: "2024.18.1",
+      versionName: "2024.18.2",
       changelogItems: [
         ChangelogItem(
           title: "Android Platform",
