@@ -1,19 +1,17 @@
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html';
-
 import 'package:flavor/flavor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart' hide Environment;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web/web.dart';
 
 @module
 abstract class AppModule {
   @singleton
   Flavor get provideFlavor {
     const defaultDomain = "device.teslaandroid.com";
-    final isLocalHost = window.location.hostname?.contains("localhost") ?? true;
-    final domain = isLocalHost ? defaultDomain : (window.location.hostname ?? defaultDomain);
+    final isLocalHost = window.location.hostname.contains("localhost");
+    final domain = isLocalHost ? defaultDomain : window.location.hostname;
     final isSSL = window.location.protocol.contains("https") || kDebugMode;
     final httpProtocol = isSSL ? "https://" : "http://";
     final webSocketProtocol = isSSL ? "wss://" : "ws://";

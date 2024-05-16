@@ -1,11 +1,10 @@
 import 'dart:async';
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:tesla_android/common/network/health_service.dart';
 import 'package:tesla_android/feature/connectivityCheck/model/connectivity_state.dart';
+import 'package:web/web.dart';
 
 @injectable
 class ConnectivityCheckCubit extends Cubit<ConnectivityState> {

@@ -25,11 +25,13 @@ dependencies:
   qr_flutter: ^4.0.0
   logger: any
   json_serializable: ^6.2.0
-  package_info_plus: ^4.1.0
+  package_info_plus: ^8.0.0
   url_launcher: ^6.1.1
   equatable: ^2.0.0
   web_socket_client: ^0.1.0-dev.3
+  web: ^0.5.1
 
+  json_annotation: any
 dev_dependencies:
   flutter_test:
     sdk: flutter

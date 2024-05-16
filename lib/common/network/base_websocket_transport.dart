@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:html';
-
 import 'dart:typed_data';
 
 import 'package:flavor/flavor.dart';
@@ -99,7 +97,7 @@ abstract class BaseWebsocketTransport with Logger {
     sendString(jsonString);
   }
 
-  void sendBlob(Blob blob) {
+  void sendBlob(blob) {
     if (!_isConnected) return;
     _webSocketChannel?.send(blob);
   }

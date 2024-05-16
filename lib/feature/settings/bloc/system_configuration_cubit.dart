@@ -183,8 +183,9 @@ class SystemConfigurationCubit extends Cubit<SystemConfigurationState>
       } catch (exception, stackTrace) {
         logException(
             exception: exception, stackTrace: stackTrace);
-        if (!isClosed)
+        if (!isClosed) {
           emit(SystemConfigurationStateSettingsSavingFailedError());
+        }
       }
     }
   }

@@ -1,4 +1,4 @@
-import 'dart:html';
+import 'dart:js_interop';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +6,7 @@ import 'package:injectable/injectable.dart';
 import 'package:tesla_android/common/utils/logger.dart';
 import 'package:tesla_android/feature/touchscreen/model/virtual_touchscreen_slot_state.dart';
 import 'package:tesla_android/feature/touchscreen/model/virtual_touchscreen_command.dart';
+import 'package:web/web.dart' as web;
 
 @injectable
 class TouchscreenCubit extends Cubit<bool> with Logger {
@@ -125,10 +126,10 @@ class TouchscreenCubit extends Cubit<bool> with Logger {
     for (final command in commands) {
       message += command.build();
     }
-    window.postMessage(message, '*');
+    web.window.postMessage(message.toJS, '*'.toJS);
   }
 
   void sendCommand(VirtualTouchScreenCommand command) {
-    window.postMessage(command.build(), '*');
+    web.window.postMessage(command.build().toJS, '*'.toJS);
   }
 }

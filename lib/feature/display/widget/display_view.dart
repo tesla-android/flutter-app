@@ -1,6 +1,6 @@
 //ignore: avoid_web_libraries_in_flutter
 import 'dart:convert';
-import 'dart:html';
+import 'dart:js_interop';
 import 'dart:ui' as ui;
 
 import 'package:flavor/flavor.dart';
@@ -13,6 +13,7 @@ import 'package:tesla_android/feature/display/cubit/display_state.dart';
 import 'package:tesla_android/feature/display/model/remote_display_state.dart';
 import 'package:tesla_android/feature/settings/bloc/audio_configuration_cubit.dart';
 import 'package:tesla_android/feature/settings/bloc/audio_configuration_state.dart';
+import 'package:web/helpers.dart';
 
 class DisplayView extends StatefulWidget {
   final DisplayRendererType type;
@@ -24,7 +25,7 @@ class DisplayView extends StatefulWidget {
 }
 
 class _IframeViewState extends State<DisplayView> with Logger {
-  final IFrameElement _iframeElement = IFrameElement();
+  final HTMLIFrameElement _iframeElement = HTMLIFrameElement();
 
   static const String _src = "/android.html";
 
@@ -70,12 +71,11 @@ class _IframeViewState extends State<DisplayView> with Logger {
                 displayState.adjustedSize.height.toString(),
               };
 
-              window.addEventListener('message', (event) {
-                var data = (event as MessageEvent).data;
-                if (data is String && data == "iframeReady") {
-                  window.postMessage(jsonEncode(config), '*');
+              window.addEventListener('message', (JSAny event) {
+                if (event is MessageEvent && event.data == "iframeReady".toJS) {
+                  window.postMessage(jsonEncode(config).toJS, '*'.toJS);
                 }
-              });
+              }.toJS);
             },
           );
         } else {

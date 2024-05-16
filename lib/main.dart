@@ -1,4 +1,3 @@
-import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:tesla_android/common/di/ta_locator.dart';
@@ -24,7 +23,7 @@ class TeslaAndroid extends StatelessWidget with Logger {
     MediaQueryData windowData = MediaQueryData.fromView(View.of(context));
 
     return MediaQuery(
-      data: windowData.copyWith(textScaleFactor: 1.5, devicePixelRatio: 1.0),
+      data: windowData.copyWith(devicePixelRatio: 1.0, textScaler: const TextScaler.linear(1.5)),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         navigatorKey: getIt<GlobalKey<NavigatorState>>(),
