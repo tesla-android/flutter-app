@@ -7,54 +7,79 @@ import 'package:tesla_android/feature/releaseNotes/model/version.dart';
 class ReleaseNotesRepository {
   static const ReleaseNotes _releaseNotes = ReleaseNotes(versions: [
     Version(
+      versionName: "2024.20.1",
+      changelogItems: [
+        ChangelogItem(
+          title: "Flutter App",
+          shortDescription: "Performance improvements",
+          descriptionMarkdown: "Flutter has been updated to 3.22.",
+        ),
+        ChangelogItem(
+          title: "Browser audio",
+          shortDescription: "Bugfixes",
+          descriptionMarkdown:
+              "Browser audio is working again. The capture logic has been moved from Android frameworks to the Audio HAL.",
+        ),
+        ChangelogItem(
+          title: "Raspberry Pi 4",
+          shortDescription: "Bugfixes",
+          descriptionMarkdown:
+              "This release contains a fix for Pi 4 based setups that could not boot without an HDMI cable connected.",
+        ),
+        ChangelogItem(
+          title: "Virtual display",
+          shortDescription: "Bugfixes",
+          descriptionMarkdown:
+              "Tesla Infotainment did not handle 60fps display well, it has been reverted to the state that has been stable(2023.42).",
+        ),
+      ],
+    ),
+    Version(
       versionName: "2024.18.2",
       changelogItems: [
         ChangelogItem(
           title: "Android Platform",
           shortDescription: "Security improvements",
-          descriptionMarkdown:
-          "The platform has been updated to Android 14.",
+          descriptionMarkdown: "The platform has been updated to Android 14.",
         ),
-	ChangelogItem(
+        ChangelogItem(
           title: "Kernel",
           shortDescription: "Security improvements",
-          descriptionMarkdown:
-          "Kernel has been updated from 5.15 to 6.1.",
+          descriptionMarkdown: "Kernel has been updated from 5.15 to 6.1.",
         ),
         ChangelogItem(
           title: "SSL Certificates",
           shortDescription: "Usability improvements",
           descriptionMarkdown:
-          "SSL certificates are now valid for 12 months instead of 3 months.",
+              "SSL certificates are now valid for 12 months instead of 3 months.",
         ),
         ChangelogItem(
           title: "Raspberry Pi Firmware",
           shortDescription: "Usability improvements",
           descriptionMarkdown:
-          "Firmware updates are now included with Tesla Android OTA updates. Your device will restart twice during OTA updates if new firmware is available.",
+              "Firmware updates are now included with Tesla Android OTA updates. Your device will restart twice during OTA updates if new firmware is available.",
         ),
         ChangelogItem(
           title: "Full screen launcher",
           shortDescription: "Usability improvements",
           descriptionMarkdown:
-          "Full screen launcher has been removed since this feature has been added by Tesla in 2024 Spring Update.",
+              "Full screen launcher has been removed since this feature has been added by Tesla in 2024 Spring Update.",
         ),
         ChangelogItem(
           title: "Virtual Display",
           shortDescription: "Performance improvements",
-          descriptionMarkdown:
-          "FPS limit has been bumped from 30 to 60.",
+          descriptionMarkdown: "FPS limit has been bumped from 30 to 60.",
         ),
       ],
     ),
     Version(
       versionName: "2023.48.2",
       changelogItems: [
-        ChangelogItem( 
-          title: "SSL certificate reneval",
+        ChangelogItem(
+          title: "SSL certificate renewal",
           shortDescription: "Bugfix",
           descriptionMarkdown:
-          "The SSL certificate for the frontend expired on 09.02.2024. It has been renewed for another 90 days",
+              "The SSL certificate for the frontend expired on 09.02.2024. It has been renewed for another 90 days",
         ),
       ],
     ),
@@ -65,13 +90,13 @@ class ReleaseNotesRepository {
           title: "Wi-Fi Hotspot",
           shortDescription: "Bugfix",
           descriptionMarkdown:
-          "Some users unintentionally disabled the Hotspot without using a 3rd party router. The ability to disable the broadcasting has been removed in this version since it does not make a lot of sense with the current networking setup that does not rely on using a public IP range in the DHCP server.",
+              "Some users unintentionally disabled the Hotspot without using a 3rd party router. The ability to disable the broadcasting has been removed in this version since it does not make a lot of sense with the current networking setup that does not rely on using a public IP range in the DHCP server.",
         ),
         ChangelogItem(
           title: "Android Platform",
           shortDescription: "Security improvements",
           descriptionMarkdown:
-          "The platform has been updated to the latest Android 13 release",
+              "The platform has been updated to the latest Android 13 release",
         ),
       ],
     ),
@@ -82,19 +107,19 @@ class ReleaseNotesRepository {
           title: "SSL certificate reneval",
           shortDescription: "Bugfix",
           descriptionMarkdown:
-          "The SSL certificate for the frontend expired on 11.11.2023. It has been renewed for another 90 days",
+              "The SSL certificate for the frontend expired on 11.11.2023. It has been renewed for another 90 days",
         ),
         ChangelogItem(
           title: "Offline mode",
           shortDescription: "Bugfix",
           descriptionMarkdown:
-          "This version includes a fix for offline mode for cars running 2023.38.x or newer",
+              "This version includes a fix for offline mode for cars running 2023.38.x or newer",
         ),
         ChangelogItem(
           title: "Android Platform",
           shortDescription: "Security improvements",
           descriptionMarkdown:
-          "The platform has been updated to the latest Android 13 release",
+              "The platform has been updated to the latest Android 13 release",
         ),
       ],
     ),
@@ -105,13 +130,13 @@ class ReleaseNotesRepository {
           title: "Graphics and codecs",
           shortDescription: "Performance improvements",
           descriptionMarkdown:
-          "The transition to updated GPU backend and optimised video codecs is now complete. Those changes improve the overall performance of the system",
+              "The transition to updated GPU backend and optimised video codecs is now complete. Those changes improve the overall performance of the system",
         ),
         ChangelogItem(
           title: "Android Platform",
           shortDescription: "Security improvements",
           descriptionMarkdown:
-          "The platform has been updated to the latest Android 13 release with October 2023 security patches", 
+              "The platform has been updated to the latest Android 13 release with October 2023 security patches",
         ),
       ],
     ),
@@ -122,7 +147,7 @@ class ReleaseNotesRepository {
           title: "NVMe support",
           shortDescription: "Performance improvements",
           descriptionMarkdown:
-          "NVMe drives are now supported on the Compute Module 4",
+              "NVMe drives are now supported on the Compute Module 4",
         ),
       ],
     ),
@@ -133,7 +158,7 @@ class ReleaseNotesRepository {
           title: "Virtual display",
           shortDescription: "Bugfixes",
           descriptionMarkdown:
-          "This version contains a hotfix for DRM video playback",
+              "This version contains a hotfix for DRM video playback",
         ),
       ],
     ),
@@ -144,25 +169,25 @@ class ReleaseNotesRepository {
           title: "Virtual display",
           shortDescription: "Performance improvements",
           descriptionMarkdown:
-          "Virtual display module has been updated to take advantage of DMA buffers in the capture pipeline. The new approach lowers the CPU usage by up to 500% and improves performance. Other bugfixes and improvements have been included to enhance stability.",
+              "Virtual display module has been updated to take advantage of DMA buffers in the capture pipeline. The new approach lowers the CPU usage by up to 500% and improves performance. Other bugfixes and improvements have been included to enhance stability.",
         ),
         ChangelogItem(
           title: "OTA Updates",
           shortDescription: "Usability improvements",
           descriptionMarkdown:
-          "Starting with version 2023.40.1 Tesla Android will notify you about new updates directly in the Flutter App. A familiar download icon will show up in the upper right corner of the screen.",
+              "Starting with version 2023.40.1 Tesla Android will notify you about new updates directly in the Flutter App. A familiar download icon will show up in the upper right corner of the screen.",
         ),
         ChangelogItem(
           title: "Video Codecs",
           shortDescription: "Performance improvements",
           descriptionMarkdown:
-          "This update brings back v42l_codec2 for H264 encoding/decoding. Issues with AV1 decoding present in 2023.38.1 have been resolved.",
+              "This update brings back v42l_codec2 for H264 encoding/decoding. Issues with AV1 decoding present in 2023.38.1 have been resolved.",
         ),
         ChangelogItem(
           title: "Browser Audio",
           shortDescription: "Performance improvements",
           descriptionMarkdown:
-          "2023.40.1 comes with a new browser audio player that improves the reliability and reduces the audio drift that was noticible in MCU2 vehicles.",
+              "2023.40.1 comes with a new browser audio player that improves the reliability and reduces the audio drift that was noticible in MCU2 vehicles.",
         ),
       ],
     ),
@@ -173,43 +198,43 @@ class ReleaseNotesRepository {
           title: "Vulkan Backend for SKIA/HWUI",
           shortDescription: "Performance improvements",
           descriptionMarkdown:
-          "Version 2023.38.1 adds the Vulkan Backend support for the system interface drawing. It is still considered experimental and can be enabled in the settings.",
+              "Version 2023.38.1 adds the Vulkan Backend support for the system interface drawing. It is still considered experimental and can be enabled in the settings.",
         ),
         ChangelogItem(
           title: "Local OTA Updates",
           shortDescription: "Usability improvements",
           descriptionMarkdown:
-          "You can now install OTA updates from external storage and save your data package. The builds are available on GitHub in the Tesla Android organisation (android-raspberry-pi-ota, android-compute-module-4-ota).",
+              "You can now install OTA updates from external storage and save your data package. The builds are available on GitHub in the Tesla Android organisation (android-raspberry-pi-ota, android-compute-module-4-ota).",
         ),
         ChangelogItem(
           title: "Offline mode",
           shortDescription: "Stability improvements",
           descriptionMarkdown:
-          "Offline mode has been improved in version 2023.38.1 and it will no longer interfere with the Tesla App / vehicle telemetry collection (Teslascope, TeslaFi, TeslaMate etc) when internet is accessible.",
+              "Offline mode has been improved in version 2023.38.1 and it will no longer interfere with the Tesla App / vehicle telemetry collection (Teslascope, TeslaFi, TeslaMate etc) when internet is accessible.",
         ),
         ChangelogItem(
           title: "Device Settings",
           shortDescription: "Usability improvements",
           descriptionMarkdown:
-          "You can now check if the LTE modem and CarPlay module is properly detected by the system.",
+              "You can now check if the LTE modem and CarPlay module is properly detected by the system.",
         ),
         ChangelogItem(
           title: "Browser Audio",
           shortDescription: "Stability improvements",
           descriptionMarkdown:
-          "Fixed an issue with disabling browser audio in the settings.",
+              "Fixed an issue with disabling browser audio in the settings.",
         ),
         ChangelogItem(
           title: "Virtual Display",
           shortDescription: "Stability improvements",
           descriptionMarkdown:
-          "Miscellaneous bugfixes aimed at improving display stability.",
+              "Miscellaneous bugfixes aimed at improving display stability.",
         ),
         ChangelogItem(
           title: "Argon I2C fan support",
           shortDescription: "Usability improvements",
           descriptionMarkdown:
-          "Argon fans controlled by I2C are now fully supported on builds meant for the Raspberry Pi 4.",
+              "Argon fans controlled by I2C are now fully supported on builds meant for the Raspberry Pi 4.",
         ),
       ],
     ),
@@ -226,31 +251,31 @@ class ReleaseNotesRepository {
           title: "Virtual Display",
           shortDescription: "Stability improvements",
           descriptionMarkdown:
-          "Virtual display frontend implementation issue that resulted in a blank screen after launching the app is fixed in this release.",
+              "Virtual display frontend implementation issue that resulted in a blank screen after launching the app is fixed in this release.",
         ),
         ChangelogItem(
           title: "CM4 Bundle Support",
           shortDescription: "Hardware improvements",
           descriptionMarkdown:
-          "A separate target has been created for the Tesla Android Compute Module 4 Hardware Bundles.",
+              "A separate target has been created for the Tesla Android Compute Module 4 Hardware Bundles.",
         ),
         ChangelogItem(
           title: "Device Settings",
           shortDescription: "Usability improvements",
           descriptionMarkdown:
-          "You can now check the CPU temperature, device model and serial number in the new tab on the Settings page",
+              "You can now check the CPU temperature, device model and serial number in the new tab on the Settings page",
         ),
         ChangelogItem(
           title: "Flutter App",
           shortDescription: "Stability improvements",
           descriptionMarkdown:
-          "Flutter Framework has been updated to 3.13.2. Miscellaneous bugfixes in the app are also included.",
+              "Flutter Framework has been updated to 3.13.2. Miscellaneous bugfixes in the app are also included.",
         ),
         ChangelogItem(
           title: "Android Platform",
           shortDescription: "Security improvements",
           descriptionMarkdown:
-          "Android has been updated to android-platform-13.0.0_r10 with the latest available security patches.",
+              "Android has been updated to android-platform-13.0.0_r10 with the latest available security patches.",
         ),
       ],
     ),
