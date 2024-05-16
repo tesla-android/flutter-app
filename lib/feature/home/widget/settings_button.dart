@@ -12,10 +12,6 @@ class SettingsButton extends StatelessWidget with Logger {
     return IconButton(
       color: Colors.white,
       onPressed: () {
-        dispatchAnalyticsEvent(
-          eventName: "settings_button_tapped",
-          props: {},
-        );
         TANavigator.pushReplacement(
           context: context,
           page: TAPage.about,

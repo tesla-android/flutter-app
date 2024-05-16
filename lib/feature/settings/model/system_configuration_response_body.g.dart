@@ -9,22 +9,31 @@ part of 'system_configuration_response_body.dart';
 SystemConfigurationResponseBody _$SystemConfigurationResponseBodyFromJson(
         Map<String, dynamic> json) =>
     SystemConfigurationResponseBody(
-      bandType: json['persist.tesla-android.softap.band_type'] as int,
-      channel: json['persist.tesla-android.softap.channel'] as int,
-      channelWidth: json['persist.tesla-android.softap.channel_width'] as int,
-      isEnabledFlag: json['persist.tesla-android.softap.is_enabled'] as int,
+      bandType: (json['persist.tesla-android.softap.band_type'] as num).toInt(),
+      channel: (json['persist.tesla-android.softap.channel'] as num).toInt(),
+      channelWidth:
+          (json['persist.tesla-android.softap.channel_width'] as num).toInt(),
+      isEnabledFlag:
+          (json['persist.tesla-android.softap.is_enabled'] as num).toInt(),
       isOfflineModeEnabledFlag:
-          json['persist.tesla-android.offline-mode.is_enabled'] as int,
+          (json['persist.tesla-android.offline-mode.is_enabled'] as num)
+              .toInt(),
       isOfflineModeTelemetryEnabledFlag:
-          json['persist.tesla-android.offline-mode.telemetry.is_enabled']
-              as int,
+          (json['persist.tesla-android.offline-mode.telemetry.is_enabled']
+                  as num)
+              .toInt(),
       isOfflineModeTeslaFirmwareDownloadsEnabledFlag:
-          json['persist.tesla-android.offline-mode.tesla-firmware-downloads']
-              as int,
+          (json['persist.tesla-android.offline-mode.tesla-firmware-downloads']
+                  as num)
+              .toInt(),
       browserAudioIsEnabled:
-          json['persist.tesla-android.browser_audio.is_enabled'] as int? ?? 1,
+          (json['persist.tesla-android.browser_audio.is_enabled'] as num?)
+                  ?.toInt() ??
+              1,
       browserAudioVolume:
-          json['persist.tesla-android.browser_audio.volume'] as int? ?? 100,
+          (json['persist.tesla-android.browser_audio.volume'] as num?)
+                  ?.toInt() ??
+              100,
     );
 
 Map<String, dynamic> _$SystemConfigurationResponseBodyToJson(

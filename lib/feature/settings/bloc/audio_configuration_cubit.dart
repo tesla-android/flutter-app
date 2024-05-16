@@ -44,15 +44,9 @@ class AudioConfigurationCubit extends Cubit<AudioConfigurationState>
           AudioConfigurationStateSettingsFetched(
               isEnabled: true, volume: newVolume),
         );
-        dispatchAnalyticsEvent(
-          eventName: "audio_configuration_volume",
-          props: {
-            "volume": newVolume,
-          },
-        );
       }
     } catch (exception, stackTrace) {
-      logExceptionAndUploadToSentry(
+      logException(
           exception: exception, stackTrace: stackTrace);
       if (!isClosed) emit(AudioConfigurationStateError());
     }
@@ -64,19 +58,13 @@ class AudioConfigurationCubit extends Cubit<AudioConfigurationState>
       await _repository.setBrowserAudioState(isEnabled ? 1 : 0);
       await _repository.setBrowserAudioVolume(100);
       if (!isClosed) {
-        dispatchAnalyticsEvent(
-          eventName: "audio_configuration_state",
-          props: {
-            "isEnabled": isEnabled,
-          },
-        );
         emit(
           AudioConfigurationStateSettingsFetched(
               isEnabled: isEnabled, volume: 100),
         );
       }
     } catch (exception, stackTrace) {
-      logExceptionAndUploadToSentry(
+      logException(
           exception: exception, stackTrace: stackTrace);
       if (!isClosed) emit(AudioConfigurationStateError());
     }

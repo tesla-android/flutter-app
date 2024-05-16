@@ -70,10 +70,6 @@ class _IframeViewState extends State<DisplayView> with Logger {
                 displayState.adjustedSize.height.toString(),
               };
 
-              dispatchAnalyticsEvent(
-                eventName: "display_started",
-                props: config,
-              );
               window.addEventListener('message', (event) {
                 var data = (event as MessageEvent).data;
                 if (data is String && data == "iframeReady") {

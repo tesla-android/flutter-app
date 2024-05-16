@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
-import 'package:sentry_dio/sentry_dio.dart';
 
 @module
 abstract class NetworkModule {
@@ -11,5 +10,5 @@ abstract class NetworkModule {
           receiveTimeout: const Duration(seconds: 5),
           sendTimeout: const Duration(seconds: 5),
         ),
-      )..addSentry();
+      );
 }

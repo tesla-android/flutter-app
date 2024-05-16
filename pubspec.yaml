@@ -6,8 +6,8 @@ publish_to: 'none'
 version: 2024.18.2
 
 environment:
-  flutter: "3.13.3"
-  sdk: "3.1.1"
+  flutter: "3.22.0"
+  sdk: "3.4.0"
 
 dependencies:
   flutter:
@@ -26,11 +26,8 @@ dependencies:
   logger: any
   json_serializable: ^6.2.0
   package_info_plus: ^4.1.0
-  sentry_flutter: ^7.5.2
-  sentry_dio: ^7.5.2
   url_launcher: ^6.1.1
   equatable: ^2.0.0
-  aptabase_flutter: ^0.1.0
   web_socket_client: ^0.1.0-dev.3
 
 dev_dependencies:

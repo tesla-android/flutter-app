@@ -93,30 +93,21 @@
   <img src="icons/android-icon-192x192.png" alt="Loading indicator..." />
 </div>
 <script>
-            window.addEventListener("load", function () {
-                var loading = document.querySelector("#loading");
-                _flutter.loader
-                    .loadEntrypoint({
-                        serviceWorker: {
-                            serviceWorkerVersion: serviceWorkerVersion,
-                        },
-                    })
-                    .then(function (engineInitializer) {
-                        loading.classList.add("main_done");
-                        return engineInitializer.initializeEngine();
-                    })
-                    .then(function (appRunner) {
-                        loading.classList.add("init_done");
-                        return appRunner.runApp();
-                    })
-                    .then(function (app) {
-                        // Wait a few milliseconds so users can see the "zoooom" animation
-                        // before getting rid of the "loading" div.
-                        window.setTimeout(function () {
-                            loading.remove();
-                        }, 200);
-                    });
-            });
-        </script>
+  {{flutter_js}}
+  {{flutter_build_config}}
+
+  var loading = document.querySelector("#loading");
+
+  _flutter.loader.load({
+    onEntrypointLoaded: async function(engineInitializer) {
+      const appRunner = await engineInitializer.initializeEngine();
+
+      window.setTimeout(function () {
+        loading.remove();
+      }, 200);
+      await appRunner.runApp();
+  }
+});
+</script>
 </body>
 </html>

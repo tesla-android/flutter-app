@@ -22,7 +22,7 @@ class SystemConfigurationCubit extends Cubit<SystemConfigurationState>
       emit(SystemConfigurationStateSettingsFetched(
           currentConfiguration: configuration));
     } catch (exception, stackTrace) {
-      logExceptionAndUploadToSentry(
+      logException(
           exception: exception, stackTrace: stackTrace);
       if (!isClosed) emit(SystemConfigurationStateSettingsFetchingError());
     }
@@ -180,21 +180,8 @@ class SystemConfigurationCubit extends Cubit<SystemConfigurationState>
             isOfflineModeTelemetryEnabledFlag ? 1 : 0);
         await _repository.setOfflineModeTeslaFirmwareDownloads(
             isOfflineModeTeslaFirmwareDownloadsEnabledFlag ? 1 : 0);
-        dispatchAnalyticsEvent(
-          eventName: "system_configuration_apply",
-          props: {
-            "setSoftApBand": newBand.band,
-            "softApChannelWidth": newBand.channelWidth,
-            "softApChannel": newBand.channel,
-            "softApState": isEnabledFlag,
-            "offlineModeState": isOfflineModeEnabledFlag,
-            "offlineModeTelemetryState": isOfflineModeTelemetryEnabledFlag,
-            "offlineModeTeslaFirmwareDownloads":
-                isOfflineModeTeslaFirmwareDownloadsEnabledFlag,
-          },
-        );
       } catch (exception, stackTrace) {
-        logExceptionAndUploadToSentry(
+        logException(
             exception: exception, stackTrace: stackTrace);
         if (!isClosed)
           emit(SystemConfigurationStateSettingsSavingFailedError());

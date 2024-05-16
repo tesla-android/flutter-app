@@ -138,20 +138,8 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
               adjustedSize: adjustedSize,
               rendererType: renderer));
         });
-        dispatchAnalyticsEvent(
-          eventName: "virtualDisplayResolutionChanged",
-          props: {
-            "width": adjustedSize.width,
-            "height": adjustedSize.height,
-            "viewportWidth": viewSize.width,
-            "viewportHeight": viewSize.height,
-            "density": density,
-            "lowRes": lowResModePreset.maxHeight(),
-            "renderer": renderer.name(),
-          },
-        );
       } catch (exception, stacktrace) {
-        logExceptionAndUploadToSentry(
+        logException(
             exception: exception, stackTrace: stacktrace);
       }
     } else {

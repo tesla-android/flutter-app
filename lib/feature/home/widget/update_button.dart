@@ -16,10 +16,6 @@ class UpdateButton extends StatelessWidget with Logger {
         return IconButton(
           color: Colors.amber,
           onPressed: () {
-            dispatchAnalyticsEvent(
-              eventName: "update_button_tapped",
-              props: {},
-            );
             BlocProvider.of<OTAUpdateCubit>(context).launchUpdater();
           },
           icon: const Icon(

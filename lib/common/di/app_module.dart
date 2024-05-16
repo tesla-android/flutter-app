@@ -1,7 +1,6 @@
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html';
 
-import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:flavor/flavor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -40,15 +39,4 @@ abstract class AppModule {
 
   @lazySingleton
   GlobalKey<NavigatorState> get navigatorKey => GlobalKey<NavigatorState>();
-
-  @singleton
-  @preResolve
-  Future<Aptabase> provideAptabase() async {
-    await Aptabase.init(
-        "A-SH-6015564984",
-        const InitOptions(
-          host: "https://aptabase.teslaandroid.com",
-        ));
-    return Aptabase.instance;
-  }
 }

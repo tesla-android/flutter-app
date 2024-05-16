@@ -8,16 +8,16 @@ part of 'remote_display_state.dart';
 
 RemoteDisplayState _$RemoteDisplayStateFromJson(Map<String, dynamic> json) =>
     RemoteDisplayState(
-      width: json['width'] as int,
-      height: json['height'] as int,
-      density: json['density'] as int,
+      width: (json['width'] as num).toInt(),
+      height: (json['height'] as num).toInt(),
+      density: (json['density'] as num).toInt(),
       lowRes: $enumDecode(_$DisplayResolutionModePresetEnumMap, json['lowres']),
       renderer:
           $enumDecodeNullable(_$DisplayRendererTypeEnumMap, json['renderer']) ??
               DisplayRendererType.imgTag,
-      isResponsive: json['isResponsive'] as int? ?? 1,
-      isH264: json['isH264'] as int? ?? 1,
-      isHeadless: json['isHeadless'] as int?,
+      isResponsive: (json['isResponsive'] as num?)?.toInt() ?? 1,
+      isH264: (json['isH264'] as num?)?.toInt() ?? 1,
+      isHeadless: (json['isHeadless'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$RemoteDisplayStateToJson(RemoteDisplayState instance) =>

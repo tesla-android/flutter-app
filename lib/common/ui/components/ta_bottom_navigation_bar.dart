@@ -38,10 +38,6 @@ class TaBottomNavigationBar extends StatelessWidget with Logger {
         if(page == null) {
           return;
         }
-        dispatchAnalyticsEvent(
-          eventName: "bottom_navigation_tab_changed",
-          props: {"route": page.route, "title": page.title},
-        );
         TANavigator.pushReplacement(
             context: context, page: page, animated: index == 0);
       },
