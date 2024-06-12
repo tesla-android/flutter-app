@@ -20,10 +20,10 @@ class _DisplayService implements DisplayService {
 
   @override
   Future<RemoteDisplayState> getDisplayState() async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<RemoteDisplayState>(Options(
       method: 'GET',
@@ -49,7 +49,7 @@ class _DisplayService implements DisplayService {
   @override
   Future<dynamic> updateDisplayConfiguration(
       RemoteDisplayState configuration) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'Content-Type': 'application/json'};
     _headers.removeWhere((k, v) => v == null);

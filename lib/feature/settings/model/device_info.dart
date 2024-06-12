@@ -19,6 +19,8 @@ class DeviceInfo extends Equatable {
   final String releaseType;
   @JsonKey(name: "ota_url", defaultValue: "undefined")
   final String otaUrl;
+  @JsonKey(name: "is_gps_enabled", defaultValue: 0)
+  final int isGPSEnabled;
 
   const DeviceInfo({
     required this.cpuTemperature,
@@ -28,6 +30,7 @@ class DeviceInfo extends Equatable {
     required this.isModemDetected,
     required this.releaseType,
     required this.otaUrl,
+    required this.isGPSEnabled
   });
 
   factory DeviceInfo.fromJson(Map<String, dynamic> json) =>
@@ -43,7 +46,8 @@ class DeviceInfo extends Equatable {
         isModemDetected,
         isCarPlayDetected,
         releaseType,
-        otaUrl
+        otaUrl,
+        isGPSEnabled,
       ];
 }
 

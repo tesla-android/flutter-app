@@ -20,11 +20,11 @@ class _GitHubService implements GitHubService {
 
   @override
   Future<GitHubRelease> getLatestRelease() async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'X-GitHub-Api-Version': '2022-11-28'};
     _headers.removeWhere((k, v) => v == null);
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<GitHubRelease>(Options(
       method: 'GET',

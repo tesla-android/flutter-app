@@ -20,10 +20,10 @@ class _ConfigurationService implements ConfigurationService {
 
   @override
   Future<SystemConfigurationResponseBody> getConfiguration() async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<SystemConfigurationResponseBody>(Options(
       method: 'GET',
@@ -48,7 +48,7 @@ class _ConfigurationService implements ConfigurationService {
 
   @override
   Future<dynamic> setSoftApBand(int band) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'Content-Type': 'text/plain'};
     _headers.removeWhere((k, v) => v == null);
@@ -76,7 +76,7 @@ class _ConfigurationService implements ConfigurationService {
 
   @override
   Future<dynamic> setSoftApChannel(int channel) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'Content-Type': 'text/plain'};
     _headers.removeWhere((k, v) => v == null);
@@ -104,7 +104,7 @@ class _ConfigurationService implements ConfigurationService {
 
   @override
   Future<dynamic> setSoftApChannelWidth(int channelWidth) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'Content-Type': 'text/plain'};
     _headers.removeWhere((k, v) => v == null);
@@ -132,7 +132,7 @@ class _ConfigurationService implements ConfigurationService {
 
   @override
   Future<dynamic> setSoftApState(int isEnabledFlag) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'Content-Type': 'text/plain'};
     _headers.removeWhere((k, v) => v == null);
@@ -160,7 +160,7 @@ class _ConfigurationService implements ConfigurationService {
 
   @override
   Future<dynamic> setOfflineModeState(int isEnabledFlag) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'Content-Type': 'text/plain'};
     _headers.removeWhere((k, v) => v == null);
@@ -188,7 +188,7 @@ class _ConfigurationService implements ConfigurationService {
 
   @override
   Future<dynamic> setOfflineModeTelemetryState(int isEnabledFlag) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'Content-Type': 'text/plain'};
     _headers.removeWhere((k, v) => v == null);
@@ -217,7 +217,7 @@ class _ConfigurationService implements ConfigurationService {
   @override
   Future<dynamic> setOfflineModeTeslaFirmwareDownloads(
       int isEnabledFlag) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'Content-Type': 'text/plain'};
     _headers.removeWhere((k, v) => v == null);
@@ -245,7 +245,7 @@ class _ConfigurationService implements ConfigurationService {
 
   @override
   Future<dynamic> setBrowserAudioState(int isEnabledFlag) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'Content-Type': 'text/plain'};
     _headers.removeWhere((k, v) => v == null);
@@ -273,7 +273,7 @@ class _ConfigurationService implements ConfigurationService {
 
   @override
   Future<dynamic> setBrowserAudioVolume(int volume) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'Content-Type': 'text/plain'};
     _headers.removeWhere((k, v) => v == null);

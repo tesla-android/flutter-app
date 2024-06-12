@@ -1,4 +1,3 @@
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:tesla_android/common/utils/logger.dart';
@@ -45,8 +44,7 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
         _currentConfig = _currentConfig?.copyWith(isResponsive: isResponsive);
         _emitCurrentConfig();
       } catch (exception, stackTrace) {
-        logException(
-            exception: exception, stackTrace: stackTrace);
+        logException(exception: exception, stackTrace: stackTrace);
         if (!isClosed) emit(DisplayConfigurationStateError());
       }
     } else {
@@ -64,8 +62,7 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
         _currentConfig = _currentConfig?.copyWith(lowRes: newPreset);
         _emitCurrentConfig();
       } catch (exception, stackTrace) {
-        logException(
-            exception: exception, stackTrace: stackTrace);
+        logException(exception: exception, stackTrace: stackTrace);
         if (!isClosed) emit(DisplayConfigurationStateError());
       }
     } else {
@@ -83,8 +80,43 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
         _currentConfig = _currentConfig?.copyWith(renderer: newType);
         _emitCurrentConfig();
       } catch (exception, stackTrace) {
-        logException(
-            exception: exception, stackTrace: stackTrace);
+        logException(exception: exception, stackTrace: stackTrace);
+        if (!isClosed) emit(DisplayConfigurationStateError());
+      }
+    } else {
+      log("_currentConfig not available");
+    }
+  }
+
+  void setQuality(DisplayQualityPreset newQuality) async {
+    var config = _currentConfig;
+    if (config != null) {
+      config = config.updateQuality(newQuality: newQuality);
+      if (!isClosed) emit(DisplayConfigurationStateSettingsUpdateInProgress());
+      try {
+        await _repository.updateDisplayConfiguration(config);
+        _currentConfig = _currentConfig?.copyWith(quality: newQuality);
+        _emitCurrentConfig();
+      } catch (exception, stackTrace) {
+        logException(exception: exception, stackTrace: stackTrace);
+        if (!isClosed) emit(DisplayConfigurationStateError());
+      }
+    } else {
+      log("_currentConfig not available");
+    }
+  }
+
+  void setRefreshRate(DisplayRefreshRatePreset newRefreshRate) async {
+    var config = _currentConfig;
+    if (config != null) {
+      config = config.updateRefreshRate(newRefreshRate: newRefreshRate);
+      if (!isClosed) emit(DisplayConfigurationStateSettingsUpdateInProgress());
+      try {
+        await _repository.updateDisplayConfiguration(config);
+        _currentConfig = _currentConfig?.copyWith(refreshRate: newRefreshRate);
+        _emitCurrentConfig();
+      } catch (exception, stackTrace) {
+        logException(exception: exception, stackTrace: stackTrace);
         if (!isClosed) emit(DisplayConfigurationStateError());
       }
     } else {
@@ -98,6 +130,8 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
         lowResModePreset: _currentConfig!.lowRes,
         renderer: _currentConfig!.renderer,
         isResponsive: _currentConfig!.isResponsive == 1,
+        refreshRate: _currentConfig!.refreshRate,
+        quality: _currentConfig!.quality,
       ));
     }
   }

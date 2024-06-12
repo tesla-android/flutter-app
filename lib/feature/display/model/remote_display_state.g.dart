@@ -17,6 +17,12 @@ RemoteDisplayState _$RemoteDisplayStateFromJson(Map<String, dynamic> json) =>
               DisplayRendererType.imgTag,
       isResponsive: (json['isResponsive'] as num?)?.toInt() ?? 1,
       isH264: (json['isH264'] as num?)?.toInt() ?? 1,
+      refreshRate: $enumDecodeNullable(
+              _$DisplayRefreshRatePresetEnumMap, json['refreshRate']) ??
+          DisplayRefreshRatePreset.refresh30hz,
+      quality:
+          $enumDecodeNullable(_$DisplayQualityPresetEnumMap, json['quality']) ??
+              DisplayQualityPreset.quality90,
       isHeadless: (json['isHeadless'] as num?)?.toInt(),
     );
 
@@ -30,6 +36,8 @@ Map<String, dynamic> _$RemoteDisplayStateToJson(RemoteDisplayState instance) =>
       'isHeadless': instance.isHeadless,
       'isResponsive': instance.isResponsive,
       'isH264': instance.isH264,
+      'refreshRate': _$DisplayRefreshRatePresetEnumMap[instance.refreshRate]!,
+      'quality': _$DisplayQualityPresetEnumMap[instance.quality]!,
     };
 
 const _$DisplayResolutionModePresetEnumMap = {
@@ -44,4 +52,19 @@ const _$DisplayRendererTypeEnumMap = {
   DisplayRendererType.imgTag: 0,
   DisplayRendererType.workerWebGLWebCodecs: 1,
   DisplayRendererType.h264WebCodecs: 2,
+};
+
+const _$DisplayRefreshRatePresetEnumMap = {
+  DisplayRefreshRatePreset.refresh30hz: 30,
+  DisplayRefreshRatePreset.refresh45hz: 45,
+  DisplayRefreshRatePreset.refresh60hz: 60,
+};
+
+const _$DisplayQualityPresetEnumMap = {
+  DisplayQualityPreset.quality40: 40,
+  DisplayQualityPreset.quality50: 50,
+  DisplayQualityPreset.quality60: 60,
+  DisplayQualityPreset.quality70: 70,
+  DisplayQualityPreset.quality80: 80,
+  DisplayQualityPreset.quality90: 90,
 };

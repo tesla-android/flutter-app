@@ -73,6 +73,8 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
     final isHeadless = (remoteState.isHeadless ?? 1) == 1;
     final renderer = _getRenderer(remoteState);
     final isResponsive = remoteState.isResponsive == 1;
+    final quality = remoteState.quality;
+    final refreshRate = remoteState.refreshRate;
 
     final desiredSize = _calculateOptimalSize(
       isResponsive ? viewSize : const Size(1088,832),
@@ -105,6 +107,8 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
         rendererType: renderer,
         isH264: remoteState.isH264 == 1,
         isResponsive: remoteState.isResponsive == 1,
+        quality: quality,
+        refreshRate: refreshRate
       ));
     }
     _resizeCoolDownTimer = Timer(_coolDownDuration, _sendResizeRequest);
@@ -119,6 +123,8 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
       final renderer = currentState.rendererType;
       final density = lowResModePreset.density();
       final isH264 = renderer == DisplayRendererType.h264WebCodecs;
+      final quality = currentState.quality;
+      final refreshRate = currentState.refreshRate;
 
       emit(DisplayStateResizeInProgress());
       try {
@@ -130,6 +136,8 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
           renderer: renderer,
           isResponsive: currentState.isResponsive ? 1 : 0,
           isH264: isH264 ? 1 : 0,
+          quality: quality,
+          refreshRate: refreshRate,
         ));
         await Future.delayed(_coolDownDuration, () {
           if (isClosed) return;

@@ -17,6 +17,8 @@ class DisplayStateResizeCoolDown extends DisplayState {
   final DateTime timestamp;
   final bool isH264;
   final bool isResponsive;
+  final DisplayRefreshRatePreset refreshRate;
+  final DisplayQualityPreset quality;
 
   DisplayStateResizeCoolDown({
     required this.viewSize,
@@ -25,6 +27,8 @@ class DisplayStateResizeCoolDown extends DisplayState {
     required this.rendererType,
     required this.isH264,
     required this.isResponsive,
+    required this.refreshRate,
+    required this.quality,
   }) : timestamp = DateTime.now();
 
   @override
@@ -36,6 +40,8 @@ class DisplayStateResizeCoolDown extends DisplayState {
         rendererType,
         isResponsive,
         isH264,
+        refreshRate,
+        quality,
       ];
 }
 

@@ -17,6 +17,10 @@ class RemoteDisplayState extends Equatable {
   final int isResponsive;
   @JsonKey(defaultValue: 1)
   final int isH264;
+  @JsonKey(defaultValue: DisplayRefreshRatePreset.refresh30hz)
+  final DisplayRefreshRatePreset refreshRate;
+  @JsonKey(defaultValue: DisplayQualityPreset.quality90)
+  final DisplayQualityPreset quality;
 
   const RemoteDisplayState({
     required this.width,
@@ -26,6 +30,8 @@ class RemoteDisplayState extends Equatable {
     required this.renderer,
     required this.isResponsive,
     required this.isH264,
+    required this.refreshRate,
+    required this.quality,
     this.isHeadless,
   });
 
@@ -35,8 +41,16 @@ class RemoteDisplayState extends Equatable {
   Map<String, dynamic> toJson() => _$RemoteDisplayStateToJson(this);
 
   @override
-  List<Object?> get props =>
-      [width, height, density, lowRes, renderer, isHeadless];
+  List<Object?> get props => [
+        width,
+        height,
+        density,
+        lowRes,
+        renderer,
+        isHeadless,
+        refreshRate,
+        quality,
+      ];
 
   RemoteDisplayState updateResolution(
       {required DisplayResolutionModePreset newPreset}) {
@@ -47,7 +61,17 @@ class RemoteDisplayState extends Equatable {
   }
 
   RemoteDisplayState updateRenderer({required DisplayRendererType newType}) {
-    return copyWith(renderer: newType, isH264: newType == DisplayRendererType.h264WebCodecs ? 1 : 0);
+    return copyWith(
+        renderer: newType,
+        isH264: newType == DisplayRendererType.h264WebCodecs ? 1 : 0);
+  }
+
+  RemoteDisplayState updateQuality({required DisplayQualityPreset newQuality}) {
+    return copyWith(quality: newQuality);
+  }
+
+  RemoteDisplayState updateRefreshRate({required DisplayRefreshRatePreset newRefreshRate}) {
+    return copyWith(refreshRate: newRefreshRate);
   }
 
   RemoteDisplayState copyWith({
@@ -59,6 +83,8 @@ class RemoteDisplayState extends Equatable {
     DisplayRendererType? renderer,
     int? isH264,
     int? isResponsive,
+    DisplayRefreshRatePreset? refreshRate,
+    DisplayQualityPreset? quality,
   }) {
     return RemoteDisplayState(
       width: width ?? this.width,
@@ -69,7 +95,82 @@ class RemoteDisplayState extends Equatable {
       renderer: renderer ?? this.renderer,
       isH264: isH264 ?? this.isH264,
       isResponsive: isResponsive ?? this.isResponsive,
+      refreshRate: refreshRate ?? this.refreshRate,
+      quality: quality ?? this.quality,
     );
+  }
+}
+
+enum DisplayRefreshRatePreset {
+  @JsonValue(30)
+  refresh30hz,
+  @JsonValue(45)
+  refresh45hz,
+  @JsonValue(60)
+  refresh60hz;
+
+  String name() {
+    switch (index) {
+      case 0:
+        return "30 Hz";
+      case 1:
+        return "45 Hz";
+      case 2:
+        return "60 Hz";
+      default:
+        return "30 Hz";
+    }
+  }
+
+  int value() {
+    switch (index) {
+      case 0:
+        return 30;
+      case 1:
+        return 45;
+      case 2:
+        return 60;
+      default:
+        return 30;
+    }
+  }
+}
+
+enum DisplayQualityPreset {
+  @JsonValue(40)
+  quality40,
+  @JsonValue(50)
+  quality50,
+  @JsonValue(60)
+  quality60,
+  @JsonValue(70)
+  quality70,
+  @JsonValue(80)
+  quality80,
+  @JsonValue(90)
+  quality90;
+
+  String name() {
+    switch (index) {
+      case 0:
+        return "40";
+      case 1:
+        return "50";
+      case 2:
+        return "60";
+      case 3:
+        return "70";
+      case 4:
+        return "80";
+      case 5:
+        return "90";
+      default:
+        return "90";
+    }
+  }
+
+  int value() {
+    return int.parse(name());
   }
 }
 

@@ -14,6 +14,7 @@ DeviceInfo _$DeviceInfoFromJson(Map<String, dynamic> json) => DeviceInfo(
       isModemDetected: (json['is_modem_detected'] as num?)?.toInt() ?? 0,
       releaseType: json['release_type'] as String? ?? 'undefined',
       otaUrl: json['ota_url'] as String? ?? 'undefined',
+      isGPSEnabled: (json['is_gps_enabled'] as num?)?.toInt() ?? 0,
     );
 
 Map<String, dynamic> _$DeviceInfoToJson(DeviceInfo instance) =>
@@ -25,4 +26,5 @@ Map<String, dynamic> _$DeviceInfoToJson(DeviceInfo instance) =>
       'is_carplay_detected': instance.isCarPlayDetected,
       'release_type': instance.releaseType,
       'ota_url': instance.otaUrl,
+      'is_gps_enabled': instance.isGPSEnabled,
     };
