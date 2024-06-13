@@ -76,4 +76,10 @@ abstract class ConfigurationService {
     "Content-Type": "text/plain",
   })
   Future setBrowserAudioVolume(@Body() int volume);
+
+  @POST("/gpsState")
+  @Headers({
+    "Content-Type": "text/plain",
+  })
+  Future setGPSState(@Body() int state);
 }

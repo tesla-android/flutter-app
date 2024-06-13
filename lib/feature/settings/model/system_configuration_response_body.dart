@@ -29,6 +29,11 @@ class SystemConfigurationResponseBody {
     defaultValue: 100,
   )
   final int browserAudioVolume;
+  @JsonKey(
+    name: "persist.tesla-android.gps.is_active",
+    defaultValue: 1,
+  )
+  final int isGPSEnabled;
 
   SystemConfigurationResponseBody({
     required this.bandType,
@@ -39,7 +44,8 @@ class SystemConfigurationResponseBody {
     required this.isOfflineModeTelemetryEnabledFlag,
     required this.isOfflineModeTeslaFirmwareDownloadsEnabledFlag,
     required this.browserAudioIsEnabled,
-    required this.browserAudioVolume
+    required this.browserAudioVolume,
+    required this.isGPSEnabled,
   });
 
   factory SystemConfigurationResponseBody.fromJson(Map<String, dynamic> json) =>
@@ -49,5 +55,9 @@ class SystemConfigurationResponseBody {
       _$SystemConfigurationResponseBodyToJson(this);
 
   SoftApBandType get currentSoftApBandType =>
-      (bandType == 1) ? SoftApBandType.band2_4GHz : SoftApBandType.band5GHz;
+      SoftApBandType.matchBandTypeFromConfig(
+        band: bandType,
+        channel: channel,
+        channelWidth: channelWidth,
+      );
 }

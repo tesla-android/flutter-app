@@ -48,4 +48,8 @@ class SystemConfigurationRepository {
   Future setBrowserAudioVolume(int volume) {
     return _configurationService.setBrowserAudioVolume(volume);
   }
+  
+  Future setGPSState(int isEnabled) {
+    return _configurationService.setGPSState(isEnabled);
+  }
 }

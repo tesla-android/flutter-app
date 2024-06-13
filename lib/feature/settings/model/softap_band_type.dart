@@ -5,10 +5,28 @@ enum SoftApBandType {
     channel: 6,
     channelWidth: 2,
   ),
-  band5GHz(
-    name: "5 GHZ",
+  band5GHz36(
+    name: "5 GHZ - Channel 36",
     band: 2,
     channel: 36,
+    channelWidth: 3,
+  ),
+  band5GHz44(
+    name: "5 GHZ - Channel 44",
+    band: 2,
+    channel: 44,
+    channelWidth: 3,
+  ),
+  band5GHz149(
+    name: "5 GHZ - Channel 149",
+    band: 2,
+    channel: 149,
+    channelWidth: 3,
+  ),
+  band5GHz157(
+    name: "5 GHZ - Channel 157",
+    band: 2,
+    channel: 157,
     channelWidth: 3,
   );
 
@@ -26,4 +44,25 @@ enum SoftApBandType {
   // packages/modules/Wifi/framework/java/android/net/wifi/SoftApInfo.java
   final int channelWidth;
   final String name;
+
+  static SoftApBandType matchBandTypeFromConfig(
+      {required band,
+      required channel,
+      required channelWidth}) {
+    if (band == 1) {
+      return SoftApBandType.band2_4GHz;
+    }
+    switch (channel) {
+      case 36:
+        return SoftApBandType.band5GHz36;
+      case 44:
+        return SoftApBandType.band5GHz44;
+      case 149:
+        return SoftApBandType.band5GHz149;
+      case 157:
+        return SoftApBandType.band5GHz157;
+      default:
+        return SoftApBandType.band5GHz36;
+    }
+  }
 }

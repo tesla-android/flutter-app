@@ -13,6 +13,8 @@ import 'package:tesla_android/feature/display/cubit/display_state.dart';
 import 'package:tesla_android/feature/display/model/remote_display_state.dart';
 import 'package:tesla_android/feature/settings/bloc/audio_configuration_cubit.dart';
 import 'package:tesla_android/feature/settings/bloc/audio_configuration_state.dart';
+import 'package:tesla_android/feature/settings/bloc/gps_configuration_cubit.dart';
+import 'package:tesla_android/feature/settings/bloc/gps_configuration_state.dart';
 import 'package:web/helpers.dart';
 
 class DisplayView extends StatefulWidget {
@@ -47,41 +49,53 @@ class _IframeViewState extends State<DisplayView> with Logger {
     final flavor = getIt<Flavor>();
     final displayState =
         BlocProvider.of<DisplayCubit>(context).state as DisplayStateNormal;
-    return BlocBuilder<AudioConfigurationCubit, AudioConfigurationState>(
-      bloc: BlocProvider.of<AudioConfigurationCubit>(context)
-        ..fetchConfiguration(),
-      builder: (context, state) {
-        if (state is AudioConfigurationStateSettingsFetched) {
-          return HtmlElementView(
-            viewType: _src,
-            onPlatformViewCreated: (_) {
-              final Map<String, dynamic> config = {
-                'audioWebsocketUrl': flavor.getString("audioWebSocket")!,
-                'displayWebsocketUrl':
-                flavor.getString("displayWebSocket")!,
-                'gpsWebsocketUrl': flavor.getString("gpsWebSocket")!,
-                'touchScreenWebsocketUrl':
-                flavor.getString("touchscreenWebSocket")!,
-                'isAudioEnabled': state.isEnabled.toString(),
-                'audioVolume': (state.volume / 100).toString(),
-                'displayRenderer': widget.type.resourcePath(),
-                'displayBinaryType': widget.type.binaryType(),
-                "displayWidth": displayState.adjustedSize.width.toString(),
-                "displayHeight":
-                displayState.adjustedSize.height.toString(),
-              };
+    return BlocBuilder<GPSConfigurationCubit, GPSConfigurationState>(
+        bloc: BlocProvider.of<GPSConfigurationCubit>(context)
+          ..fetchConfiguration(),
+        builder: (context, gpsState) {
+          return BlocBuilder<AudioConfigurationCubit, AudioConfigurationState>(
+            bloc: BlocProvider.of<AudioConfigurationCubit>(context)
+              ..fetchConfiguration(),
+            builder: (context, audioState) {
+              if (audioState is AudioConfigurationStateSettingsFetched &&
+                  gpsState is GPSConfigurationStateLoaded) {
+                return HtmlElementView(
+                  viewType: _src,
+                  onPlatformViewCreated: (_) {
+                    final Map<String, dynamic> config = {
+                      'audioWebsocketUrl': flavor.getString("audioWebSocket")!,
+                      'displayWebsocketUrl':
+                          flavor.getString("displayWebSocket")!,
+                      'gpsWebsocketUrl': flavor.getString("gpsWebSocket")!,
+                      'touchScreenWebsocketUrl':
+                          flavor.getString("touchscreenWebSocket")!,
+                      'isGPSEnabled': gpsState.isGPSEnabled.toString(),
+                      'isAudioEnabled': audioState.isEnabled.toString(),
+                      'audioVolume': (audioState.volume / 100).toString(),
+                      'displayRenderer': widget.type.resourcePath(),
+                      'displayBinaryType': widget.type.binaryType(),
+                      "displayWidth":
+                          displayState.adjustedSize.width.toString(),
+                      "displayHeight":
+                          displayState.adjustedSize.height.toString(),
+                    };
 
-              window.addEventListener('message', (JSAny event) {
-                if (event is MessageEvent && event.data == "iframeReady".toJS) {
-                  window.postMessage(jsonEncode(config).toJS, '*'.toJS);
-                }
-              }.toJS);
+                    window.addEventListener(
+                        'message',
+                        (JSAny event) {
+                          if (event is MessageEvent &&
+                              event.data == "iframeReady".toJS) {
+                            window.postMessage(
+                                jsonEncode(config).toJS, '*'.toJS);
+                          }
+                        }.toJS);
+                  },
+                );
+              } else {
+                return const SizedBox();
+              }
             },
           );
-        } else {
-          return const SizedBox();
-        }
-      },
-    );
+        });
   }
 }

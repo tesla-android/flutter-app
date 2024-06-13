@@ -84,7 +84,8 @@ class HotspotSettings extends SettingsSection {
 
         SettingsTile(
             icon: Icons.wifi_channel,
-            title: 'Frequency band',
+            dense: false,
+            title: 'Frequency band and channel',
             trailing: DropdownButton<SoftApBandType>(
               value: selectedBand,
               icon: const Icon(Icons.arrow_drop_down_outlined),
@@ -109,7 +110,7 @@ class HotspotSettings extends SettingsSection {
         const Padding(
           padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
           child: Text(
-              'The utilization of the 5 GHz operation mode enhances the performance of the Tesla Android system while effectively resolving Bluetooth-related challenges. This mode is anticipated to be designated as the default option in a future versions.\n\nConversely, when operating on the 2.4 GHz frequency, the allocation of resources between the hotspot and Bluetooth can lead to dropped frames, particularly when utilizing AD2P audio.'),
+              'The utilization of the 5 GHz operation mode enhances the performance of the Tesla Android system while effectively resolving Bluetooth-related challenges. If your car does not see the Tesla Android network please change the channel, supported channels differ by region. This mode is anticipated to be designated as the default option in a future versions.\n\nConversely, when operating on the 2.4 GHz frequency, the allocation of resources between the hotspot and Bluetooth can lead to dropped frames, particularly when utilizing AD2P audio.'),
         ),
         divider,
         SettingsTile(

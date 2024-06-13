@@ -13,6 +13,7 @@ import 'package:tesla_android/feature/releaseNotes/widget/release_notes_page.dar
 import 'package:tesla_android/feature/settings/bloc/audio_configuration_cubit.dart';
 import 'package:tesla_android/feature/settings/bloc/device_info_cubit.dart';
 import 'package:tesla_android/feature/settings/bloc/display_configuration_cubit.dart';
+import 'package:tesla_android/feature/settings/bloc/gps_configuration_cubit.dart';
 import 'package:tesla_android/feature/settings/bloc/system_configuration_cubit.dart';
 import 'package:tesla_android/feature/settings/widget/settings_page.dart';
 import 'package:tesla_android/feature/touchscreen/cubit/touchscreen_cubit.dart';
@@ -35,6 +36,9 @@ class TAPageFactory {
             providers: [
               BlocProvider(
                 create: (_) => getIt<AudioConfigurationCubit>(),
+              ),
+              BlocProvider(
+                create: (_) => getIt<GPSConfigurationCubit>(),
               ),
               BlocProvider(
                 create: (_) => getIt<TouchscreenCubit>(),
@@ -60,6 +64,9 @@ class TAPageFactory {
         case TAPage.settings:
           return MultiBlocProvider(
             providers: [
+              BlocProvider(
+                create: (_) => getIt<GPSConfigurationCubit>()..fetchConfiguration(),
+              ),
               BlocProvider(
                 create: (_) =>
                     getIt<AudioConfigurationCubit>()..fetchConfiguration(),

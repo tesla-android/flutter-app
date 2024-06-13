@@ -34,6 +34,8 @@ SystemConfigurationResponseBody _$SystemConfigurationResponseBodyFromJson(
           (json['persist.tesla-android.browser_audio.volume'] as num?)
                   ?.toInt() ??
               100,
+      isGPSEnabled:
+          (json['persist.tesla-android.gps.is_active'] as num?)?.toInt() ?? 1,
     );
 
 Map<String, dynamic> _$SystemConfigurationResponseBodyToJson(
@@ -52,4 +54,5 @@ Map<String, dynamic> _$SystemConfigurationResponseBodyToJson(
       'persist.tesla-android.browser_audio.is_enabled':
           instance.browserAudioIsEnabled,
       'persist.tesla-android.browser_audio.volume': instance.browserAudioVolume,
+      'persist.tesla-android.gps.is_active': instance.isGPSEnabled,
     };

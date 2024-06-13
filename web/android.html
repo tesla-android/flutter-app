@@ -57,7 +57,7 @@
     var gpsEstimator;
     var gpsRunning = false;
 
-
+    var isGPSEnabled = 'false';
 
     window.parent.addEventListener(
       "message",
@@ -79,7 +79,7 @@
         gpsWebsocketUrl = config.gpsWebsocketUrl;
         touchScreenWebsocketUrl = config.touchScreenWebsocketUrl;
 
-
+        isGPSEnabled = config.isGPSEnabled;
 
         setAudioEnabled(config.isAudioEnabled);
         setAudioVolume(config.audioVolume);
@@ -157,6 +157,9 @@
     }
 
     function createGpsSocket(url) {
+      if(isGPSEnabled === 'false') {
+        return;
+      }
       gpsSocket = new ReconnectingWebSocket(url);
       gpsEstimator = new GpsEstimator();
 
@@ -177,6 +180,9 @@
       gpsSocket.onmessage = (event) => {
         log("GPS: " + message);
       };
+
+      // Start the permission check and potentially start location updates
+      checkPermissionAndStartUpdates();
     }
 
     function createTouchScreenSocket(url) {
@@ -208,6 +214,9 @@
     });
 
     async function checkPermissionAndStartUpdates() {
+      if(isGPSEnabled === 'false') {
+        return;
+      }
       const permissionStatus = await navigator.permissions.query({ name: 'geolocation' });
 
       if (permissionStatus.state === 'prompt') {
@@ -266,8 +275,6 @@
     }
 
     window.addEventListener('load', function () {
-      // Start the permission check and potentially start location updates
-      checkPermissionAndStartUpdates();
       window.parent.postMessage("iframeReady", "*");
     })
   </script>
