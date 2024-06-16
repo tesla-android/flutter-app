@@ -7,6 +7,36 @@ import 'package:tesla_android/feature/releaseNotes/model/version.dart';
 class ReleaseNotesRepository {
   static const ReleaseNotes _releaseNotes = ReleaseNotes(versions: [
     Version(
+      versionName: "2024.24.1",
+      changelogItems: [
+        ChangelogItem(
+          title: "Virtual display",
+          shortDescription: "Performance improvements",
+          descriptionMarkdown: "You can now control the bitrate and refresh rate of the virtual display.",
+        ),
+        ChangelogItem(
+          title: "Browser audio",
+          shortDescription: "Performance improvements",
+          descriptionMarkdown: "Various improvements in the audio capture pipeline have been implemented resulting in better performance.",
+        ),
+        ChangelogItem(
+          title: "Browser GPS",
+          shortDescription: "Stability improvements",
+          descriptionMarkdown: "Tesla software version 2024.14 brought back a bug where browser crashes may occur on certain vehicles (mostly MCU2). Tesla Android now comes with browser GPS disabled by default in order to improve stability. This function can be enabled in Settings.",
+        ),
+        ChangelogItem(
+          title: "LTE Modems",
+          shortDescription: "Compatibility improvements",
+          descriptionMarkdown: "RNDIS based LTE modems that worked on Android 13 releases of Tesla Android should now be detected again. The driver has been enabled in the kernel.",
+        ),
+        ChangelogItem(
+          title: "5GHz Wi-Fi Hotspot",
+          shortDescription: "Compatibility improvements",
+          descriptionMarkdown: "You can now change the 5GHz Wi-Fi channel used by Tesla Android. Vehicles in certain regions (Japan, China) did not detect the Wi-Fi network broadcasted by the device in previous releases",
+        ),
+      ],
+    ),
+    Version(
       versionName: "2024.20.1",
       changelogItems: [
         ChangelogItem(
