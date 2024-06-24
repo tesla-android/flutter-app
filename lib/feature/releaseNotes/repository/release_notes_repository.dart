@@ -7,6 +7,31 @@ import 'package:tesla_android/feature/releaseNotes/model/version.dart';
 class ReleaseNotesRepository {
   static const ReleaseNotes _releaseNotes = ReleaseNotes(versions: [
     Version(
+      versionName: "2024.26.1",
+      changelogItems: [
+        ChangelogItem(
+          title: "Virtual display",
+          shortDescription: "Performance improvements",
+          descriptionMarkdown: "This version iterates on Virtual Display improvements from 2024.24.1",
+        ),
+        ChangelogItem(
+          title: "Browser audio",
+          shortDescription: "Bugfixes",
+          descriptionMarkdown: "Playback performance should be improved in this build.",
+        ),
+        ChangelogItem(
+          title: "Flutter App",
+          shortDescription: "Performance improvements",
+          descriptionMarkdown: "CanvasKit is now used to render the UI, resulting in better scrolling performance in Tesla Android Settings.",
+        ),
+        ChangelogItem(
+          title: "Android Platform",
+          shortDescription: "Security improvements",
+          descriptionMarkdown: "Android Platform has been updated and it now includes latest security patches (05.06.2024). Kernel has also been updated to 6.1.84.",
+        ),
+      ],
+    ),
+    Version(
       versionName: "2024.24.1",
       changelogItems: [
         ChangelogItem(

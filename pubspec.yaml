@@ -3,7 +3,7 @@ description: Tesla Android
 
 publish_to: 'none'
 
-version: 2024.24.1
+version: 2024.26.1
 
 environment:
   flutter: "3.22.0"
@@ -30,8 +30,8 @@ dependencies:
   equatable: ^2.0.0
   web_socket_client: ^0.1.0-dev.3
   web: ^0.5.1
-
   json_annotation: any
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
