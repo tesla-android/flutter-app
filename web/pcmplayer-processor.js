@@ -35,17 +35,10 @@ class PCMPlayerProcessor extends AudioWorkletProcessor {
 
     getFormattedValue(data) {
         if (data.constructor == ArrayBuffer) {
-            data = new Int16Array(data);
+            return new Float32Array(data);
         } else {
-            data = new Int16Array(data.buffer);
+            return new Float32Array(data.buffer);
         }
-
-        let float32 = new Float32Array(data.length);
-
-        for (let i = 0; i < data.length; i++) {
-            float32[i] = data[i] / 32768;
-        }
-        return float32
     }
 
     process(inputs, outputs, parameters) {
