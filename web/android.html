@@ -36,28 +36,35 @@
   <canvas id="canvas"></canvas>
   <script>
 
-
     var audioWebsocketUrl;
     var displayWebsocketUrl;
     var gpsWebsocketUrl;
     var touchScreenWebsocketUrl;
 
-
     var displaySocket;
     var gpsSocket;
     var touchScreenSocket;
-
-
 
     var displayRenderer;
     var displayBinaryType;
     var displayWidth;
     var displayHeight;
     var displayRendererAdded = false;
-    var gpsEstimator;
-    var gpsRunning = false;
 
     var isGPSEnabled = 'false';
+    var gpsEstimator;
+    var gpsWatcher = null;
+    var gpsTimer = null;
+    var gpsRunning = false;
+    var gpsPosition = {
+      latitude: "0.0",
+      longitude: "0.0",
+      altitude: "0.0",
+      vertical_accuracy: "0.0",
+      bearing: "0.0",
+      speed: "0.0",
+      timestamp: String(Date.now())
+    }
 
     window.parent.addEventListener(
       "message",
@@ -233,11 +240,13 @@
       }
     }
 
-    function updateLocation(position) {
-      if (!gpsRunning) return;
-      if (!position.coords) return
+    function updateLocation() {
+      //if (!gpsRunning) return;
+      //if (!position.coords) return
+      //gpsSocket.send(toLocationData(position));
 
-      gpsSocket.send(toLocationData(position));
+      gpsPosition.timestamp = String(Date.now());
+      gpsSocket.send(JSON.stringify(gpsPosition));
     }
 
     function logError(error) {
@@ -249,7 +258,23 @@
     }
 
     function startLocationUpdates() {
-      setInterval(updateHandler, 1000);
+      if(gpsWatcher !== null) navigator.geolocation.clearWatch(gpsWatcher);
+      if(gpsTimer !== null) clearInterval(gpsTimer);
+
+      gpsWatcher = navigator.geolocation.watchPosition(position => {
+        //Cache all values since Tesla Browser sends this as much as
+        //every 10-50ms, which might interfere with display/audio if
+        //it's sending that much traffic that frequently to the Pi
+        gpsPosition.latitude = String(position.coords.latitude);
+        gpsPosition.longitude = String(position.coords.longitude);
+        gpsPosition.altitude = String(position.coords.altitude);
+        gpsPosition.vertical_accuracy = String(position.coords.accuracy);
+        gpsPosition.bearing = String(position.coords.heading);
+        gpsPosition.speed = String(position.coords.speed);
+      }, logError);
+
+      gpsTimer = setInterval(updateLocation, 250);
+      //setInterval(updateHandler, 1000);
     }
 
     function toLocationData(position) {
@@ -277,6 +302,11 @@
     window.addEventListener('load', function () {
       window.parent.postMessage("iframeReady", "*");
     })
+
+    window.addEventListener('beforeunload', () => {
+      if(gpsWatcher !== null) navigator.geolocation.clearWatch(gpsWatcher);
+      if(gpsTimer !== null) clearInterval(gpsTimer);
+    });
   </script>
 </body>
 
