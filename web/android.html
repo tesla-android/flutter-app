@@ -81,8 +81,8 @@
 
         isGPSEnabled = config.isGPSEnabled;
 
-        setAudioEnabled(config.isAudioEnabled);
-        setAudioVolume(config.audioVolume);
+        //setAudioEnabled(config.isAudioEnabled);
+        //setAudioVolume(config.audioVolume);
 
         displayRenderer = config.displayRenderer;
         displayBinaryType = config.displayBinaryType;
@@ -209,7 +209,7 @@
     window.parent.addEventListener("click", function (e) {
 
       if (pcmPlayerNode == null && isAudioEnabled) {
-        startAudioPlayback();
+        //startAudioPlayback();
       }
     });
 

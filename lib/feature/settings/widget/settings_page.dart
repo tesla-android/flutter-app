@@ -27,7 +27,7 @@ class _SettingsPageState extends State<SettingsPage> {
     _sections = [
       const DisplaySettings(),
       const HotspotSettings(),
-      const SoundSettings(),
+      //const SoundSettings(),
       const GpsSettings(),
       const DeviceSettings(),
     ];

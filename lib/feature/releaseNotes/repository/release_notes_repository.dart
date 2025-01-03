@@ -7,6 +7,21 @@ import 'package:tesla_android/feature/releaseNotes/model/version.dart';
 class ReleaseNotesRepository {
   static const ReleaseNotes _releaseNotes = ReleaseNotes(versions: [
     Version(
+      versionName: "2025.1.1",
+      changelogItems: [
+        ChangelogItem(
+          title: "Bluetooth audio",
+          shortDescription: "Bugfixes",
+          descriptionMarkdown: "Bluetooth audio won't be causing system crashes anymore.",
+        ),
+        ChangelogItem(
+          title: "Browser audio",
+          shortDescription: "Bugfixes",
+          descriptionMarkdown: "Browser audio feature has been removed since it does not work anymore due to changes in the browser introduced with the 2024 Holiday Update.",
+        ),
+      ],
+    ),
+    Version(
       versionName: "2024.26.1",
       changelogItems: [
         ChangelogItem(
