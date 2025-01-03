@@ -180,11 +180,17 @@ packages:
   dio:
     dependency: "direct main"
     description:
-      name: dio
-      sha256: "11e40df547d418cc0c4900a9318b26304e665da6fa4755399a9ff9efd09034b5"
-      url: "https://pub.dev"
-    source: hosted
+      path: "plugins/dio/dio"
+      relative: true
+    source: path
     version: "5.4.3+1"
+  dio_web_adapter:
+    dependency: "direct overridden"
+    description:
+      path: "plugins/dio/plugins/web_adapter"
+      relative: true
+    source: path
+    version: "1.0.0"
   equatable:
     dependency: "direct main"
     description:

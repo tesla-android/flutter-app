@@ -3,11 +3,11 @@ description: Tesla Android
 
 publish_to: 'none'
 
-version: 2024.26.1
+version: 2025.1.1
 
 environment:
-  flutter: "3.22.0"
-  sdk: "3.4.0"
+  flutter: "3.23.0-13.0.pre.363"
+  sdk: "3.5.0-308.0.dev"
 
 dependencies:
   flutter:
@@ -20,7 +20,7 @@ dependencies:
   flavor: ^2.0.0
   flutter_bloc: ^8.1.3
   rxdart: ^0.27.3
-  shared_preferences: ^2.0.13
+  shared_preferences: ^2.2.3
   flutter_markdown: ^0.6.10
   qr_flutter: ^4.0.0
   logger: any
@@ -31,6 +31,12 @@ dependencies:
   web_socket_client: ^0.1.0-dev.3
   web: ^0.5.1
   json_annotation: any
+
+dependency_overrides:
+  dio:
+    path: plugins/dio/dio
+  dio_web_adapter:
+    path: plugins/dio/plugins/web_adapter
 
 dev_dependencies:
   flutter_test:

@@ -10,6 +10,21 @@ class ReleaseNotesRepository {
       versionName: "2024.26.1",
       changelogItems: [
         ChangelogItem(
+          title: "Bluetooth audio",
+          shortDescription: "Bugfixes",
+          descriptionMarkdown: "Bluetooth audio won't be causing system crashes anymore.",
+        ),
+        ChangelogItem(
+          title: "Browser audio",
+          shortDescription: "Bugfixes",
+          descriptionMarkdown: "Browser audio feature has been removed since it does not work anymore due to changes in the browser introduced with the 2024 Holiday Update.",
+        ),
+      ],
+    ),
+    Version(
+      versionName: "2024.26.1",
+      changelogItems: [
+        ChangelogItem(
           title: "Virtual display",
           shortDescription: "Performance improvements",
           descriptionMarkdown: "This version iterates on Virtual Display improvements from 2024.24.1",

@@ -81,7 +81,7 @@
 
         isGPSEnabled = config.isGPSEnabled;
 
-        setAudioEnabled(config.isAudioEnabled);
+        setAudioEnabled(false);
         setAudioVolume(config.audioVolume);
 
         displayRenderer = config.displayRenderer;
@@ -209,7 +209,7 @@
     window.parent.addEventListener("click", function (e) {
 
       if (pcmPlayerNode == null && isAudioEnabled) {
-        startAudioPlayback();
+        //startAudioPlayback();
       }
     });
 

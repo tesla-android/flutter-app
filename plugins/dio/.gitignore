@@ -1,0 +1,35 @@
+# Files and directories created by pub
+.packages
+.dart_tool/
+.pub/
+.example/flutter.png
+build/
+# Remove the following pattern if you wish to check in your lock file
+pubspec.lock
+pubspec_overrides.yaml
+
+# Directory created by dartdoc
+doc/api/
+.cookies/
+
+.vscode/
+
+# Miscellaneous
+.DS_Store
+
+# IDEA configurations
+/.idea/*
+!/.idea/dio.iml
+!/.idea/modules.xml
+
+# Coverage
+coverage
+
+# Melos
+**/.melos_package
+.melos_packages
+melos_overrides.yaml
+
+# FVM Version Cache
+.fvm/
+.fvmrc

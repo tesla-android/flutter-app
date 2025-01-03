@@ -1,0 +1,119 @@
+name: Verify packages abilities
+
+on:
+  push:
+    branches:
+      - main
+      - '6.0.0'
+    paths-ignore:
+      - "**.md"
+  pull_request:
+    branches:
+      - main
+      - '6.0.0'
+    paths-ignore:
+      - "**.md"
+
+# Ensure that new pushes/updates cancel running jobs
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash -leo pipefail {0}
+
+jobs:
+  workflows:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        sdk: [ min, stable, beta ]
+    env:
+      TEST_PRESET: all
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          cache: true
+          flutter-version: ${{ matrix.sdk == 'min' && '3.3.0' || '' }}
+          channel: ${{ matrix.sdk == 'min' && '' || matrix.channel }}
+      - name: Prepare dependencies for the project management
+        run: dart pub get
+      - uses: bluefireteam/melos-action@v3
+        with:
+          run-bootstrap: false
+      - name: Check satisfied packages
+        run: |
+          dart ./scripts/melos_packages.dart
+          echo $(cat .melos_packages) >> $GITHUB_ENV
+      - name: Melos Bootstrap
+        run: melos bootstrap
+      - name: '[Verify step] Format'
+        if: ${{ matrix.sdk == 'stable' }}
+        run: melos run format
+      - name: '[Verify step] Analyze packages'
+        if: ${{ matrix.sdk == 'stable' }}
+        run: melos run analyze
+      - name: '[Verify step] Publish dry-run'
+        if: ${{ matrix.sdk == 'stable' }}
+        run: melos run publish-dry-run
+      # Tests
+      - run: ./scripts/prepare_pinning_certs.sh
+      - name: Install proxy for tests
+        run: sudo apt-get update && sudo apt-get install -y squid mkcert
+      - name: Start local httpbun
+        run: |
+          mkcert -install
+          mkcert -cert-file '/tmp/cert.pem' -key-file '/tmp/key.pem' httpbun.local
+          echo '127.0.0.1 httpbun.local' | sudo tee --append /etc/hosts
+          docker run \
+            --name httpbun \
+            --detach \
+            --publish 443:443 \
+            --volume /tmp:/tmp:ro \
+            --env HTTPBUN_TLS_CERT=/tmp/cert.pem \
+            --env HTTPBUN_TLS_KEY=/tmp/key.pem \
+            --pull always \
+            sharat87/httpbun
+          sleep 1
+          curl --fail --silent --show-error https://httpbun.local/any
+      - name: Use httpbun.local for tests
+        run: melos run httpbun:local
+      - name: '[Verify step] Test Dart packages [VM]'
+        run: melos run test:vm
+      - name: Use httpbun.com for Web/Flutter tests
+        run: melos run httpbun:com
+      - name: '[Verify step] Test Dart packages [Chrome]'
+        run: melos run test:web:chrome
+      - name: '[Verify step] Test Dart packages [Firefox]'
+        run: melos run test:web:firefox
+      - name: '[Verify step] Test Flutter packages'
+        run: melos run test:flutter
+      - name: '[Verify step] Build Flutter APK'
+        run: melos run build:example:apk
+      # Coverage
+      - name: '[Coverage] Format & print test coverage'
+        if: ${{ matrix.sdk == 'stable' }}
+        run: melos run coverage:show
+      - name: '[Coverage] Create Report'
+        uses: clearlyip/code-coverage-report-action@v5
+        id: code_coverage_report
+        if: ${{ matrix.sdk == 'stable' && github.actor != 'dependabot[bot]'}}
+        with:
+          artifact_download_workflow_names: 'Verify packages abilities,coverage_baseline'
+          filename: 'coverage/cobertura.xml'
+          only_list_changed_files: true
+      - name: '[Coverage] Write PR number to file'
+        if: ${{ matrix.sdk == 'stable' && github.actor != 'dependabot[bot]'}}
+        run: echo ${{ github.event.number }} > pr_number.txt
+      - name: '[Coverage] Upload'
+        if: ${{ matrix.sdk == 'stable' && github.actor != 'dependabot[bot]'}}
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-coverage-results
+          path: |
+            coverage/cobertura.xml
+            code-coverage-results.md
+            pr_number.txt

@@ -1,0 +1,18 @@
+file_reporters:
+  json: build/reports/test-results.json
+
+tags:
+  tls:
+    skip: "Skipping TLS test with specific setup requirements by default. Use '-P all' to run all tests."
+    presets:
+      all:
+        skip: false
+      default:
+        skip: true
+  proxy:
+    skip: "Skipping proxy test with specific setup requirements by default. Use '-P all' to run all tests."
+    presets:
+      all:
+        skip: false
+      default:
+        skip: true
