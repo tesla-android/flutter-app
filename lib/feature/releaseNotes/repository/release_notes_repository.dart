@@ -7,6 +7,17 @@ import 'package:tesla_android/feature/releaseNotes/model/version.dart';
 class ReleaseNotesRepository {
   static const ReleaseNotes _releaseNotes = ReleaseNotes(versions: [
     Version(
+      versionName: "2025.14.1",
+      changelogItems: [
+        ChangelogItem(
+          title: "SSL Certificates",
+          shortDescription: "Usability improvements",
+          descriptionMarkdown: 
+              "SSL certificates have been renewed for another year",
+        ),
+      ],
+    ),
+    Version(
       versionName: "2025.1.1",
       changelogItems: [
         ChangelogItem(
