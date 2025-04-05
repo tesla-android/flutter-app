@@ -60,7 +60,7 @@ function createAudioSocket(url) {
     } else {
         console.log("Audio: Enabled");
 
-        audioSocket = new ReconnectingWebSocket(url, null, { binaryType: 'arraybuffer' });
+        audioSocket = new ReconnectingWebSocket(url, null, { binaryType: 'arraybuffer', reconnectInterval: 0 });
 
         audioSocket.onopen = () => {
             log("Audio: Websocket connection established")
