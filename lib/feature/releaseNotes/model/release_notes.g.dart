@@ -7,12 +7,10 @@ part of 'release_notes.dart';
 // **************************************************************************
 
 ReleaseNotes _$ReleaseNotesFromJson(Map<String, dynamic> json) => ReleaseNotes(
-      versions: (json['versions'] as List<dynamic>)
-          .map((e) => Version.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
+  versions: (json['versions'] as List<dynamic>)
+      .map((e) => Version.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
 
 Map<String, dynamic> _$ReleaseNotesToJson(ReleaseNotes instance) =>
-    <String, dynamic>{
-      'versions': instance.versions,
-    };
+    <String, dynamic>{'versions': instance.versions};
