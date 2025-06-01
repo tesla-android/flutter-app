@@ -1,7 +1,7 @@
 //ignore: avoid_web_libraries_in_flutter
 import 'dart:convert';
 import 'dart:js_interop';
-import 'dart:ui' as ui;
+import 'dart:ui_web' as ui;
 
 import 'package:flavor/flavor.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +37,6 @@ class _IframeViewState extends State<DisplayView> with Logger {
     _iframeElement.src = _src;
     _iframeElement.style.border = 'none';
 
-    //ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory(
       _src,
       (int viewId) => _iframeElement,
