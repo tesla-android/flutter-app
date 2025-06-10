@@ -5,7 +5,7 @@ import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
 import 'package:tesla_android/common/utils/logger.dart';
 
 class SettingsButton extends StatelessWidget with Logger {
-  const SettingsButton({Key? key}) : super(key: key);
+  const SettingsButton({super.key});
 
   @override
   Widget build(BuildContext context) {

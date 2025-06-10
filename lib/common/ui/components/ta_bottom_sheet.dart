@@ -5,10 +5,10 @@ class TABottomSheet extends StatelessWidget {
   final Widget body;
 
   const TABottomSheet({
-    Key? key,
+    super.key,
     required this.title,
     required this.body,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

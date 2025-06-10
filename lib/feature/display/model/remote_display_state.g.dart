@@ -26,6 +26,10 @@ RemoteDisplayState _$RemoteDisplayStateFromJson(Map<String, dynamic> json) =>
       quality:
           $enumDecodeNullable(_$DisplayQualityPresetEnumMap, json['quality']) ??
           DisplayQualityPreset.quality90,
+      isRearDisplayEnabled:
+          (json['isRearDisplayEnabled'] as num?)?.toInt() ?? 0,
+      isRearDisplayPrioritised:
+          (json['isRearDisplayPrioritised'] as num?)?.toInt() ?? 0,
       isHeadless: (json['isHeadless'] as num?)?.toInt(),
     );
 
@@ -41,6 +45,8 @@ Map<String, dynamic> _$RemoteDisplayStateToJson(RemoteDisplayState instance) =>
       'isH264': instance.isH264,
       'refreshRate': _$DisplayRefreshRatePresetEnumMap[instance.refreshRate]!,
       'quality': _$DisplayQualityPresetEnumMap[instance.quality]!,
+      'isRearDisplayEnabled': instance.isRearDisplayEnabled,
+      'isRearDisplayPrioritised': instance.isRearDisplayPrioritised,
     };
 
 const _$DisplayResolutionModePresetEnumMap = {

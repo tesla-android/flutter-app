@@ -79,7 +79,7 @@ class SoundSettings extends SettingsSection {
             style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
-                color: TAColors.SETTING_PRIMARY_COLOR),
+                color: TAColors.settingsPrimaryColor),
           ),
           Slider(
             divisions: 15,

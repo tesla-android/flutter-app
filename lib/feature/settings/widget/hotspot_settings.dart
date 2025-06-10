@@ -41,9 +41,6 @@ class HotspotSettings extends SettingsSection {
     final selectedBand = (state is SystemConfigurationStateSettingsFetched)
         ? state.currentConfiguration.currentSoftApBandType
         : (state as SystemConfigurationStateSettingsModified).newBandType;
-    final isSoftApEnabled = (state is SystemConfigurationStateSettingsFetched)
-        ? (state.currentConfiguration.isEnabledFlag == 1 ? true : false)
-        : (state as SystemConfigurationStateSettingsModified).isSoftApEnabled;
     final isOfflineModeEnabled =
         (state is SystemConfigurationStateSettingsFetched)
             ? (state.currentConfiguration.isOfflineModeEnabledFlag == 1

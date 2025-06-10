@@ -6,10 +6,10 @@ class ReleaseNotesChangelogItemDetailsView extends StatelessWidget {
   final ChangelogItem changelogItem;
 
   const ReleaseNotesChangelogItemDetailsView({
-    Key? key,
+    super.key,
     required,
     required this.changelogItem,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

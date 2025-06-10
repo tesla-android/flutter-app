@@ -13,7 +13,7 @@ import 'package:tesla_android/feature/releaseNotes/widget/detail/release_notes_c
 import 'list/release_notes_versions_list.dart';
 
 class ReleaseNotesPage extends StatelessWidget {
-  const ReleaseNotesPage({Key? key}) : super(key: key);
+  const ReleaseNotesPage({super.key});
 
   @override
   Widget build(BuildContext context) {

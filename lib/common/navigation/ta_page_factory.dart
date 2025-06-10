@@ -18,14 +18,14 @@ import 'package:tesla_android/feature/settings/bloc/system_configuration_cubit.d
 import 'package:tesla_android/feature/settings/widget/settings_page.dart';
 import 'package:tesla_android/feature/touchscreen/cubit/touchscreen_cubit.dart';
 
+import '../../feature/settings/bloc/rear_display_configuration_cubit.dart';
+
 @injectable
 class TAPageFactory {
   String initialRoute = TAPage.home.route;
 
   Map<String, Widget Function(BuildContext context)> getRoutes() {
-    return {
-      for (var e in TAPage.availablePages) e.route: buildPage(e),
-    };
+    return {for (var e in TAPage.availablePages) e.route: buildPage(e)};
   }
 
   Widget Function(BuildContext context) buildPage(TAPage page) {
@@ -34,18 +34,10 @@ class TAPageFactory {
         case TAPage.home:
           return MultiBlocProvider(
             providers: [
-              BlocProvider(
-                create: (_) => getIt<AudioConfigurationCubit>(),
-              ),
-              BlocProvider(
-                create: (_) => getIt<GPSConfigurationCubit>(),
-              ),
-              BlocProvider(
-                create: (_) => getIt<TouchscreenCubit>(),
-              ),
-              BlocProvider(
-                create: (_) => getIt<DisplayCubit>(),
-              ),
+              BlocProvider(create: (_) => getIt<AudioConfigurationCubit>()),
+              BlocProvider(create: (_) => getIt<GPSConfigurationCubit>()),
+              BlocProvider(create: (_) => getIt<TouchscreenCubit>()),
+              BlocProvider(create: (_) => getIt<DisplayCubit>()),
               BlocProvider(
                 create: (_) => getIt<OTAUpdateCubit>()..checkForUpdates(),
               ),
@@ -65,7 +57,8 @@ class TAPageFactory {
           return MultiBlocProvider(
             providers: [
               BlocProvider(
-                create: (_) => getIt<GPSConfigurationCubit>()..fetchConfiguration(),
+                create: (_) =>
+                    getIt<GPSConfigurationCubit>()..fetchConfiguration(),
               ),
               BlocProvider(
                 create: (_) =>
@@ -74,6 +67,11 @@ class TAPageFactory {
               BlocProvider(
                 create: (_) =>
                     getIt<DisplayConfigurationCubit>()..fetchConfiguration(),
+              ),
+              BlocProvider(
+                create: (_) =>
+                    getIt<RearDisplayConfigurationCubit>()
+                      ..fetchConfiguration(),
               ),
               BlocProvider(
                 create: (_) =>

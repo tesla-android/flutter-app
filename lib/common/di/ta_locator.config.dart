@@ -44,6 +44,8 @@ import 'package:tesla_android/feature/settings/bloc/display_configuration_cubit.
     as _i685;
 import 'package:tesla_android/feature/settings/bloc/gps_configuration_cubit.dart'
     as _i713;
+import 'package:tesla_android/feature/settings/bloc/rear_display_configuration_cubit.dart'
+    as _i588;
 import 'package:tesla_android/feature/settings/bloc/system_configuration_cubit.dart'
     as _i365;
 import 'package:tesla_android/feature/settings/repository/device_info_repository.dart'
@@ -107,9 +109,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i723.DeviceInfoService>(),
       ),
     );
-    gh.factory<_i271.DisplayRepository>(
-      () => _i271.DisplayRepository(gh<_i856.DisplayService>()),
-    );
     gh.factory<_i68.OTAUpdateCubit>(
       () => _i68.OTAUpdateCubit(
         gh<_i865.GitHubReleaseRepository>(),
@@ -129,9 +128,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i708.DeviceInfoRepository>(
       () => _i708.DeviceInfoRepository(gh<_i723.DeviceInfoService>()),
     );
-    gh.factory<_i14.DisplayCubit>(
-      () =>
-          _i14.DisplayCubit(gh<_i271.DisplayRepository>(), gh<_i544.Flavor>()),
+    gh.factory<_i271.DisplayRepository>(
+      () => _i271.DisplayRepository(
+        gh<_i856.DisplayService>(),
+        gh<_i460.SharedPreferences>(),
+      ),
     );
     gh.factory<_i399.ReleaseNotesCubit>(
       () => _i399.ReleaseNotesCubit(gh<_i841.ReleaseNotesRepository>()),
@@ -142,8 +143,15 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i685.DisplayConfigurationCubit>(
       () => _i685.DisplayConfigurationCubit(gh<_i271.DisplayRepository>()),
     );
+    gh.factory<_i588.RearDisplayConfigurationCubit>(
+      () => _i588.RearDisplayConfigurationCubit(gh<_i271.DisplayRepository>()),
+    );
     gh.factory<_i1064.DeviceInfoCubit>(
       () => _i1064.DeviceInfoCubit(gh<_i708.DeviceInfoRepository>()),
+    );
+    gh.factory<_i14.DisplayCubit>(
+      () =>
+          _i14.DisplayCubit(gh<_i271.DisplayRepository>(), gh<_i544.Flavor>()),
     );
     return this;
   }

@@ -10,11 +10,11 @@ class ReleaseNotesVersionList extends StatelessWidget {
   final ChangelogItem selectedChangelogItem;
 
   const ReleaseNotesVersionList({
-    Key? key,
+    super.key,
     required this.versions,
     required this.selectedVersion,
     required this.selectedChangelogItem,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
