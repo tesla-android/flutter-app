@@ -21,6 +21,10 @@ class RemoteDisplayState extends Equatable {
   final DisplayRefreshRatePreset refreshRate;
   @JsonKey(defaultValue: DisplayQualityPreset.quality90)
   final DisplayQualityPreset quality;
+  @JsonKey(defaultValue: 0)
+  final int isRearDisplayEnabled;
+  @JsonKey(defaultValue: 0)
+  final int isRearDisplayPrioritised;
 
   const RemoteDisplayState({
     required this.width,
@@ -32,6 +36,8 @@ class RemoteDisplayState extends Equatable {
     required this.isH264,
     required this.refreshRate,
     required this.quality,
+    required this.isRearDisplayEnabled,
+    required this.isRearDisplayPrioritised,
     this.isHeadless,
   });
 
@@ -42,35 +48,36 @@ class RemoteDisplayState extends Equatable {
 
   @override
   List<Object?> get props => [
-        width,
-        height,
-        density,
-        lowRes,
-        renderer,
-        isHeadless,
-        refreshRate,
-        quality,
-      ];
+    width,
+    height,
+    density,
+    lowRes,
+    renderer,
+    isHeadless,
+    refreshRate,
+    quality,
+  ];
 
-  RemoteDisplayState updateResolution(
-      {required DisplayResolutionModePreset newPreset}) {
-    return copyWith(
-      lowRes: newPreset,
-      density: newPreset.density(),
-    );
+  RemoteDisplayState updateResolution({
+    required DisplayResolutionModePreset newPreset,
+  }) {
+    return copyWith(lowRes: newPreset, density: newPreset.density());
   }
 
   RemoteDisplayState updateRenderer({required DisplayRendererType newType}) {
     return copyWith(
-        renderer: newType,
-        isH264: newType == DisplayRendererType.h264WebCodecs ? 1 : 0);
+      renderer: newType,
+      isH264: newType == DisplayRendererType.h264WebCodecs ? 1 : 0,
+    );
   }
 
   RemoteDisplayState updateQuality({required DisplayQualityPreset newQuality}) {
     return copyWith(quality: newQuality);
   }
 
-  RemoteDisplayState updateRefreshRate({required DisplayRefreshRatePreset newRefreshRate}) {
+  RemoteDisplayState updateRefreshRate({
+    required DisplayRefreshRatePreset newRefreshRate,
+  }) {
     return copyWith(refreshRate: newRefreshRate);
   }
 
@@ -85,6 +92,8 @@ class RemoteDisplayState extends Equatable {
     int? isResponsive,
     DisplayRefreshRatePreset? refreshRate,
     DisplayQualityPreset? quality,
+    int? isRearDisplayEnabled,
+    int? isRearDisplayPrioritised,
   }) {
     return RemoteDisplayState(
       width: width ?? this.width,
@@ -97,6 +106,9 @@ class RemoteDisplayState extends Equatable {
       isResponsive: isResponsive ?? this.isResponsive,
       refreshRate: refreshRate ?? this.refreshRate,
       quality: quality ?? this.quality,
+      isRearDisplayEnabled: isRearDisplayEnabled ?? this.isRearDisplayEnabled,
+      isRearDisplayPrioritised:
+          isRearDisplayPrioritised ?? this.isRearDisplayPrioritised,
     );
   }
 }

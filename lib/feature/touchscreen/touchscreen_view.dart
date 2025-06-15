@@ -7,9 +7,9 @@ class TouchScreenView extends StatelessWidget {
   final Size displaySize;
 
   const TouchScreenView({
-    Key? key,
+    super.key,
     required this.displaySize,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
