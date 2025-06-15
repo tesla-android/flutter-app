@@ -6,8 +6,8 @@ publish_to: 'none'
 version: 2025.24.1
 
 environment:
-  flutter: "3.32.0"
-  sdk: "3.8.0"
+  flutter: "3.32.4"
+  sdk: "3.8.1"
 
 dependencies:
   flutter:

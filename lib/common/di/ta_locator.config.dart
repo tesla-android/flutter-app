@@ -109,9 +109,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i723.DeviceInfoService>(),
       ),
     );
-    gh.factory<_i271.DisplayRepository>(
-      () => _i271.DisplayRepository(gh<_i856.DisplayService>()),
-    );
     gh.factory<_i68.OTAUpdateCubit>(
       () => _i68.OTAUpdateCubit(
         gh<_i865.GitHubReleaseRepository>(),
@@ -136,9 +133,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i856.DisplayService>(),
         gh<_i460.SharedPreferences>(),
       ),
-    gh.factory<_i14.DisplayCubit>(
-      () =>
-          _i14.DisplayCubit(gh<_i271.DisplayRepository>(), gh<_i544.Flavor>()),
     );
     gh.factory<_i399.ReleaseNotesCubit>(
       () => _i399.ReleaseNotesCubit(gh<_i841.ReleaseNotesRepository>()),
@@ -146,11 +140,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i747.ConnectivityCheckCubit>(
       () => _i747.ConnectivityCheckCubit(gh<_i483.HealthService>()),
     );
-    gh.factory<_i685.DisplayConfigurationCubit>(
-      () => _i685.DisplayConfigurationCubit(gh<_i271.DisplayRepository>()),
-    );
     gh.factory<_i588.RearDisplayConfigurationCubit>(
       () => _i588.RearDisplayConfigurationCubit(gh<_i271.DisplayRepository>()),
+    );
+    gh.factory<_i685.DisplayConfigurationCubit>(
+      () => _i685.DisplayConfigurationCubit(gh<_i271.DisplayRepository>()),
     );
     gh.factory<_i1064.DeviceInfoCubit>(
       () => _i1064.DeviceInfoCubit(gh<_i708.DeviceInfoRepository>()),
@@ -158,9 +152,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i14.DisplayCubit>(
       () =>
           _i14.DisplayCubit(gh<_i271.DisplayRepository>(), gh<_i544.Flavor>()),
-    );
-    gh.factory<_i1064.DeviceInfoCubit>(
-      () => _i1064.DeviceInfoCubit(gh<_i708.DeviceInfoRepository>()),
     );
     return this;
   }
