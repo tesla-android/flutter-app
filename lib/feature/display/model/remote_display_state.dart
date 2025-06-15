@@ -274,13 +274,13 @@ enum DisplayRendererType {
   String resourcePath() {
     switch (index) {
       case 0:
-        return "imgTag";
+        return "h264";
       case 1:
-        return "webGLWebCodecs";
+        return "h264";
       case 2:
         return "h264";
       default:
-        return "imgTag";
+        return "h264";
     }
   }
 
@@ -298,13 +298,13 @@ enum DisplayRendererType {
   String binaryType() {
     switch (index) {
       case 0:
-        return "blob";
+        return "arraybuffer";
       case 1:
         return "arraybuffer";
       case 2:
         return "arraybuffer";
       default:
-        return "blob";
+        return "arraybuffer";
     }
   }
 }
