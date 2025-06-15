@@ -17,8 +17,7 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
   final DisplayRepository _repository;
   final Flavor _flavor;
 
-  DisplayCubit(this._repository, this._flavor)
-      : super(DisplayStateInitial());
+  DisplayCubit(this._repository, this._flavor) : super(DisplayStateInitial());
 
   BaseWebsocketTransport? activeTransport;
 
@@ -36,7 +35,9 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
 
   void resizeDisplay({required Size viewSize}) {
     if (state is DisplayStateResizeInProgress) {
-      log("Display resize can't happen now (state == DisplayStateResizeInProgress)");
+      log(
+        "Display resize can't happen now (state == DisplayStateResizeInProgress)",
+      );
       return;
     }
 
@@ -55,11 +56,19 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
     _startResize(viewSize: updatedSize);
   }
 
-  void _startResize({required Size viewSize}) async {
+  void onDisplayTypeSelectionFinished({required bool isPrimaryDisplay}) {
+    emit(DisplayStateDisplayTypeSelectionFinished());
+    _repository.setDisplayType(isPrimaryDisplay);
+    _startResize();
+  }
+
+  void _startResize({Size viewSize = Size.zero}) async {
     if (state is DisplayStateResizeCoolDown) {
       final currentState = state as DisplayStateResizeCoolDown;
       if (currentState.viewSize == viewSize) {
-        log("Display resize already scheduled (state == DisplayStateResizeCoolDown)");
+        log(
+          "Display resize already scheduled (state == DisplayStateResizeCoolDown)",
+        );
         return;
       } else {
         _resizeCoolDownTimer?.cancel();
@@ -67,49 +76,90 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
       }
     }
 
+    final isPrimaryDisplay = await _repository.isPrimaryDisplay();
     final remoteState = await _getRemoteDisplayState();
+    final isRearDisplayPrioritised = remoteState.isRearDisplayPrioritised == 1;
+    final isRearDisplayEnabled = remoteState.isRearDisplayEnabled == 1;
     final resolutionPreset = remoteState.lowRes;
-
     final isHeadless = (remoteState.isHeadless ?? 1) == 1;
     final renderer = _getRenderer(remoteState);
     final isResponsive = remoteState.isResponsive == 1;
     final quality = remoteState.quality;
     final refreshRate = remoteState.refreshRate;
-
-    final desiredSize = _calculateOptimalSize(
-      isResponsive ? viewSize : const Size(1088,832),
-      resolutionPreset: resolutionPreset,
-      isHeadless: isHeadless,
+    final remoteSize = Size(
+      remoteState.width.toDouble(),
+      remoteState.height.toDouble(),
     );
+    Size desiredSize = Size.zero;
+    if (viewSize == Size.zero) {
+      viewSize = remoteSize;
+    }
 
-    if (remoteState.width == desiredSize.width &&
-        remoteState.height == desiredSize.height) {
-      log("Display resize not needed remote size == desired size");
-      _resizeCoolDownTimer?.cancel();
-      _resizeCoolDownTimer = null;
-      if (!isClosed) {
-        emit(
-          DisplayStateNormal(
-            viewSize: viewSize,
-            adjustedSize: desiredSize,
-            rendererType: renderer,
-          ),
-        );
-      }
+    log(
+      "Verify display type before triggering a resize (state == DisplayStateInitial)",
+    );
+    if (isPrimaryDisplay == null && isRearDisplayEnabled) {
+      log("Primary display preference unset");
+      emit(DisplayStateDisplayTypeSelectionTriggered());
       return;
+    } else {
+      if (isPrimaryDisplay == true ||
+          isPrimaryDisplay == false && isRearDisplayPrioritised) {
+        desiredSize = _calculateOptimalSize(
+          isResponsive ? viewSize : const Size(1088, 832),
+          resolutionPreset: resolutionPreset,
+          isHeadless: isHeadless,
+        );
+
+        if (remoteState.width == desiredSize.width &&
+            remoteState.height == desiredSize.height) {
+          log("Display resize not needed remote size == desired size");
+          _resizeCoolDownTimer?.cancel();
+          _resizeCoolDownTimer = null;
+          if (!isClosed) {
+            emit(
+              DisplayStateNormal(
+                viewSize: viewSize,
+                adjustedSize: desiredSize,
+                rendererType: renderer,
+              ),
+            );
+          }
+          return;
+        }
+      } else {
+        log("Display resize not needed, display is not prioritised");
+        _resizeCoolDownTimer?.cancel();
+        _resizeCoolDownTimer = null;
+        desiredSize = remoteSize;
+        if (!isClosed) {
+          emit(
+            DisplayStateNormal(
+              viewSize: viewSize,
+              adjustedSize: desiredSize,
+              rendererType: renderer,
+            ),
+          );
+        }
+      }
     }
 
     if (!isClosed) {
-      emit(DisplayStateResizeCoolDown(
-        viewSize: viewSize,
-        adjustedSize: desiredSize,
-        resolutionPreset: resolutionPreset,
-        rendererType: renderer,
-        isH264: remoteState.isH264 == 1,
-        isResponsive: remoteState.isResponsive == 1,
-        quality: quality,
-        refreshRate: refreshRate
-      ));
+      emit(
+        DisplayStateResizeCoolDown(
+          viewSize: viewSize,
+          adjustedSize: desiredSize,
+          resolutionPreset: resolutionPreset,
+          rendererType: renderer,
+          isH264: remoteState.isH264 == 1,
+          isResponsive: remoteState.isResponsive == 1,
+          quality: quality,
+          refreshRate: refreshRate,
+          isRearDisplayEnabled: remoteState.isRearDisplayEnabled == 1,
+          isRearDisplayPrioritised: remoteState.isRearDisplayPrioritised == 1,
+          isPrimaryDisplay: isPrimaryDisplay ?? true,
+        ),
+      );
     }
     _resizeCoolDownTimer = Timer(_coolDownDuration, _sendResizeRequest);
   }
@@ -125,30 +175,38 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
       final isH264 = renderer == DisplayRendererType.h264WebCodecs;
       final quality = currentState.quality;
       final refreshRate = currentState.refreshRate;
+      final isRearDisplayEnabled = currentState.isRearDisplayEnabled;
+      final isRearDisplayPrioritised = currentState.isRearDisplayPrioritised;
 
       emit(DisplayStateResizeInProgress());
       try {
-        await _repository.updateDisplayConfiguration(RemoteDisplayState(
-          width: adjustedSize.width.toInt(),
-          height: adjustedSize.height.toInt(),
-          density: density,
-          lowRes: lowResModePreset,
-          renderer: renderer,
-          isResponsive: currentState.isResponsive ? 1 : 0,
-          isH264: isH264 ? 1 : 0,
-          quality: quality,
-          refreshRate: refreshRate,
-        ));
+        await _repository.updateDisplayConfiguration(
+          RemoteDisplayState(
+            width: adjustedSize.width.toInt(),
+            height: adjustedSize.height.toInt(),
+            density: density,
+            lowRes: lowResModePreset,
+            renderer: renderer,
+            isResponsive: currentState.isResponsive ? 1 : 0,
+            isH264: isH264 ? 1 : 0,
+            quality: quality,
+            refreshRate: refreshRate,
+            isRearDisplayEnabled: isRearDisplayEnabled ? 1 : 0,
+            isRearDisplayPrioritised: isRearDisplayPrioritised ? 1 : 0,
+          ),
+        );
         await Future.delayed(_coolDownDuration, () {
           if (isClosed) return;
-          emit(DisplayStateNormal(
+          emit(
+            DisplayStateNormal(
               viewSize: viewSize,
               adjustedSize: adjustedSize,
-              rendererType: renderer));
+              rendererType: renderer,
+            ),
+          );
         });
       } catch (exception, stacktrace) {
-        logException(
-            exception: exception, stackTrace: stacktrace);
+        logException(exception: exception, stackTrace: stacktrace);
       }
     } else {
       log("Unable to send resize request. Invalid state, no pending resize");
@@ -190,11 +248,13 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
 
     if (viewSize.width > viewSize.height) {
       maxWidth = viewSize.width > 1280 ? 1280 : viewSize.width;
-      maxHeight =
-          viewSize.height > maxShortestSide ? maxShortestSide : viewSize.height;
+      maxHeight = viewSize.height > maxShortestSide
+          ? maxShortestSide
+          : viewSize.height;
     } else {
-      maxWidth =
-          viewSize.width > maxShortestSide ? maxShortestSide : viewSize.width;
+      maxWidth = viewSize.width > maxShortestSide
+          ? maxShortestSide
+          : viewSize.width;
       maxHeight = viewSize.height > 1280 ? 1280 : viewSize.height;
     }
 

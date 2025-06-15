@@ -11,11 +11,11 @@ class ReleaseNotesChangelogItemCard extends StatelessWidget {
   final bool isActive;
 
   const ReleaseNotesChangelogItemCard({
-    Key? key,
+    super.key,
     required this.version,
     required this.changelogItem,
     required this.isActive,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

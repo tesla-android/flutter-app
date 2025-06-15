@@ -6,7 +6,7 @@ import 'package:tesla_android/feature/home/cubit/ota_update_cubit.dart';
 import 'package:tesla_android/feature/home/cubit/ota_update_state.dart';
 
 class UpdateButton extends StatelessWidget with Logger {
-  const UpdateButton({Key? key}) : super(key: key);
+  const UpdateButton({super.key});
 
   @override
   Widget build(BuildContext context) {

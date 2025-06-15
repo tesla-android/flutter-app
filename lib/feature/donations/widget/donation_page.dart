@@ -6,7 +6,7 @@ import 'package:tesla_android/common/ui/components/ta_bottom_navigation_bar.dart
 import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
 
 class DonationPage extends StatelessWidget {
-  const DonationPage({Key? key}) : super(key: key);
+  const DonationPage({super.key});
 
   @override
   Widget build(BuildContext context) {

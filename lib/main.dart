@@ -14,7 +14,7 @@ Future<void> main() async {
 }
 
 class TeslaAndroid extends StatelessWidget with Logger {
-  TeslaAndroid({Key? key}) : super(key: key);
+  TeslaAndroid({super.key});
 
   final TAPageFactory _pageFactory = getIt<TAPageFactory>();
 
@@ -31,12 +31,12 @@ class TeslaAndroid extends StatelessWidget with Logger {
         theme: ThemeData(
             brightness: Brightness.light,
             useMaterial3: true,
-            colorSchemeSeed: TAColors.SETTING_PRIMARY_COLOR,
+            colorSchemeSeed: TAColors.settingsPrimaryColor,
             fontFamily: 'Roboto'),
         darkTheme: ThemeData(
             brightness: Brightness.dark,
             useMaterial3: true,
-            colorSchemeSeed: TAColors.SETTING_PRIMARY_COLOR,
+            colorSchemeSeed: TAColors.settingsPrimaryColor,
             fontFamily: 'Roboto'),
         themeMode: ThemeMode.system,
         initialRoute: _pageFactory.initialRoute,

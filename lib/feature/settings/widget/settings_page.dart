@@ -7,6 +7,7 @@ import 'package:tesla_android/feature/settings/widget/device_settings.dart';
 import 'package:tesla_android/feature/settings/widget/display_settings.dart';
 import 'package:tesla_android/feature/settings/widget/gps_settings.dart';
 import 'package:tesla_android/feature/settings/widget/hotspot_settings.dart';
+import 'package:tesla_android/feature/settings/widget/rear_display_settings.dart';
 import 'package:tesla_android/feature/settings/widget/settings_section.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -25,6 +26,7 @@ class _SettingsPageState extends State<SettingsPage> {
   void initState() {
     _sections = [
       const DisplaySettings(),
+      const RearDisplaySettings(),
       const HotspotSettings(),
       //const SoundSettings(),
       const GpsSettings(),
@@ -36,12 +38,8 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TaAppBar(
-        title: TAPage.settings.title,
-      ),
-      bottomNavigationBar: const TaBottomNavigationBar(
-        currentIndex: 4,
-      ),
+      appBar: TaAppBar(title: TAPage.settings.title),
+      bottomNavigationBar: const TaBottomNavigationBar(currentIndex: 4),
       body: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,28 +52,17 @@ class _SettingsPageState extends State<SettingsPage> {
               });
             },
             children: [
-              const SizedBox(
-                height: TADimens.baseContentMargin,
+              const SizedBox(height: TADimens.baseContentMargin),
+              ..._sections.map(
+                (section) => NavigationDrawerDestination(
+                  icon: Icon(section.icon),
+                  label: Text(section.name),
+                ),
               ),
-              ..._sections
-                  .map(
-                    (section) => NavigationDrawerDestination(
-                      icon: Icon(
-                        section.icon,
-                      ),
-                      label: Text(
-                        section.name,
-                      ),
-                    ),
-                  )
-                  .toList(),
             ],
           ),
           Expanded(
-            child: IndexedStack(
-              index: _activeIndex,
-              children: _sections
-            ),
+            child: IndexedStack(index: _activeIndex, children: _sections),
           ),
         ],
       ),
