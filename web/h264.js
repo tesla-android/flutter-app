@@ -1,7 +1,5 @@
-var img = document.getElementById("image");
 var canvas = document.getElementById("canvas");
 var statsElement = document.getElementById('stats');
-img.style.display = "none";
 canvas.style.display = "block";
 
 canvas.width = window.innerWidth;
