@@ -29,26 +29,20 @@
   <script src="reconnecting-websocket.js"></script>
   <script src="audioplayback.js"></script>
   <script src="estimator.js"></script>
+  <script type="text/javascript" src="Decoder.js"></script>
+  <script type="text/javascript" src="YUVCanvas.js"></script>
 </head>
 
 <body>
-  <img id="image" />
-  <canvas id="canvas"></canvas>
-  <script>
-
-
+<canvas id="canvas"></canvas>
+<script>
     var audioWebsocketUrl;
     var displayWebsocketUrl;
     var gpsWebsocketUrl;
     var touchScreenWebsocketUrl;
-
-
     var displaySocket;
     var gpsSocket;
     var touchScreenSocket;
-
-
-
     var displayRenderer;
     var displayBinaryType;
     var displayWidth;
@@ -56,7 +50,6 @@
     var displayRendererAdded = false;
     var gpsEstimator;
     var gpsRunning = false;
-
     var isGPSEnabled = 'false';
 
     window.parent.addEventListener(
@@ -96,7 +89,6 @@
           if (!touchScreenSocket) createTouchScreenSocket(touchScreenWebsocketUrl);
         } else {
           document.addEventListener("DOMContentLoaded", function () {
-
             if (!displaySocket) createDisplaySocket(displayWebsocketUrl, displayRenderer, displayBinaryType);
             if (!gpsSocket) createGpsSocket(gpsWebsocketUrl);
             if (!touchScreenSocket) createTouchScreenSocket(touchScreenWebsocketUrl);
@@ -106,54 +98,33 @@
       false
     );
 
-
-
-    async function checkVideoStream() {
-      while (true) {
-        try {
-          await image.decode();
-        } catch {
-          let src = image.src;
-          image.src = "";
-          image.src = src;
-        }
-
-        await new Promise((resolve) => setTimeout(resolve, 5000));
-      }
-    }
-
     function createDisplaySocket(url, renderer, binaryType) {
       if (!displayRendererAdded) {
-        //var rendererScript = document.createElement('script');
-        //rendererScript.src = renderer + '.js';
-        //document.head.appendChild(rendererScript);
-        var img = document.getElementById("image");
+        var rendererScript = document.createElement('script');
+        rendererScript.src = renderer + '.js';
+        document.head.appendChild(rendererScript);
         var canvas = document.getElementById("canvas");
-        img.style.display = "block";
-        img.src = url;
-        canvas.style.display = "none";
+        canvas.style.display = "block";
         displayRendererAdded = true;
-
-        checkVideoStream();
       }
 
-      //displaySocket = new ReconnectingWebSocket(url, null, { binaryType: binaryType });
+      displaySocket = new ReconnectingWebSocket(url, null, { binaryType: binaryType });
 
-      //displaySocket.onopen = () => {
-      //  log("Display: Websocket connection established");
-      //};
+      displaySocket.onopen = () => {
+        log("Display: Websocket connection established");
+      };
 
-      //displaySocket.onclose = () => {
-      //  log("Display: Websocket connection closed")
-      //};
+      displaySocket.onclose = () => {
+        log("Display: Websocket connection closed")
+      };
 
-      //displaySocket.onerror = error => {
-      //  log("Display: " + error)
-      //};
+      displaySocket.onerror = error => {
+        log("Display: " + error)
+      };
 
-      //displaySocket.onmessage = (event) => {
-      //  drawDisplayFrame(event.data);
-      //};
+      displaySocket.onmessage = (event) => {
+        drawDisplayFrame(event.data);
+      };
     }
 
     function createGpsSocket(url) {
@@ -207,7 +178,6 @@
 
 
     window.parent.addEventListener("click", function (e) {
-
       if (pcmPlayerNode == null && isAudioEnabled) {
         //startAudioPlayback();
       }
