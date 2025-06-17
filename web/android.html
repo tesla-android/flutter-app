@@ -27,7 +27,6 @@
   </style>
 
   <script src="reconnecting-websocket.js"></script>
-  <script src="audioplayback.js"></script>
   <script src="estimator.js"></script>
   <script type="text/javascript" src="Decoder.js"></script>
   <script type="text/javascript" src="YUVCanvas.js"></script>
@@ -36,7 +35,6 @@
 <body>
 <canvas id="canvas"></canvas>
 <script>
-    var audioWebsocketUrl;
     var displayWebsocketUrl;
     var gpsWebsocketUrl;
     var touchScreenWebsocketUrl;
@@ -67,15 +65,11 @@
         }
         const config = JSON.parse(event.data);
 
-        audioWebsocketUrl = config.audioWebsocketUrl;
         displayWebsocketUrl = config.displayWebsocketUrl;
         gpsWebsocketUrl = config.gpsWebsocketUrl;
         touchScreenWebsocketUrl = config.touchScreenWebsocketUrl;
 
         isGPSEnabled = config.isGPSEnabled;
-
-        //setAudioEnabled(config.isAudioEnabled);
-        //setAudioVolume(config.audioVolume);
 
         displayRenderer = config.displayRenderer;
         displayBinaryType = config.displayBinaryType;
@@ -175,13 +169,6 @@
         log("Touch: " + message);
       };
     }
-
-
-    window.parent.addEventListener("click", function (e) {
-      if (pcmPlayerNode == null && isAudioEnabled) {
-        //startAudioPlayback();
-      }
-    });
 
     async function checkPermissionAndStartUpdates() {
       if(isGPSEnabled === 'false') {
