@@ -9,7 +9,7 @@ Please refer to https://teslaandroid.com for release notes, hardware requirement
 ```
 flutter pub get
 flutter packages pub run build_runner build --delete-conflicting-outputs  
-flutter build web
+flutter build web --wasm 
 ```
 
 In order to build this project for debugging make sure to disable cors in Chrome and connect to Tesla Android Wi-Fi network
