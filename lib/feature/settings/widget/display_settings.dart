@@ -33,18 +33,18 @@ class DisplaySettings extends SettingsSection {
               ),
             ),
             divider,
-            SettingsTile(
-              icon: Icons.photo_size_select_actual_outlined,
-              title: 'Image quality',
-              trailing: _qualityDropdown(context, cubit, state),
-            ),
-            const Padding(
-              padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
-              child: Text(
-                'Reducing the image quality can significantly improve performance when a higher resolution is used.',
-              ),
-            ),
-            divider,
+            // SettingsTile(
+            //   icon: Icons.photo_size_select_actual_outlined,
+            //   title: 'Image quality',
+            //   trailing: _qualityDropdown(context, cubit, state),
+            // ),
+            // const Padding(
+            //   padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
+            //   child: Text(
+            //     'Reducing the image quality can significantly improve performance when a higher resolution is used.',
+            //   ),
+            // ),
+            // divider,
             SettingsTile(
               icon: Icons.monitor,
               title: 'Refresh rate',
