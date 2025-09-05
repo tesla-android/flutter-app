@@ -172,7 +172,7 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
       final lowResModePreset = currentState.resolutionPreset;
       final renderer = currentState.rendererType;
       final density = lowResModePreset.density();
-      final isH264 = renderer == DisplayRendererType.h264WebCodecs;
+      final isH264 = renderer == DisplayRendererType.h264;
       final quality = currentState.quality;
       final refreshRate = currentState.refreshRate;
       final isRearDisplayEnabled = currentState.isRearDisplayEnabled;
@@ -224,7 +224,7 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
     final isRendererSupported = isSSL && rendererNeedsSSL || !rendererNeedsSSL;
     if (!isRendererSupported) {
       log("Renderer needs SSL, returning to default");
-      renderer = DisplayRendererType.imgTag;
+      renderer = DisplayRendererType.h264;
     }
     return renderer;
   }
@@ -241,54 +241,38 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
     if (!isHeadless) {
       return const Size(1024, 768);
     }
-    double maxWidth;
-    double maxHeight;
 
-    double maxShortestSide = resolutionPreset.maxHeight();
+    // Max encoder limits for Raspberry Pi 4
+    const int maxEncoderWidth = 1920;
+    const int maxEncoderHeight = 1080;
 
-    if (viewSize.width > viewSize.height) {
-      maxWidth = viewSize.width > 1280 ? 1280 : viewSize.width;
-      maxHeight = viewSize.height > maxShortestSide
-          ? maxShortestSide
-          : viewSize.height;
-    } else {
-      maxWidth = viewSize.width > maxShortestSide
-          ? maxShortestSide
-          : viewSize.width;
-      maxHeight = viewSize.height > 1280 ? 1280 : viewSize.height;
-    }
-
-    if (maxWidth < 320 || maxHeight < 320) {
-      return const Size(320, 320);
-    }
+    // Min practical resolution
+    const int minSize = 320;
 
     double aspectRatio = viewSize.width / viewSize.height;
 
-    double bestWidth = maxWidth;
-    double bestHeight = maxHeight;
-    double minEmptySpace = maxWidth * maxHeight;
+    // Start with the smaller of the requested size and encoder max
+    double width = viewSize.width.clamp(
+      minSize.toDouble(),
+      maxEncoderWidth.toDouble(),
+    );
+    double height = width / aspectRatio;
 
-    for (double height = maxHeight; height >= 320; height -= 32) {
-      double width = height * aspectRatio;
-
-      if (width > maxWidth) {
-        continue;
-      }
-
-      if (width < 320 || height < 320) {
-        continue;
-      }
-
-      width = (width ~/ 32) * 32;
-
-      double emptySpace = (maxWidth - width) * (maxHeight - height);
-
-      if (emptySpace < minEmptySpace) {
-        minEmptySpace = emptySpace;
-        bestWidth = width;
-        bestHeight = height;
-      }
+    if (height > maxEncoderHeight) {
+      height = maxEncoderHeight.toDouble();
+      width = height * aspectRatio;
     }
-    return Size(bestWidth, bestHeight);
+
+    // Align to encoder requirements
+    width = (width ~/ 32) * 32;
+    height = (height ~/ 16) * 16;
+
+    // Ensure still above minimum
+    if (width < minSize || height < minSize) {
+      width = (minSize ~/ 32) * 32;
+      height = (minSize ~/ 16) * 16;
+    }
+
+    return Size(width, height);
   }
 }
