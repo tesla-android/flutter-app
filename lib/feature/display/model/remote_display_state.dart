@@ -10,7 +10,7 @@ class RemoteDisplayState extends Equatable {
   final int density;
   @JsonKey(name: "lowres")
   final DisplayResolutionModePreset lowRes;
-  @JsonKey(defaultValue: DisplayRendererType.imgTag)
+  @JsonKey(defaultValue: DisplayRendererType.h264)
   final DisplayRendererType renderer;
   final int? isHeadless;
   @JsonKey(defaultValue: 1)
@@ -53,9 +53,13 @@ class RemoteDisplayState extends Equatable {
     density,
     lowRes,
     renderer,
-    isHeadless,
+    isResponsive,
+    isH264,
     refreshRate,
     quality,
+    isRearDisplayEnabled,
+    isRearDisplayPrioritised,
+    isHeadless,
   ];
 
   RemoteDisplayState updateResolution({
@@ -67,7 +71,7 @@ class RemoteDisplayState extends Equatable {
   RemoteDisplayState updateRenderer({required DisplayRendererType newType}) {
     return copyWith(
       renderer: newType,
-      isH264: newType == DisplayRendererType.h264WebCodecs ? 1 : 0,
+      isH264: newType == DisplayRendererType.h264 ? 1 : 0,
     );
   }
 
@@ -252,32 +256,20 @@ enum DisplayResolutionModePreset {
 
 enum DisplayRendererType {
   @JsonValue(0)
-  imgTag,
-  @JsonValue(1)
-  workerWebGLWebCodecs,
-  @JsonValue(2)
-  h264WebCodecs;
+  h264;
 
   String name() {
     switch (index) {
       case 0:
-        return "Motion JPEG - Image tag (legacy)";
-      case 1:
-        return "Motion JPEG - WebCodecs/WebGL";
-      case 2:
-        return "H264 video - WebCodecs/WebGL";
+        return "H264";
       default:
-        return "Motion JPEG - Image tag (legacy)";
+        return "H264";
     }
   }
 
   String resourcePath() {
     switch (index) {
       case 0:
-        return "h264";
-      case 1:
-        return "h264";
-      case 2:
         return "h264";
       default:
         return "h264";
@@ -287,21 +279,15 @@ enum DisplayRendererType {
   bool needsSSL() {
     switch (index) {
       case 0:
-        return false;
-      case 1:
         return true;
       default:
-        return false;
+        return true;
     }
   }
 
   String binaryType() {
     switch (index) {
       case 0:
-        return "arraybuffer";
-      case 1:
-        return "arraybuffer";
-      case 2:
         return "arraybuffer";
       default:
         return "arraybuffer";
