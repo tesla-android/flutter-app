@@ -9,6 +9,7 @@ import 'package:tesla_android/feature/settings/widget/gps_settings.dart';
 import 'package:tesla_android/feature/settings/widget/hotspot_settings.dart';
 import 'package:tesla_android/feature/settings/widget/rear_display_settings.dart';
 import 'package:tesla_android/feature/settings/widget/settings_section.dart';
+import 'package:tesla_android/feature/settings/widget/sound_settings.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -28,7 +29,7 @@ class _SettingsPageState extends State<SettingsPage> {
       const DisplaySettings(),
       const RearDisplaySettings(),
       const HotspotSettings(),
-      //const SoundSettings(),
+      const SoundSettings(),
       const GpsSettings(),
       const DeviceSettings(),
     ];
