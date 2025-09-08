@@ -23,90 +23,127 @@
   <meta name="msapplication-TileColor" content="#ffffff" />
   <meta name="msapplication-TileImage" content="icons/ms-icon-144x144.png" />
   <meta name="theme-color" content="#ffffff" />
-  <script>
-            function createAudioContext() {
-                return new (window.AudioContext || window.webkitAudioContext)();
-            }
-        </script>
+  <script src="audioplayback.js"></script>
+  <style>
+    body {
+      inset: 0; overflow: hidden; margin: 0; padding: 0; position: fixed;
+      background-color: #ffffff;
+    }
+    @media (prefers-color-scheme: dark) { body { background-color: #303030; } }
+
+    #loading {
+      align-items: center; display: flex; height: 100%;
+      justify-content: center; width: 100%;
+    }
+    #loading img {
+      animation: 1s ease-in-out 0s infinite alternate breathe;
+      transition: opacity 0.4s; border-radius: 20px;
+    }
+    #loading.init_done img {
+      animation: 0.33s ease-in-out 0s 1 forwards zooooom;
+      opacity: 0.05;
+    }
+    @keyframes breathe { from { transform: scale(1); } to { transform: scale(0.95); } }
+    @keyframes zooooom { from { transform: scale(1); } to { transform: scale(10); } }
+  </style>
 </head>
 <body>
 <div id="loading">
-  <style>
-                body {
-                    inset: 0;
-                    overflow: hidden;
-                    margin: 0;
-                    padding: 0;
-                    position: fixed;
-                    background-color: #ffffff; /* Light Mode */
-                }
-
-                #loading {
-                    align-items: center;
-                    display: flex;
-                    height: 100%;
-                    justify-content: center;
-                    width: 100%;
-                }
-
-                #loading img {
-                    animation: 1s ease-in-out 0s infinite alternate breathe;
-                    transition: opacity 0.4s;
-                    border-radius: 20px;
-                }
-
-                #loading.init_done img {
-                    animation: 0.33s ease-in-out 0s 1 forwards zooooom;
-                    opacity: 0.05;
-                }
-
-                @media (prefers-color-scheme: dark) {
-                    body {
-                        background-color: #303030; /* Dark Mode */
-                    }
-                }
-
-                @keyframes breathe {
-                    from {
-                        transform: scale(1);
-                    }
-
-                    to {
-                        transform: scale(0.95);
-                    }
-                }
-
-                @keyframes zooooom {
-                    from {
-                        transform: scale(1);
-                    }
-
-                    to {
-                        transform: scale(10);
-                    }
-                }
-            </style>
   <img src="icons/android-icon-192x192.png" alt="Loading indicator..." />
 </div>
+
 <script>
-  {{flutter_js}}
-  {{flutter_build_config}}
+    {{flutter_js}}
+    {{flutter_build_config}}
 
-  var loading = document.querySelector("#loading");
+    var loading = document.querySelector("#loading");
+    _flutter.loader.load({
+      onEntrypointLoaded: async function(engineInitializer) {
+        const appRunner = await engineInitializer.initializeEngine({
+          renderer: "canvaskit",
+          canvasKitBaseUrl: "/canvaskit/",
+        });
+        window.setTimeout(function () { loading.remove(); }, 200);
+        await appRunner.runApp();
+      }
+    });
+  </script>
 
-  _flutter.loader.load({
-    onEntrypointLoaded: async function(engineInitializer) {
-      const appRunner = await engineInitializer.initializeEngine({
-        renderer: "canvaskit",
-        canvasKitBaseUrl: "/canvaskit/",
+<script>
+    (function () {
+      let AUDIO_STATE = 'stopped'; // 'stopped' | 'playing'
+      let wired = false;
+
+      function emitState(next) {
+        try { window.dispatchEvent(new CustomEvent('audio-state', { detail: String(next) })); } catch (_) {}
+      }
+      function setState(next) {
+        if (AUDIO_STATE === next) return;
+        AUDIO_STATE = next;
+        emitState(next);
+      }
+      window.getAudioState = function getAudioState() { return AUDIO_STATE; };
+
+      function wireAudioElementEvents() {
+        if (wired) return;
+        const el = window.__liveAudioEl || document.querySelector('audio');
+        if (!el) return;
+
+        const toStopped = () => setState('stopped');
+        const toPlaying = () => setState('playing');
+
+        el.addEventListener('play', toPlaying);
+        el.addEventListener('playing', toPlaying);
+
+        el.addEventListener('pause', toStopped);
+        el.addEventListener('ended', toStopped);
+        el.addEventListener('error', toStopped);
+        el.addEventListener('emptied', toStopped);
+        el.addEventListener('stalled', () => {});
+
+        wired = true;
+      }
+
+      window.addEventListener('audio-el-created', wireAudioElementEvents);
+      const pollId = setInterval(() => {
+        if (wired) { clearInterval(pollId); return; }
+        wireAudioElementEvents();
+        if (wired) clearInterval(pollId);
+      }, 250);
+
+      window.setupAudioConfig = function setupAudioConfig(configObj) {
+        let cfg = configObj;
+        if (typeof cfg === 'string') { try { cfg = JSON.parse(cfg); } catch (_) { cfg = null; } }
+        if (!cfg || typeof cfg !== 'object') return;
+
+        window.audioWebsocketUrl = cfg.audioWebsocketUrl;
+        try { if (typeof setAudioEnabled === 'function') setAudioEnabled(String(cfg.isAudioEnabled) !== 'false'); } catch(_){}
+        try { if (typeof setAudioVolume === 'function') setAudioVolume(Number(cfg.audioVolume ?? 1) || 1); } catch(_){}
+      };
+
+      window.startAudioFromGesture = function startAudioFromGesture() {
+        try { if (typeof primeAudioFromGesture === 'function') primeAudioFromGesture(); } catch(_){}
+        try { if (typeof startAudioPlayback === 'function') startAudioPlayback(); } catch(_){}
+        setState('playing');
+        wireAudioElementEvents();
+      };
+
+      window.stopAudio = function stopAudio() {
+        try { if (typeof stopAudioPlayback === 'function') stopAudioPlayback(); } catch(_){}
+        setState('stopped');
+      };
+
+      window.addEventListener('message', (e) => {
+        if (typeof e.data === 'string') {
+          try {
+            const maybe = JSON.parse(e.data);
+            if (maybe && typeof maybe === 'object' && 'audioWebsocketUrl' in maybe) {
+              window.setupAudioConfig(maybe);
+            }
+          } catch(_) {}
+        }
       });
-
-      window.setTimeout(function () {
-        loading.remove();
-      }, 200);
-      await appRunner.runApp();
-  }
-});
-</script>
+    })();
+  </script>
 </body>
 </html>

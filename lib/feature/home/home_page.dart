@@ -7,6 +7,8 @@ import 'package:tesla_android/feature/connectivityCheck/model/connectivity_state
 import 'package:tesla_android/feature/display/cubit/display_cubit.dart';
 import 'package:tesla_android/feature/display/cubit/display_state.dart';
 import 'package:tesla_android/feature/display/widget/display_view.dart';
+import 'package:tesla_android/feature/home/widget/audio_button.dart';
+import 'package:tesla_android/feature/home/widget/display_size_watcher.dart';
 import 'package:tesla_android/feature/home/widget/settings_button.dart';
 import 'package:tesla_android/feature/home/widget/update_button.dart';
 import 'package:tesla_android/feature/touchscreen/touchscreen_view.dart';
@@ -36,29 +38,24 @@ class HomePage extends StatelessWidget {
             body: isBackendAccessible
                 ? Stack(
                     children: [
-                      LayoutBuilder(
-                        builder: (context, constraints) {
-                          BlocProvider.of<DisplayCubit>(
-                            context,
-                          ).onWindowSizeChanged(
-                            Size(constraints.maxWidth, constraints.maxHeight),
-                          );
+                      DisplaySizeWatcher(
+                        builder: (size) {
                           return Center(
                             child: BlocBuilder<DisplayCubit, DisplayState>(
                               builder: (context, state) {
                                 if (state is DisplayStateNormal) {
                                   return AspectRatio(
-                                    aspectRatio:
-                                        state.adjustedSize.width /
-                                        state.adjustedSize.height,
+                                    aspectRatio: state.adjustedSize.width / state.adjustedSize.height,
                                     child: Stack(
                                       fit: StackFit.expand,
                                       children: [
-                                        DisplayView(type: state.rendererType),
+                                        // Give this a stable key so Flutter keeps it
+                                        DisplayView(
+                                          key: const ValueKey('/android.html'),
+                                          type: state.rendererType,
+                                        ),
                                         PointerInterceptor(
-                                          child: TouchScreenView(
-                                            displaySize: state.adjustedSize,
-                                          ),
+                                          child: TouchScreenView(displaySize: state.adjustedSize),
                                         ),
                                       ],
                                     ),
@@ -84,7 +81,7 @@ class HomePage extends StatelessWidget {
                             ),
                           ),
                           child: const Row(
-                            children: [UpdateButton(), SettingsButton()],
+                            children: [AudioButton(), UpdateButton(), SettingsButton()],
                           ),
                         ),
                       ),
