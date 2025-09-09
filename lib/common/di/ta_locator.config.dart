@@ -79,19 +79,19 @@ extension GetItInjectableX on _i174.GetIt {
       () => appModule.navigatorKey,
     );
     gh.factory<_i302.ConfigurationService>(
-      () => _i302.ConfigurationService(gh<_i361.Dio>(), gh<_i544.Flavor>()),
+      () => _i302.ConfigurationService.new(gh<_i361.Dio>(), gh<_i544.Flavor>()),
     );
     gh.factory<_i483.HealthService>(
-      () => _i483.HealthService(gh<_i361.Dio>(), gh<_i544.Flavor>()),
+      () => _i483.HealthService.new(gh<_i361.Dio>(), gh<_i544.Flavor>()),
     );
     gh.factory<_i723.DeviceInfoService>(
-      () => _i723.DeviceInfoService(gh<_i361.Dio>(), gh<_i544.Flavor>()),
+      () => _i723.DeviceInfoService.new(gh<_i361.Dio>(), gh<_i544.Flavor>()),
     );
     gh.factory<_i10.GitHubService>(
-      () => _i10.GitHubService(gh<_i361.Dio>(), gh<_i544.Flavor>()),
+      () => _i10.GitHubService.new(gh<_i361.Dio>(), gh<_i544.Flavor>()),
     );
     gh.factory<_i856.DisplayService>(
-      () => _i856.DisplayService(gh<_i361.Dio>(), gh<_i544.Flavor>()),
+      () => _i856.DisplayService.new(gh<_i361.Dio>(), gh<_i544.Flavor>()),
     );
     gh.factory<_i608.SystemConfigurationRepository>(
       () =>

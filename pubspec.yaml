@@ -3,30 +3,30 @@ description: Tesla Android
 
 publish_to: 'none'
 
-version: 2025.24.1
+version: 2025.37.1
 
 environment:
-  flutter: "3.32.4"
-  sdk: "3.8.1"
+  flutter: "3.35.0"
+  sdk: "3.9.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  dio: 5.8.0+1
-  retrofit: 4.4.2
+  dio: 5.9.0
+  retrofit: 4.7.2
   pointer_interceptor: 0.10.1+2
-  get_it: 8.0.3
-  injectable: 2.5.0
+  get_it: 8.2.0
+  injectable: 2.5.1
   flavor: ^2.0.0
   flutter_bloc: 9.1.1
   rxdart: 0.28.0
   shared_preferences: 2.5.3
   flutter_markdown: 0.7.7+1
   qr_flutter: 4.1.0
-  logger: 2.5.0
-  json_serializable: 6.9.5
-  package_info_plus: 8.3.0
-  url_launcher: 6.3.1
+  logger: 2.6.1
+  json_serializable: 6.11.1
+  package_info_plus: 8.3.1
+  url_launcher: 6.3.2
   equatable: 2.0.7
   web_socket_client: 0.2.1
   web: 1.1.1
@@ -36,9 +36,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: 6.0.0
-  build_runner: 2.4.15
-  injectable_generator: 2.7.0
-  retrofit_generator: 9.2.0
+  build_runner: 2.7.1
+  injectable_generator: 2.8.1
+  retrofit_generator: 10.0.5
 
 flutter:
   assets:
