@@ -7,6 +7,58 @@ import 'package:tesla_android/feature/releaseNotes/model/version.dart';
 class ReleaseNotesRepository {
   static const ReleaseNotes _releaseNotes = ReleaseNotes(versions: [
     Version(
+      versionName: "2025.37.1",
+      changelogItems: [
+        ChangelogItem(
+          title: "Flutter App",
+          shortDescription: "General improvements",
+          descriptionMarkdown:
+          "Flutter framework has been updated to 3.35.0.",
+        ),
+        ChangelogItem(
+          title: "WASM support",
+          shortDescription: "Performance improvements",
+          descriptionMarkdown:
+          "Web UI is now compiled to WebAssembly.",
+        ),
+        ChangelogItem(
+          title: "Android update",
+          shortDescription: "Security improvements",
+          descriptionMarkdown:
+          "Android platform has been updated to android-platform-14.0.0_r22.",
+        ),
+        ChangelogItem(
+          title: "App compatibility",
+          shortDescription: "Usability improvements",
+          descriptionMarkdown: "Connectivity spoofing is now enabled, it fixes some 3rd party apps like Apple Music when a USB modem is used.",
+        ),
+        ChangelogItem(
+          title: "Raspberry Pi firmware",
+          shortDescription: "Stability improvements",
+          descriptionMarkdown:
+          "Raspberry Pi firmware has been updated to the latest available version.",
+        ),
+        ChangelogItem(
+          title: "Browser audio support",
+          shortDescription: "Usability improvements",
+          descriptionMarkdown:
+          "Browser audio support has been restored.\n\nNew implementation relies on FLAC playback through MSE/Audio Tag for improved reliability.\n\nYou can enable the audio playback using the button in the corner of the screen.",
+        ),
+        ChangelogItem(
+          title: "Rear screen support",
+          shortDescription: "Usability improvements",
+          descriptionMarkdown:
+          "If your Tesla is equipped with an OEM rear display it can now run Tesla Android too!\n\nYou can enable the integration in Tesla Android settings.\n\nIn order to launch the app on the rear screen just open the YouTube app, search for Tesla Android and tap the link in the channel description (device.teslaandroid.com)",
+        ),
+        ChangelogItem(
+          title: "H264 Virtual Display",
+          shortDescription: "Performance improvements",
+          descriptionMarkdown:
+          "Virtual display now uses H264 instead of JPEG. This means lower CPU usage, a much lighter video stream and better performance.",
+        ),
+      ],
+    ),
+    Version(
       versionName: "2025.14.1",
       changelogItems: [
         ChangelogItem(
