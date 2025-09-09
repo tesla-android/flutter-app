@@ -40,12 +40,12 @@ pipeline {
         }
         stage('Get dependencies') {
             steps {
-                sh('flutter pub get -v')
+                sh('fvm flutter pub get -v')
             }
         }
         stage('Build runner') {
             steps {
-                sh('flutter packages pub run build_runner build --delete-conflicting-outputs')
+                sh('fvm flutter packages pub run build_runner build --delete-conflicting-outputs')
             }
         }
         stage('Build') {
@@ -53,7 +53,7 @@ pipeline {
                 script {
                     SENTRY_RELEASE = 'flutter-app-ci-' + getCurrentBranch()  + '-' + getCommitSha()
                 }
-                sh('flutter build web --wasm --no-web-resources-cdn')
+                sh('fvm flutter build web --wasm --no-web-resources-cdn')
             }
         }
         stage('Prepare artifacts') {
