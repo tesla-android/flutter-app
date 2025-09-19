@@ -50,6 +50,12 @@ class ReleaseNotesRepository {
           descriptionMarkdown:
           "Raspberry Pi firmware has been updated to the latest available version.",
         ),
+        ChangelogItem(
+          title: "Public beta access",
+          shortDescription: "",
+          descriptionMarkdown:
+          "You can now access beta builds of Tesla Android via OTA. Navigate to beta.teslaandroid.com when connected to the Tesla Android network (you can use the browser in your car)",
+        ),
       ],
     ),
     Version(
