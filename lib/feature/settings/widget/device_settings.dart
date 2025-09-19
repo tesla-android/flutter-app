@@ -86,7 +86,7 @@ class DeviceSettings extends SettingsSection {
             const Padding(
               padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
               child: Text(
-                  'No support is provided for devices that are running pre-release (beta) software'),
+                  'No support is provided for devices that are running pre-release (beta) software. You can switch your desired release type on https://beta.teslaandroid.com'),
             ),
           ],
         );
