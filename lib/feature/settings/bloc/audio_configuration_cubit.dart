@@ -12,7 +12,7 @@ class AudioConfigurationCubit extends Cubit<AudioConfigurationState>
   AudioConfigurationCubit(this._repository)
       : super(AudioConfigurationStateInitial());
 
-  void fetchConfiguration() async {
+  Future fetchConfiguration() async {
     if (!isClosed) emit(AudioConfigurationStateLoading());
     try {
       final configuration = await _repository.getConfiguration();
