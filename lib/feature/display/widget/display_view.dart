@@ -95,13 +95,19 @@ class _IframeViewState extends State<DisplayView>
     return _cachedView;
   }
 
-  void _sendConfigToIframe() {
+  void _sendConfigToIframe() async {
     final flavor = getIt<Flavor>();
 
-    // Read the latest states without rebuilding this widget.
-    final displayState = context.read<DisplayCubit>().state;
-    final gpsState = context.read<GPSConfigurationCubit>().state;
-    final audioState = context.read<AudioConfigurationCubit>().state;
+    final displayCubit = context.read<DisplayCubit>();
+    final gpsCubit = context.read<GPSConfigurationCubit>();
+    final audioCubit = context.read<AudioConfigurationCubit>();
+
+    await gpsCubit.fetchConfiguration();
+    await audioCubit.fetchConfiguration();
+
+    final displayState = displayCubit.state;
+    final gpsState = gpsCubit.state;
+    final audioState = audioCubit.state;
 
     if (displayState is! DisplayStateNormal) {
       // If display state isn't ready yet, try again on next frame.
