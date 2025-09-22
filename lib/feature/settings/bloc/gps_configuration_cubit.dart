@@ -11,7 +11,7 @@ class GPSConfigurationCubit extends Cubit<GPSConfigurationState> with Logger {
   GPSConfigurationCubit(this._configurationRepository)
       : super(GPSConfigurationStateInitial());
 
-  void fetchConfiguration() async {
+  Future fetchConfiguration() async {
     if (!isClosed) emit(GPSConfigurationStateLoading());
     try {
       final configuration = await _configurationRepository.getConfiguration();
