@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'dart:ui' hide window;
 
@@ -85,6 +86,7 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
     final renderer = _getRenderer(remoteState);
     final isResponsive = remoteState.isResponsive == 1;
     final quality = remoteState.quality;
+    final isH264 = remoteState.isH264 == 1;
     final refreshRate = remoteState.refreshRate;
     final remoteSize = Size(
       remoteState.width.toDouble(),
@@ -107,6 +109,7 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
           isPrimaryDisplay == false && isRearDisplayPrioritised) {
         desiredSize = _calculateOptimalSize(
           isResponsive ? viewSize : const Size(1088, 832),
+          isH264: isH264,
           resolutionPreset: resolutionPreset,
           isHeadless: isHeadless,
         );
@@ -171,8 +174,8 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
       final adjustedSize = currentState.adjustedSize;
       final lowResModePreset = currentState.resolutionPreset;
       final renderer = currentState.rendererType;
-      final density = lowResModePreset.density();
       final isH264 = renderer != DisplayRendererType.mjpeg;
+      final density = lowResModePreset.density(isH264: isH264);
       final quality = currentState.quality;
       final refreshRate = currentState.refreshRate;
       final isRearDisplayEnabled = currentState.isRearDisplayEnabled;
@@ -221,50 +224,75 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
     return remoteDisplayState.renderer;
   }
 
-  ///
-  /// Display resolution needs to be aligned by 16 for the hardware encoder
-  /// Not going below 1280 x 832 just to be safe
-  ///
   Size _calculateOptimalSize(
     Size viewSize, {
     required DisplayResolutionModePreset resolutionPreset,
+    required isH264,
     required bool isHeadless,
   }) {
     if (!isHeadless) {
       return const Size(1024, 768);
     }
 
-    // Max encoder limits for Raspberry Pi 4
-    const int maxEncoderWidth = 1920;
-    const int maxEncoderHeight = 1080;
-
-    // Min practical resolution
-    const int minSize = 320;
-
-    double aspectRatio = viewSize.width / viewSize.height;
-
-    // Start with the smaller of the requested size and encoder max
-    double width = viewSize.width.clamp(
-      minSize.toDouble(),
-      maxEncoderWidth.toDouble(),
-    );
-    double height = width / aspectRatio;
-
-    if (height > maxEncoderHeight) {
-      height = maxEncoderHeight.toDouble();
-      width = height * aspectRatio;
+    DisplayResolutionModePreset adjustedResolutionPreset;
+    if (isH264) {
+      switch (resolutionPreset) {
+        case DisplayResolutionModePreset.res832p:
+          adjustedResolutionPreset = DisplayResolutionModePreset.res832p;
+        default:
+          adjustedResolutionPreset = DisplayResolutionModePreset.res720p;
+      }
+    } else {
+      adjustedResolutionPreset = resolutionPreset;
     }
 
-    // Align to encoder requirements
-    width = (width ~/ 32) * 32;
-    height = (height ~/ 16) * 16;
+    // Pi H.264 safe “coded” limits (macroblock-aligned)
+    const double maxW = 1920.0;
+    const double maxH = 1088.0;
+    const double minSide = 320.0;
 
-    // Ensure still above minimum
-    if (width < minSize || height < minSize) {
-      width = (minSize ~/ 32) * 32;
-      height = (minSize ~/ 16) * 16;
+    // Conservative alignment for Pi H.264:
+    //  - width multiple of 64 (helps with stride/chroma alignment)
+    //  - height multiple of 32 (more reliable than 16 on some builds)
+    double alignUp(double v, int m) => ((v + (m - 1)) ~/ m * m).toDouble();
+
+    final double ar = viewSize.width / viewSize.height;
+
+    // Start from the incoming view size (bounded by encoder max)
+    double w = viewSize.width.clamp(minSide, maxW);
+    double h = w / ar;
+    if (h > maxH) {
+      h = maxH;
+      w = h * ar;
     }
 
-    return Size(width, height);
+    // Cap by preset on SHORTEST side (e.g. 480/544/640/720/832).
+    final double maxShortest = adjustedResolutionPreset.maxHeight();
+    final double shortest = math.min(w, h);
+    if (shortest > maxShortest) {
+      final double s = maxShortest / shortest;
+      w *= s;
+      h *= s;
+    }
+
+    // Align UP to safe multiples.
+    w = alignUp(w, 64);
+    h = alignUp(h, 32);
+
+    // For small presets, avoid exact 480 rows — use 512 (common good coded height).
+    if (h <= 480) {
+      h = 512;
+      w = alignUp(h * ar, 64); // preserve AR as best as possible
+    }
+
+    // Enforce minimums after alignment.
+    if (w < minSide) w = alignUp(minSide, 64);
+    if (h < minSide) h = alignUp(minSide, 32);
+
+    // Re-apply hard caps in case alignment pushed us over.
+    w = math.min(w, maxW);
+    h = math.min(h, maxH);
+
+    return Size(w, h);
   }
 }
