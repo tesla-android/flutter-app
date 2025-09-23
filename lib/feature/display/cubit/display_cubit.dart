@@ -172,7 +172,7 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
       final lowResModePreset = currentState.resolutionPreset;
       final renderer = currentState.rendererType;
       final density = lowResModePreset.density();
-      final isH264 = renderer == DisplayRendererType.h264;
+      final isH264 = renderer != DisplayRendererType.mjpeg;
       final quality = currentState.quality;
       final refreshRate = currentState.refreshRate;
       final isRearDisplayEnabled = currentState.isRearDisplayEnabled;
@@ -218,15 +218,7 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
   }
 
   DisplayRendererType _getRenderer(RemoteDisplayState remoteDisplayState) {
-    var renderer = remoteDisplayState.renderer;
-    final isSSL = _flavor.getBool("isSSL") ?? false;
-    final rendererNeedsSSL = renderer.needsSSL();
-    final isRendererSupported = isSSL && rendererNeedsSSL || !rendererNeedsSSL;
-    if (!isRendererSupported) {
-      log("Renderer needs SSL, returning to default");
-      renderer = DisplayRendererType.h264;
-    }
-    return renderer;
+    return remoteDisplayState.renderer;
   }
 
   ///

@@ -14,9 +14,9 @@ RemoteDisplayState _$RemoteDisplayStateFromJson(Map<String, dynamic> json) =>
       lowRes: $enumDecode(_$DisplayResolutionModePresetEnumMap, json['lowres']),
       renderer:
           $enumDecodeNullable(_$DisplayRendererTypeEnumMap, json['renderer']) ??
-          DisplayRendererType.h264,
+          DisplayRendererType.mjpeg,
       isResponsive: (json['isResponsive'] as num?)?.toInt() ?? 1,
-      isH264: (json['isH264'] as num?)?.toInt() ?? 1,
+      isH264: (json['isH264'] as num?)?.toInt() ?? 0,
       refreshRate:
           $enumDecodeNullable(
             _$DisplayRefreshRatePresetEnumMap,
@@ -57,7 +57,11 @@ const _$DisplayResolutionModePresetEnumMap = {
   DisplayResolutionModePreset.res480p: 4,
 };
 
-const _$DisplayRendererTypeEnumMap = {DisplayRendererType.h264: 0};
+const _$DisplayRendererTypeEnumMap = {
+  DisplayRendererType.mjpeg: 0,
+  DisplayRendererType.h264WebCodecs: 1,
+  DisplayRendererType.h264Brodway: 2,
+};
 
 const _$DisplayRefreshRatePresetEnumMap = {
   DisplayRefreshRatePreset.refresh30hz: 30,
