@@ -22,6 +22,17 @@ class DisplaySettings extends SettingsSection {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SettingsTile(
+                icon: Icons.texture,
+                title: 'Renderer',
+                dense: false,
+                trailing: _rendererDropdown(context, cubit, state)),
+            const Padding(
+              padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
+              child: Text(
+                  'Tesla Android supports both h264 and MJPEG display compression. MJPEG has less visible compression artifacts but needs much more bandwidth.\n\nNOTE: WebCodecs may not work if your car is running Tesla Firmware older than 2025.32.'),
+            ),
+            divider,
+            SettingsTile(
               icon: Icons.display_settings,
               title: 'Resolution',
               trailing: _resolutionDropdown(context, cubit, state),
@@ -29,7 +40,7 @@ class DisplaySettings extends SettingsSection {
             const Padding(
               padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
               child: Text(
-                'Choosing a low resolution improves the display performance in Drive. It reduces the browser load, meant for cars equipped with MCU2.',
+                'Choosing a low resolution improves the display performance in Drive. It reduces the browser load, meant for cars equipped with MCU2. Resolutions lower than 720p only work with the MJPEG renderer.',
               ),
             ),
             divider,
@@ -67,17 +78,6 @@ class DisplaySettings extends SettingsSection {
               child: Text(
                 'Advanced setting, Tesla Android can automatically resize the virtual display when the browser window size changes. If you disable this option, the display aspect will be locked on the current value.',
               ),
-            ),
-            divider,
-            SettingsTile(
-                icon: Icons.texture,
-                title: 'Renderer',
-                dense: false,
-                trailing: _rendererDropdown(context, cubit, state)),
-            const Padding(
-              padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
-              child: Text(
-                  'Tesla Android supports both h264 and MJPEG display compression. MJPEG has less visible compression artifacts but needs much more bandwidth.\n\nNOTE: WebCodecs may not work if your car is running Tesla Firmware older than 2025.32.'),
             ),
           ],
         );
