@@ -65,7 +65,10 @@ class RemoteDisplayState extends Equatable {
   RemoteDisplayState updateResolution({
     required DisplayResolutionModePreset newPreset,
   }) {
-    return copyWith(lowRes: newPreset, density: newPreset.density());
+    return copyWith(
+      lowRes: newPreset,
+      density: newPreset.density(isH264: isH264 == 1),
+    );
   }
 
   RemoteDisplayState updateRenderer({required DisplayRendererType newType}) {
@@ -219,20 +222,31 @@ enum DisplayResolutionModePreset {
     }
   }
 
-  int density() {
-    switch (index) {
-      case 0:
-        return 200;
-      case 1:
-        return 175;
-      case 2:
-        return 155;
-      case 3:
-        return 130;
-      case 4:
-        return 115;
-      default:
-        return 832;
+  int density({required bool isH264}) {
+    if (isH264) {
+      switch (index) {
+        case 0:
+          return 200;
+        case 1:
+          return 175;
+        default:
+          return 175;
+      }
+    } else {
+      switch (index) {
+        case 0:
+          return 200;
+        case 1:
+          return 175;
+        case 2:
+          return 155;
+        case 3:
+          return 130;
+        case 4:
+          return 115;
+        default:
+          return 832;
+      }
     }
   }
 
