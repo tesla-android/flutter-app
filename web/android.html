@@ -30,6 +30,7 @@
 </head>
 
 <body>
+<img id="image" />
 <canvas id="canvas"></canvas>
 <script>
   var displayWebsocketUrl;
@@ -97,8 +98,6 @@
       var rendererScript = document.createElement('script');
       rendererScript.src = renderer + '.js';
       document.head.appendChild(rendererScript);
-      var canvas = document.getElementById("canvas");
-      canvas.style.display = "block";
       displayRendererAdded = true;
     }
 
