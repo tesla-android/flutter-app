@@ -1,11 +1,13 @@
+var img = document.getElementById("image");
 var canvas = document.getElementById("canvas");
 var statsElement = document.getElementById('stats');
+img.style.display = "none";
 canvas.style.display = "block";
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const worker = new Worker('h264_worker.js');
+const worker = new Worker('h264BrodwayWorker.js');
 const offscreenCanvas = canvas.transferControlToOffscreen();
 
 worker.postMessage({ canvas: offscreenCanvas, displayWidth: displayWidth, displayHeight: displayHeight, windowWidth: window.innerWidth, windowHeight: window.innerHeight }, [offscreenCanvas]);

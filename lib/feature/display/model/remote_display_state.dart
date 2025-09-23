@@ -10,12 +10,12 @@ class RemoteDisplayState extends Equatable {
   final int density;
   @JsonKey(name: "lowres")
   final DisplayResolutionModePreset lowRes;
-  @JsonKey(defaultValue: DisplayRendererType.h264)
+  @JsonKey(defaultValue: DisplayRendererType.mjpeg)
   final DisplayRendererType renderer;
   final int? isHeadless;
   @JsonKey(defaultValue: 1)
   final int isResponsive;
-  @JsonKey(defaultValue: 1)
+  @JsonKey(defaultValue: 0)
   final int isH264;
   @JsonKey(defaultValue: DisplayRefreshRatePreset.refresh30hz)
   final DisplayRefreshRatePreset refreshRate;
@@ -71,7 +71,7 @@ class RemoteDisplayState extends Equatable {
   RemoteDisplayState updateRenderer({required DisplayRendererType newType}) {
     return copyWith(
       renderer: newType,
-      isH264: newType == DisplayRendererType.h264 ? 1 : 0,
+      isH264: newType != DisplayRendererType.mjpeg ? 1 : 0,
     );
   }
 
@@ -256,41 +256,48 @@ enum DisplayResolutionModePreset {
 
 enum DisplayRendererType {
   @JsonValue(0)
-  h264;
+  mjpeg,
+  @JsonValue(1)
+  h264WebCodecs,
+  @JsonValue(2)
+  h264Brodway;
 
   String name() {
     switch (index) {
       case 0:
-        return "H264";
+        return "Motion JPEG";
+      case 1:
+        return "h264 (WebCodecs)";
+      case 2:
+        return "h264 (legacy)";
       default:
-        return "H264";
+        return "mjpeg";
     }
   }
 
   String resourcePath() {
     switch (index) {
       case 0:
-        return "h264";
+        return "mjpeg";
+      case 1:
+        return "h264WebCodecs";
+      case 2:
+        return "h264Brodway";
       default:
-        return "h264";
-    }
-  }
-
-  bool needsSSL() {
-    switch (index) {
-      case 0:
-        return true;
-      default:
-        return true;
+        return "mjpeg";
     }
   }
 
   String binaryType() {
     switch (index) {
       case 0:
+        return "blob";
+      case 1:
+        return "arraybuffer";
+      case 2:
         return "arraybuffer";
       default:
-        return "arraybuffer";
+        return "blob";
     }
   }
 }
