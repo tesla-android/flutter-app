@@ -7,7 +7,7 @@ import 'package:tesla_android/feature/releaseNotes/model/version.dart';
 class ReleaseNotesRepository {
   static const ReleaseNotes _releaseNotes = ReleaseNotes(versions: [
     Version(
-      versionName: "2025.38.1",
+      versionName: "2025.39.2",
       changelogItems: [
         ChangelogItem(
           title: "Browser audio support",
@@ -25,7 +25,13 @@ class ReleaseNotesRepository {
           title: "H264 Virtual Display",
           shortDescription: "Performance improvements",
           descriptionMarkdown:
-          "Virtual display now uses H264 instead of JPEG. This means lower CPU usage, a much lighter video stream and better performance.",
+          "Virtual display can now use H264 instead of JPEG. This means lower CPU usage, a much lighter video stream and better performance. You can enable this renderer in Tesla Android Settings.",
+        ),
+        ChangelogItem(
+          title: "Video Decoding",
+          shortDescription: "Performance improvements",
+          descriptionMarkdown:
+          "Video encoders used in Android (ffmpeg and v4l2_codec2) were updated in this build.",
         ),
         ChangelogItem(
           title: "Flutter App",
