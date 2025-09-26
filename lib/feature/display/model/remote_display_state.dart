@@ -8,8 +8,8 @@ class RemoteDisplayState extends Equatable {
   final int width;
   final int height;
   final int density;
-  @JsonKey(name: "lowres")
-  final DisplayResolutionModePreset lowRes;
+  @JsonKey(name: "resolutionPreset")
+  final DisplayResolutionModePreset resolutionPreset;
   @JsonKey(defaultValue: DisplayRendererType.mjpeg)
   final DisplayRendererType renderer;
   final int? isHeadless;
@@ -30,7 +30,7 @@ class RemoteDisplayState extends Equatable {
     required this.width,
     required this.height,
     required this.density,
-    required this.lowRes,
+    required this.resolutionPreset,
     required this.renderer,
     required this.isResponsive,
     required this.isH264,
@@ -51,7 +51,7 @@ class RemoteDisplayState extends Equatable {
     width,
     height,
     density,
-    lowRes,
+    resolutionPreset,
     renderer,
     isResponsive,
     isH264,
@@ -66,7 +66,7 @@ class RemoteDisplayState extends Equatable {
     required DisplayResolutionModePreset newPreset,
   }) {
     return copyWith(
-      lowRes: newPreset,
+      resolutionPreset: newPreset,
       density: newPreset.density(isH264: isH264 == 1),
     );
   }
@@ -93,7 +93,7 @@ class RemoteDisplayState extends Equatable {
     int? height,
     int? density,
     int? isHeadless,
-    DisplayResolutionModePreset? lowRes,
+    DisplayResolutionModePreset? resolutionPreset,
     DisplayRendererType? renderer,
     int? isH264,
     int? isResponsive,
@@ -106,7 +106,7 @@ class RemoteDisplayState extends Equatable {
       width: width ?? this.width,
       height: height ?? this.height,
       density: density ?? this.density,
-      lowRes: lowRes ?? this.lowRes,
+      resolutionPreset: resolutionPreset ?? this.resolutionPreset,
       isHeadless: isHeadless ?? this.isHeadless,
       renderer: renderer ?? this.renderer,
       isH264: isH264 ?? this.isH264,

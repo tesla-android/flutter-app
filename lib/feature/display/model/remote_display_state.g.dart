@@ -11,7 +11,10 @@ RemoteDisplayState _$RemoteDisplayStateFromJson(Map<String, dynamic> json) =>
       width: (json['width'] as num).toInt(),
       height: (json['height'] as num).toInt(),
       density: (json['density'] as num).toInt(),
-      lowRes: $enumDecode(_$DisplayResolutionModePresetEnumMap, json['lowres']),
+      resolutionPreset: $enumDecode(
+        _$DisplayResolutionModePresetEnumMap,
+        json['resolutionPreset'],
+      ),
       renderer:
           $enumDecodeNullable(_$DisplayRendererTypeEnumMap, json['renderer']) ??
           DisplayRendererType.mjpeg,
@@ -38,7 +41,8 @@ Map<String, dynamic> _$RemoteDisplayStateToJson(RemoteDisplayState instance) =>
       'width': instance.width,
       'height': instance.height,
       'density': instance.density,
-      'lowres': _$DisplayResolutionModePresetEnumMap[instance.lowRes]!,
+      'resolutionPreset':
+          _$DisplayResolutionModePresetEnumMap[instance.resolutionPreset]!,
       'renderer': _$DisplayRendererTypeEnumMap[instance.renderer]!,
       'isHeadless': instance.isHeadless,
       'isResponsive': instance.isResponsive,

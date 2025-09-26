@@ -8,14 +8,14 @@ class DisplayConfigurationStateLoading extends DisplayConfigurationState {}
 
 class DisplayConfigurationStateSettingsFetched
     extends DisplayConfigurationState {
-  final DisplayResolutionModePreset lowResModePreset;
+  final DisplayResolutionModePreset resolutionPreset;
   final DisplayRendererType renderer;
   final bool isResponsive;
   final DisplayQualityPreset quality;
   final DisplayRefreshRatePreset refreshRate;
 
   DisplayConfigurationStateSettingsFetched({
-    required this.lowResModePreset,
+    required this.resolutionPreset,
     required this.renderer,
     required this.isResponsive,
     required this.refreshRate,

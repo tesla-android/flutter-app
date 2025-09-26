@@ -59,7 +59,7 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
       if (!isClosed) emit(DisplayConfigurationStateSettingsUpdateInProgress());
       try {
         await _repository.updateDisplayConfiguration(config);
-        _currentConfig = _currentConfig?.copyWith(lowRes: newPreset);
+        _currentConfig = _currentConfig?.copyWith(resolutionPreset: newPreset);
         _emitCurrentConfig();
       } catch (exception, stackTrace) {
         logException(exception: exception, stackTrace: stackTrace);
@@ -127,7 +127,7 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
   void _emitCurrentConfig() {
     if (!isClosed) {
       emit(DisplayConfigurationStateSettingsFetched(
-        lowResModePreset: _currentConfig!.lowRes,
+        resolutionPreset: _currentConfig!.resolutionPreset,
         renderer: _currentConfig!.renderer,
         isResponsive: _currentConfig!.isResponsive == 1,
         refreshRate: _currentConfig!.refreshRate,
