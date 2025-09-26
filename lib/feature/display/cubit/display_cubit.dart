@@ -81,7 +81,7 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
     final remoteState = await _getRemoteDisplayState();
     final isRearDisplayPrioritised = remoteState.isRearDisplayPrioritised == 1;
     final isRearDisplayEnabled = remoteState.isRearDisplayEnabled == 1;
-    final resolutionPreset = remoteState.lowRes;
+    final resolutionPreset = remoteState.resolutionPreset;
     final isHeadless = (remoteState.isHeadless ?? 1) == 1;
     final renderer = _getRenderer(remoteState);
     final isResponsive = remoteState.isResponsive == 1;
@@ -172,10 +172,10 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
       final currentState = state as DisplayStateResizeCoolDown;
       final viewSize = currentState.viewSize;
       final adjustedSize = currentState.adjustedSize;
-      final lowResModePreset = currentState.resolutionPreset;
+      final resolutionPreset = currentState.resolutionPreset;
       final renderer = currentState.rendererType;
       final isH264 = renderer != DisplayRendererType.mjpeg;
-      final density = lowResModePreset.density(isH264: isH264);
+      final density = resolutionPreset.density(isH264: isH264);
       final quality = currentState.quality;
       final refreshRate = currentState.refreshRate;
       final isRearDisplayEnabled = currentState.isRearDisplayEnabled;
@@ -188,7 +188,7 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
             width: adjustedSize.width.toInt(),
             height: adjustedSize.height.toInt(),
             density: density,
-            lowRes: lowResModePreset,
+            resolutionPreset: resolutionPreset,
             renderer: renderer,
             isResponsive: currentState.isResponsive ? 1 : 0,
             isH264: isH264 ? 1 : 0,

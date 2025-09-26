@@ -113,7 +113,7 @@ class DisplaySettings extends SettingsSection {
   ) {
     if (state is DisplayConfigurationStateSettingsFetched) {
       return DropdownButton<DisplayResolutionModePreset>(
-        value: state.lowResModePreset,
+        value: state.resolutionPreset,
         icon: const Icon(Icons.arrow_drop_down_outlined),
         underline: Container(height: 2, color: Theme.of(context).primaryColor),
         onChanged: (DisplayResolutionModePreset? value) {
