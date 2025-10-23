@@ -16,9 +16,6 @@ import 'package:tesla_android/feature/settings/bloc/gps_configuration_cubit.dart
 import 'package:tesla_android/feature/settings/bloc/gps_configuration_state.dart';
 import 'package:web/web.dart' as web;
 
-// Guard so we register the factory only once for this viewType.
-bool _displayViewFactoryRegistered = false;
-
 class DisplayView extends StatefulWidget {
   final DisplayRendererType type;
 
@@ -29,18 +26,12 @@ class DisplayView extends StatefulWidget {
 }
 
 class _IframeViewState extends State<DisplayView>
-    with Logger, AutomaticKeepAliveClientMixin<DisplayView> {
+    with Logger {
   static const String _src = "/android.html";
 
-  // The underlying DOM element and a cached platform view widget.
   final web.HTMLIFrameElement _iframeElement = web.HTMLIFrameElement();
-  late final Widget _cachedView;
 
-  // Keep a reference to the JS listener so we can remove it in dispose.
   web.EventListener? _onMessageJs;
-
-  @override
-  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -50,17 +41,24 @@ class _IframeViewState extends State<DisplayView>
     _iframeElement.src = _src;
     _iframeElement.style.border = 'none';
 
-    // Register the view factory only once for this viewType.
-    if (!_displayViewFactoryRegistered) {
-      ui.platformViewRegistry.registerViewFactory(
-        _src,
-            (int viewId) => _iframeElement,
-      );
-      _displayViewFactoryRegistered = true;
-    }
+    ui.platformViewRegistry.registerViewFactory(
+      _src,
+          (int viewId) => _iframeElement,
+    );
+  }
 
-    // Cache the HtmlElementView so it won’t be recreated on rebuilds.
-    _cachedView = HtmlElementView(
+  @override
+  void dispose() {
+    if (_onMessageJs != null) {
+      web.window.removeEventListener('message', _onMessageJs!);
+      _onMessageJs = null;
+    }
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return HtmlElementView(
       viewType: _src,
       onPlatformViewCreated: (_) {
         // Wire a one-time message listener on window to catch "iframeReady"
@@ -78,21 +76,6 @@ class _IframeViewState extends State<DisplayView>
         web.window.addEventListener('message', _onMessageJs);
       },
     );
-  }
-
-  @override
-  void dispose() {
-    if (_onMessageJs != null) {
-      web.window.removeEventListener('message', _onMessageJs!);
-      _onMessageJs = null;
-    }
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    super.build(context); // for AutomaticKeepAliveClientMixin
-    return _cachedView;
   }
 
   void _sendConfigToIframe() async {

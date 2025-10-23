@@ -22,14 +22,16 @@ class DisplaySettings extends SettingsSection {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SettingsTile(
-                icon: Icons.texture,
-                title: 'Renderer',
-                dense: false,
-                trailing: _rendererDropdown(context, cubit, state)),
+              icon: Icons.texture,
+              title: 'Renderer',
+              dense: false,
+              trailing: _rendererDropdown(context, cubit, state),
+            ),
             const Padding(
               padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
               child: Text(
-                  'Tesla Android supports both h264 and MJPEG display compression. MJPEG has less visible compression artifacts but needs much more bandwidth.\n\nNOTE: WebCodecs may not work if your car is running Tesla Firmware older than 2025.32.'),
+                'Tesla Android supports both h264 and MJPEG display compression. MJPEG has less visible compression artifacts but needs much more bandwidth.\n\nNOTE: WebCodecs may not work if your car is running Tesla Firmware older than 2025.32.',
+              ),
             ),
             divider,
             SettingsTile(
@@ -95,6 +97,7 @@ class DisplaySettings extends SettingsSection {
         value: state.isResponsive,
         onChanged: (bool value) {
           cubit.setResponsiveness(value);
+          _showConfigurationChangedBanner(context);
         },
       );
     } else if (state is DisplayConfigurationStateSettingsUpdateInProgress ||
@@ -119,6 +122,7 @@ class DisplaySettings extends SettingsSection {
         onChanged: (DisplayResolutionModePreset? value) {
           if (value != null) {
             cubit.setResolution(value);
+            _showConfigurationChangedBanner(context);
           }
         },
         items: DisplayResolutionModePreset.values
@@ -154,7 +158,7 @@ class DisplaySettings extends SettingsSection {
         onChanged: (DisplayQualityPreset? value) {
           if (value != null) {
             cubit.setQuality(value);
-            _showConfigurationChangedBanner();
+            _showConfigurationChangedBanner(context);
           }
         },
         items: DisplayQualityPreset.values.map((value) {
@@ -186,7 +190,7 @@ class DisplaySettings extends SettingsSection {
         onChanged: (DisplayRefreshRatePreset? value) {
           if (value != null) {
             cubit.setRefreshRate(value);
-            _showConfigurationChangedBanner();
+            _showConfigurationChangedBanner(context);
           }
         },
         items: DisplayRefreshRatePreset.values.map((value) {
@@ -218,6 +222,7 @@ class DisplaySettings extends SettingsSection {
         onChanged: (DisplayRendererType? value) {
           if (value != null) {
             cubit.setRenderer(value);
+            _showConfigurationChangedBanner(context);
           }
         },
         items: DisplayRendererType.values
@@ -240,26 +245,28 @@ class DisplaySettings extends SettingsSection {
     return const SizedBox.shrink();
   }
 
-  void _showConfigurationChangedBanner() {
-    final GlobalKey<NavigatorState> navigatorState =
-        getIt<GlobalKey<NavigatorState>>();
-    final context = navigatorState.currentContext!;
-
-    ScaffoldMessenger.of(context).showMaterialBanner(
-      MaterialBanner(
-        content: const Text(
-          'System configuration has been updated. Please restart the device to apply new configuration.',
-        ),
-        leading: const Icon(Icons.settings),
-        actions: [
-          IconButton(
-            onPressed: () {
-              ScaffoldMessenger.of(context).clearMaterialBanners();
-            },
-            icon: const Icon(Icons.close),
+  void _showConfigurationChangedBanner(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: const Text('Reboot device'),
+          content: const Text(
+            'Display configuration has been updated. Please restart the device in case of any issues.',
           ),
-        ],
-      ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Understood'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
