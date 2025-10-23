@@ -7,7 +7,7 @@ import 'package:tesla_android/feature/releaseNotes/model/version.dart';
 class ReleaseNotesRepository {
   static const ReleaseNotes _releaseNotes = ReleaseNotes(versions: [
     Version(
-      versionName: "2025.39.2",
+      versionName: "2025.44.1",
       changelogItems: [
         ChangelogItem(
           title: "Browser audio support",
