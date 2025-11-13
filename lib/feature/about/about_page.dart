@@ -40,7 +40,7 @@ class AboutPage extends StatelessWidget {
               const SizedBox(
                 height: TADimens.PADDING_XXL_VALUE,
               ),
-              const Text("Tesla Android Compute Module 4 bundles are now available.\nGet yours today on https://teslaandroid.com", style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+              const Text("Tesla Android (2nd generation) hardware is now available.\nRetrofits are available for 1st generation devices.\nMore details on https://teslaandroid.com", style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
             ],
           ),
         ),
