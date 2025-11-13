@@ -47,7 +47,6 @@
   var displayHeight;
   var displayRendererAdded = false;
 
-  var gpsEstimator;
   var gpsRunning = false;
   var isGPSEnabled = 'false';
 
@@ -116,7 +115,6 @@
     if (isGPSEnabled === 'false') return;
 
     gpsSocket = new ReconnectingWebSocket(url);
-    gpsEstimator = new GpsEstimator();
 
     gpsSocket.onopen = () => { log("GPS: Websocket connection established"); gpsRunning = true; };
     gpsSocket.onclose = () => { log("GPS: Websocket connection closed"); gpsRunning = false; };
@@ -167,17 +165,18 @@
       latitude: position.coords.latitude,
       longitude: position.coords.longitude,
       accuracy: position.coords.accuracy,
+      speed: position.coords.speed,
+      heading: position.coords.heading,
       timestamp: Date.now()
     };
 
-    const estimate = gpsEstimator.estimate(pos);
 
     return JSON.stringify({
       latitude: String(pos.latitude),
       longitude: String(pos.longitude),
-      speed: String(estimate.speed),
-      bearing: String(estimate.heading),
-      vertical_accuracy: String(5), // fixed
+      speed: String(pos.speed),
+      bearing: String(pos.heading),
+      vertical_accuracy: String(pos.accuracy),
       timestamp: String(pos.timestamp)
     });
   }
