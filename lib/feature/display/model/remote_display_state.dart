@@ -10,8 +10,9 @@ class RemoteDisplayState extends Equatable {
   final int density;
   @JsonKey(name: "resolutionPreset")
   final DisplayResolutionModePreset resolutionPreset;
-  @JsonKey(defaultValue: DisplayRendererType.mjpeg)
-  final DisplayRendererType renderer;
+  @Deprecated("Not used, switch to isH264 instead")
+  @JsonKey(defaultValue: -1)
+  final int renderer;
   final int? isHeadless;
   @JsonKey(defaultValue: 1)
   final int isResponsive;
@@ -31,7 +32,6 @@ class RemoteDisplayState extends Equatable {
     required this.height,
     required this.density,
     required this.resolutionPreset,
-    required this.renderer,
     required this.isResponsive,
     required this.isH264,
     required this.refreshRate,
@@ -39,6 +39,7 @@ class RemoteDisplayState extends Equatable {
     required this.isRearDisplayEnabled,
     required this.isRearDisplayPrioritised,
     this.isHeadless,
+    this.renderer = -1,
   });
 
   factory RemoteDisplayState.fromJson(Map<String, dynamic> json) =>
@@ -71,10 +72,9 @@ class RemoteDisplayState extends Equatable {
     );
   }
 
-  RemoteDisplayState updateRenderer({required DisplayRendererType newType}) {
+  RemoteDisplayState updateRenderer({required bool isH264}) {
     return copyWith(
-      renderer: newType,
-      isH264: newType != DisplayRendererType.mjpeg ? 1 : 0,
+      isH264: isH264 ? 1 : 0,
     );
   }
 
@@ -94,7 +94,7 @@ class RemoteDisplayState extends Equatable {
     int? density,
     int? isHeadless,
     DisplayResolutionModePreset? resolutionPreset,
-    DisplayRendererType? renderer,
+    int? renderer,
     int? isH264,
     int? isResponsive,
     DisplayRefreshRatePreset? refreshRate,
@@ -264,54 +264,6 @@ enum DisplayResolutionModePreset {
         return "480p";
       default:
         return "832p";
-    }
-  }
-}
-
-enum DisplayRendererType {
-  @JsonValue(0)
-  mjpeg,
-  @JsonValue(1)
-  h264WebCodecs,
-  @JsonValue(2)
-  h264Brodway;
-
-  String name() {
-    switch (index) {
-      case 0:
-        return "Motion JPEG";
-      case 1:
-        return "h264 (WebCodecs)";
-      case 2:
-        return "h264 (legacy)";
-      default:
-        return "mjpeg";
-    }
-  }
-
-  String resourcePath() {
-    switch (index) {
-      case 0:
-        return "mjpeg";
-      case 1:
-        return "h264WebCodecs";
-      case 2:
-        return "h264Brodway";
-      default:
-        return "mjpeg";
-    }
-  }
-
-  String binaryType() {
-    switch (index) {
-      case 0:
-        return "blob";
-      case 1:
-        return "arraybuffer";
-      case 2:
-        return "arraybuffer";
-      default:
-        return "blob";
     }
   }
 }

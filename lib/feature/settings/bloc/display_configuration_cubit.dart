@@ -70,14 +70,14 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
     }
   }
 
-  void setRenderer(DisplayRendererType newType) async {
+  void setRenderer(bool isH264) async {
     var config = _currentConfig;
     if (config != null) {
-      config = config.updateRenderer(newType: newType);
+      config = config.updateRenderer(isH264: isH264);
       if (!isClosed) emit(DisplayConfigurationStateSettingsUpdateInProgress());
       try {
         await _repository.updateDisplayConfiguration(config);
-        _currentConfig = _currentConfig?.copyWith(renderer: newType);
+        _currentConfig = _currentConfig?.copyWith(isH264: isH264 ? 1 : 0);
         _emitCurrentConfig();
       } catch (exception, stackTrace) {
         logException(exception: exception, stackTrace: stackTrace);
@@ -128,7 +128,7 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
     if (!isClosed) {
       emit(DisplayConfigurationStateSettingsFetched(
         resolutionPreset: _currentConfig!.resolutionPreset,
-        renderer: _currentConfig!.renderer,
+        isH264: _currentConfig!.isH264 == 1,
         isResponsive: _currentConfig!.isResponsive == 1,
         refreshRate: _currentConfig!.refreshRate,
         quality: _currentConfig!.quality,

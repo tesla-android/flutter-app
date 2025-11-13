@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tesla_android/common/di/ta_locator.dart';
 import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
 import 'package:tesla_android/feature/display/model/remote_display_state.dart';
 import 'package:tesla_android/feature/settings/bloc/display_configuration_cubit.dart';
@@ -30,7 +29,7 @@ class DisplaySettings extends SettingsSection {
             const Padding(
               padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
               child: Text(
-                'Tesla Android supports both h264 and MJPEG display compression. MJPEG has less visible compression artifacts but needs much more bandwidth.\n\nNOTE: WebCodecs may not work if your car is running Tesla Firmware older than 2025.32.',
+                'Tesla Android supports both h264 and MJPEG display compression. MJPEG has less visible compression artifacts but needs much more bandwidth.\n\nNOTE: H264 may not work if your car is running Tesla Firmware older than 2025.32.',
               ),
             ),
             divider,
@@ -215,23 +214,23 @@ class DisplaySettings extends SettingsSection {
     DisplayConfigurationState state,
   ) {
     if (state is DisplayConfigurationStateSettingsFetched) {
-      return DropdownButton<DisplayRendererType>(
-        value: state.renderer,
+      return DropdownButton<bool>(
+        value: state.isH264,
         icon: const Icon(Icons.arrow_drop_down_outlined),
         underline: Container(height: 2, color: Theme.of(context).primaryColor),
-        onChanged: (DisplayRendererType? value) {
+        onChanged: (bool? value) {
           if (value != null) {
             cubit.setRenderer(value);
             _showConfigurationChangedBanner(context);
           }
         },
-        items: DisplayRendererType.values
-            .map<DropdownMenuItem<DisplayRendererType>>((
-              DisplayRendererType value,
+        items: [true, false]
+            .map<DropdownMenuItem<bool>>((
+              bool value,
             ) {
-              return DropdownMenuItem<DisplayRendererType>(
+              return DropdownMenuItem<bool>(
                 value: value,
-                child: Text(value.name()),
+                child: Text(value == true ? "h264" : "MJPEG"),
               );
             })
             .toList(),

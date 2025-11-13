@@ -1,4 +1,5 @@
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tesla_android/common/di/ta_locator.dart';
 import 'package:tesla_android/common/navigation/ta_page_factory.dart';
@@ -8,9 +9,44 @@ import 'package:tesla_android/common/utils/logger.dart';
 Future<void> main() async {
   await configureTADependencies();
 
+  final FlutterExceptionHandler? defaultOnError = FlutterError.onError;
+
+  FlutterError.onError = (FlutterErrorDetails details) {
+    if (_isHotReloadJsInteropError(details)) {
+      debugPrint(
+        '[IGNORED] Hot-reload JS Interop null error:\n'
+            '${details.exceptionAsString()}\n'
+            '${details.stack}',
+      );
+      return;
+    }
+
+    if (defaultOnError != null) {
+      defaultOnError(details);
+    } else {
+      FlutterError.dumpErrorToConsole(details);
+    }
+  };
+
   runApp(
     TeslaAndroid(),
   );
+}
+
+bool _isHotReloadJsInteropError(FlutterErrorDetails details) {
+  if (!kDebugMode) return false;
+
+  final msg = details.exceptionAsString();
+  final stack = details.stack?.toString() ?? '';
+
+  final isUnexpectedNull =
+  msg.contains('DartError: Unexpected null value');
+
+  final isFromVideoFrameHelper =
+      stack.contains('video_frame_to_image.dart') ||
+          stack.contains('js_allow_interop_patch.dart');
+
+  return isUnexpectedNull && isFromVideoFrameHelper;
 }
 
 class TeslaAndroid extends StatelessWidget with Logger {

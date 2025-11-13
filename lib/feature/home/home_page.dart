@@ -45,19 +45,13 @@ class HomePage extends StatelessWidget {
                               builder: (context, state) {
                                 if (state is DisplayStateNormal) {
                                   return AspectRatio(
-                                    aspectRatio: state.adjustedSize.width / state.adjustedSize.height,
-                                    child: Stack(
-                                      fit: StackFit.expand,
-                                      children: [
-                                        // Give this a stable key so Flutter keeps it
-                                        DisplayView(
-                                          key: const ValueKey('/android.html'),
-                                          type: state.rendererType,
-                                        ),
-                                        PointerInterceptor(
-                                          child: TouchScreenView(displaySize: state.adjustedSize),
-                                        ),
-                                      ],
+                                    aspectRatio:
+                                        state.adjustedSize.width /
+                                        state.adjustedSize.height,
+                                    child: TouchScreenView(
+                                      displaySize: state.adjustedSize,
+                                      child: DisplayView(
+                                      ),
                                     ),
                                   );
                                 } else {
@@ -81,7 +75,11 @@ class HomePage extends StatelessWidget {
                             ),
                           ),
                           child: const Row(
-                            children: [AudioButton(), UpdateButton(), SettingsButton()],
+                            children: [
+                              AudioButton(),
+                              UpdateButton(),
+                              SettingsButton(),
+                            ],
                           ),
                         ),
                       ),

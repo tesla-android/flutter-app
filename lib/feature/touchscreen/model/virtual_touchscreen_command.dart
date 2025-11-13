@@ -14,7 +14,7 @@ class VirtualTouchScreenCommand {
   });
 
   String build() {
-    var command = "touchScreenCommand:";
+    var command = "";
     if (absMtSlot != null) command += 's $absMtSlot\n';
     if (absMtTrackingId != null) {
       command += 'T $absMtTrackingId\n';

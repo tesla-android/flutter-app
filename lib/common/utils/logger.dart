@@ -1,10 +1,16 @@
+import 'package:flutter/foundation.dart';
+
 mixin Logger {
   void log(String message) {
-    print("[$runtimeType $hashCode] $message" );
+    if (kDebugMode) {
+      print("[$runtimeType $hashCode] $message" );
+    }
   }
 
-  void logException({exception, StackTrace? stackTrace}) {
-    print("[$runtimeType] ${exception.toString()}");
-    print("[$runtimeType] ${stackTrace.toString()}");
+  void logException({dynamic exception, StackTrace? stackTrace}) {
+    if (kDebugMode) {
+      print("[$runtimeType] ${exception.toString()}");
+      print("[$runtimeType] ${stackTrace.toString()}");
+    }
   }
 }
