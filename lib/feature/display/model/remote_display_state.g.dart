@@ -15,9 +15,6 @@ RemoteDisplayState _$RemoteDisplayStateFromJson(Map<String, dynamic> json) =>
         _$DisplayResolutionModePresetEnumMap,
         json['resolutionPreset'],
       ),
-      renderer:
-          $enumDecodeNullable(_$DisplayRendererTypeEnumMap, json['renderer']) ??
-          DisplayRendererType.mjpeg,
       isResponsive: (json['isResponsive'] as num?)?.toInt() ?? 1,
       isH264: (json['isH264'] as num?)?.toInt() ?? 0,
       refreshRate:
@@ -34,6 +31,7 @@ RemoteDisplayState _$RemoteDisplayStateFromJson(Map<String, dynamic> json) =>
       isRearDisplayPrioritised:
           (json['isRearDisplayPrioritised'] as num?)?.toInt() ?? 0,
       isHeadless: (json['isHeadless'] as num?)?.toInt(),
+      renderer: (json['renderer'] as num?)?.toInt() ?? -1,
     );
 
 Map<String, dynamic> _$RemoteDisplayStateToJson(RemoteDisplayState instance) =>
@@ -43,7 +41,7 @@ Map<String, dynamic> _$RemoteDisplayStateToJson(RemoteDisplayState instance) =>
       'density': instance.density,
       'resolutionPreset':
           _$DisplayResolutionModePresetEnumMap[instance.resolutionPreset]!,
-      'renderer': _$DisplayRendererTypeEnumMap[instance.renderer]!,
+      'renderer': instance.renderer,
       'isHeadless': instance.isHeadless,
       'isResponsive': instance.isResponsive,
       'isH264': instance.isH264,
@@ -59,12 +57,6 @@ const _$DisplayResolutionModePresetEnumMap = {
   DisplayResolutionModePreset.res640p: 2,
   DisplayResolutionModePreset.res544p: 3,
   DisplayResolutionModePreset.res480p: 4,
-};
-
-const _$DisplayRendererTypeEnumMap = {
-  DisplayRendererType.mjpeg: 0,
-  DisplayRendererType.h264WebCodecs: 1,
-  DisplayRendererType.h264Brodway: 2,
 };
 
 const _$DisplayRefreshRatePresetEnumMap = {

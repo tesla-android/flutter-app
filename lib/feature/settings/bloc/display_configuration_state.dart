@@ -9,14 +9,14 @@ class DisplayConfigurationStateLoading extends DisplayConfigurationState {}
 class DisplayConfigurationStateSettingsFetched
     extends DisplayConfigurationState {
   final DisplayResolutionModePreset resolutionPreset;
-  final DisplayRendererType renderer;
+  final bool isH264;
   final bool isResponsive;
   final DisplayQualityPreset quality;
   final DisplayRefreshRatePreset refreshRate;
 
   DisplayConfigurationStateSettingsFetched({
     required this.resolutionPreset,
-    required this.renderer,
+    required this.isH264,
     required this.isResponsive,
     required this.refreshRate,
     required this.quality,

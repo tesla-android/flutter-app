@@ -6,6 +6,7 @@ import 'package:tesla_android/common/navigation/ta_page.dart';
 import 'package:tesla_android/feature/about/about_page.dart';
 import 'package:tesla_android/feature/display/cubit/display_cubit.dart';
 import 'package:tesla_android/feature/donations/widget/donation_page.dart';
+import 'package:tesla_android/feature/gps/cubit/gps_cubit.dart';
 import 'package:tesla_android/feature/home/cubit/ota_update_cubit.dart';
 import 'package:tesla_android/feature/home/home_page.dart';
 import 'package:tesla_android/feature/releaseNotes/cubit/release_notes_cubit.dart';
@@ -37,6 +38,7 @@ class TAPageFactory {
               BlocProvider(create: (_) => getIt<AudioConfigurationCubit>()),
               BlocProvider(create: (_) => getIt<GPSConfigurationCubit>()),
               BlocProvider(create: (_) => getIt<TouchscreenCubit>()),
+              BlocProvider(create: (_) => getIt<GpsCubit>()),
               BlocProvider(create: (_) => getIt<DisplayCubit>()),
               BlocProvider(
                 create: (_) => getIt<OTAUpdateCubit>()..checkForUpdates(),

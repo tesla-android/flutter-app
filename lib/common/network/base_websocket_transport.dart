@@ -38,6 +38,11 @@ abstract class BaseWebsocketTransport with Logger {
     _webSocketChannel = null;
   }
 
+  void reconnect() {
+    disconnect();
+    connect();
+  }
+
   Future<void> _connect() async {
     _webSocketChannel = WebSocket(
       Uri.parse(_flavor.getString(

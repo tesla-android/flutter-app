@@ -29,6 +29,12 @@ import 'package:tesla_android/feature/connectivityCheck/cubit/connectivity_check
 import 'package:tesla_android/feature/display/cubit/display_cubit.dart' as _i14;
 import 'package:tesla_android/feature/display/repository/display_repository.dart'
     as _i271;
+import 'package:tesla_android/feature/display/transport/display_transport.dart'
+    as _i802;
+import 'package:tesla_android/feature/gps/cubit/gps_cubit.dart' as _i1072;
+import 'package:tesla_android/feature/gps/transport/gps_transport.dart'
+    as _i774;
+import 'package:tesla_android/feature/gps/util/web_location.dart' as _i469;
 import 'package:tesla_android/feature/home/cubit/ota_update_cubit.dart' as _i68;
 import 'package:tesla_android/feature/home/repository/github_release_repository.dart'
     as _i865;
@@ -54,6 +60,8 @@ import 'package:tesla_android/feature/settings/repository/system_configuration_r
     as _i608;
 import 'package:tesla_android/feature/touchscreen/cubit/touchscreen_cubit.dart'
     as _i680;
+import 'package:tesla_android/feature/touchscreen/transport/touchscreen_transport.dart'
+    as _i303;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -65,10 +73,13 @@ extension GetItInjectableX on _i174.GetIt {
     final appModule = _$AppModule();
     final networkModule = _$NetworkModule();
     gh.factory<_i557.TAPageFactory>(() => _i557.TAPageFactory());
-    gh.factory<_i680.TouchscreenCubit>(() => _i680.TouchscreenCubit());
     gh.factory<_i841.ReleaseNotesRepository>(
       () => _i841.ReleaseNotesRepository(),
     );
+    gh.factory<_i802.DisplayTransport>(() => _i802.DisplayTransport());
+    gh.factory<_i303.TouchScreenTransport>(() => _i303.TouchScreenTransport());
+    gh.factory<_i774.GpsTransport>(() => _i774.GpsTransport());
+    gh.factory<_i469.WebLocation>(() => _i469.WebLocation());
     gh.singleton<_i544.Flavor>(() => appModule.provideFlavor);
     await gh.singletonAsync<_i460.SharedPreferences>(
       () => appModule.sharedPreferences,
@@ -109,6 +120,16 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i723.DeviceInfoService>(),
       ),
     );
+    gh.factory<_i1072.GpsCubit>(
+      () => _i1072.GpsCubit(
+        gh<_i469.WebLocation>(),
+        gh<_i774.GpsTransport>(),
+        gh<_i608.SystemConfigurationRepository>(),
+      ),
+    );
+    gh.factory<_i680.TouchscreenCubit>(
+      () => _i680.TouchscreenCubit(gh<_i303.TouchScreenTransport>()),
+    );
     gh.factory<_i68.OTAUpdateCubit>(
       () => _i68.OTAUpdateCubit(
         gh<_i865.GitHubReleaseRepository>(),
@@ -146,12 +167,14 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i685.DisplayConfigurationCubit>(
       () => _i685.DisplayConfigurationCubit(gh<_i271.DisplayRepository>()),
     );
+    gh.factory<_i14.DisplayCubit>(
+      () => _i14.DisplayCubit(
+        gh<_i271.DisplayRepository>(),
+        gh<_i802.DisplayTransport>(),
+      ),
+    );
     gh.factory<_i1064.DeviceInfoCubit>(
       () => _i1064.DeviceInfoCubit(gh<_i708.DeviceInfoRepository>()),
-    );
-    gh.factory<_i14.DisplayCubit>(
-      () =>
-          _i14.DisplayCubit(gh<_i271.DisplayRepository>(), gh<_i544.Flavor>()),
     );
     return this;
   }

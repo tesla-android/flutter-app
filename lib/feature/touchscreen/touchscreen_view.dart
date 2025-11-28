@@ -1,56 +1,59 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tesla_android/feature/touchscreen/cubit/touchscreen_cubit.dart';
 
 class TouchScreenView extends StatelessWidget {
   final Size displaySize;
+  final Widget child;
 
   const TouchScreenView({
     super.key,
     required this.displaySize,
+    required this.child,
   });
 
   @override
   Widget build(BuildContext context) {
     final touchScreenCubit = BlocProvider.of<TouchscreenCubit>(context);
-    return LayoutBuilder(builder: (context, constraints) {
-      return Listener(
-        onPointerDown: (event) {
-          _handlePointerEvent(
-            cubit: touchScreenCubit,
-            event: event,
-            constraints: constraints,
-            touchscreenSize: displaySize,
-          );
-        },
-        onPointerMove: (event) {
-          _handlePointerEvent(
-            cubit: touchScreenCubit,
-            event: event,
-            constraints: constraints,
-            touchscreenSize: displaySize,
-          );
-        },
-        onPointerCancel: (event) {
-          _handlePointerEvent(
-            cubit: touchScreenCubit,
-            event: event,
-            constraints: constraints,
-            touchscreenSize: displaySize,
-          );
-        },
-        onPointerUp: (event) {
-          _handlePointerEvent(
-            cubit: touchScreenCubit,
-            event: event,
-            constraints: constraints,
-            touchscreenSize: displaySize,
-          );
-        },
-        child: Container(color: Colors.transparent,),
-      );
-    });
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Listener(
+          onPointerDown: (event) {
+            _handlePointerEvent(
+              cubit: touchScreenCubit,
+              event: event,
+              constraints: constraints,
+              touchscreenSize: displaySize,
+            );
+          },
+          onPointerMove: (event) {
+            _handlePointerEvent(
+              cubit: touchScreenCubit,
+              event: event,
+              constraints: constraints,
+              touchscreenSize: displaySize,
+            );
+          },
+          onPointerCancel: (event) {
+            _handlePointerEvent(
+              cubit: touchScreenCubit,
+              event: event,
+              constraints: constraints,
+              touchscreenSize: displaySize,
+            );
+          },
+          onPointerUp: (event) {
+            _handlePointerEvent(
+              cubit: touchScreenCubit,
+              event: event,
+              constraints: constraints,
+              touchscreenSize: displaySize,
+            );
+          },
+          child: child,
+        );
+      },
+    );
   }
 
   void _handlePointerEvent({

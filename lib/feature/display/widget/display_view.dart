@@ -1,30 +1,56 @@
 import 'dart:convert';
 import 'dart:js_interop';
-import 'dart:ui_web' as ui;
 
 import 'package:flavor/flavor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tesla_android/common/di/ta_locator.dart';
-import 'package:tesla_android/common/utils/logger.dart';
 import 'package:tesla_android/feature/display/cubit/display_cubit.dart';
-import 'package:tesla_android/feature/display/cubit/display_state.dart';
-import 'package:tesla_android/feature/display/model/remote_display_state.dart';
+import 'package:tesla_android/feature/gps/cubit/gps_cubit.dart';
 import 'package:tesla_android/feature/settings/bloc/audio_configuration_cubit.dart';
 import 'package:tesla_android/feature/settings/bloc/audio_configuration_state.dart';
-import 'package:tesla_android/feature/settings/bloc/gps_configuration_cubit.dart';
-import 'package:tesla_android/feature/settings/bloc/gps_configuration_state.dart';
 import 'package:web/web.dart' as web;
+import 'dart:ui' as ui hide window;
 
-class DisplayView extends StatefulWidget {
-  final DisplayRendererType type;
-
-  const DisplayView({super.key, required this.type});
+class DisplayView extends StatelessWidget {
+  const DisplayView({super.key});
 
   @override
-  State<DisplayView> createState() => _IframeViewState();
+  Widget build(BuildContext context) {
+    final flavor = getIt<Flavor>();
+    context.read<GpsCubit>().fetchConfiguration();
+
+    return BlocBuilder<AudioConfigurationCubit, AudioConfigurationState>(
+      builder: (context, audioState) {
+        if (audioState is AudioConfigurationStateInitial) {
+          final audioCubit = context.read<AudioConfigurationCubit>();
+          audioCubit.fetchConfiguration();
+        }
+        if (audioState is AudioConfigurationStateSettingsFetched) {
+          final config = <String, dynamic>{
+            'audioWebsocketUrl': flavor.getString("audioWebSocket") ?? "",
+            'isAudioEnabled': (audioState.isEnabled).toString(),
+            'audioVolume': ((audioState.volume / 100)).toStringAsFixed(2),
+          };
+          final cfgJson = jsonEncode(config).toJS;
+          web.window.postMessage(cfgJson, '*'.toJS);
+        }
+        return StreamBuilder<ui.Image>(
+          stream: context.read<DisplayCubit>().frameStream,
+          builder: (context, snapshot) {
+            final img = snapshot.data;
+            if (img == null) return const SizedBox.shrink();
+
+            return RawImage(image: img, fit: BoxFit.contain);
+          },
+        );
+      },
+    );
+    ;
+  }
 }
 
+/*
 class _IframeViewState extends State<DisplayView>
     with Logger {
   static const String _src = "/android.html";
@@ -126,4 +152,4 @@ class _IframeViewState extends State<DisplayView>
     web.window.postMessage(cfgJson, '*'.toJS);
     _iframeElement.contentWindow?.postMessage(cfgJson, '*'.toJS);
   }
-}
+}*/
