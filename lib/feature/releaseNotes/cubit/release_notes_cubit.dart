@@ -27,10 +27,13 @@ class ReleaseNotesCubit extends Cubit<ReleaseNotesState> {
   }) {
     if (state is ReleaseNotesStateLoaded) {
       final releaseNotes = (state as ReleaseNotesStateLoaded).releaseNotes;
-      emit(ReleaseNotesStateLoaded.withSelection(
+      emit(
+        ReleaseNotesStateLoaded.withSelection(
           releaseNotes: releaseNotes,
           selectedVersion: version,
-          selectedChangelogItem: changelogItem));
+          selectedChangelogItem: changelogItem,
+        ),
+      );
     }
   }
 }

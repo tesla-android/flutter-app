@@ -6,8 +6,8 @@ class VirtualTouchscreenSlotState {
   Offset position;
 
   VirtualTouchscreenSlotState.initial({required this.slotIndex})
-      : trackingId = -1,
-        position = Offset.zero;
+    : trackingId = -1,
+      position = Offset.zero;
 
   static List<VirtualTouchscreenSlotState> generateSlots() {
     return List.generate(

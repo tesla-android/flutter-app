@@ -20,7 +20,7 @@ class ReleaseNotesRepository {
             title: "Real Time Clock",
             shortDescription: "Hardware improvements",
             descriptionMarkdown:
-            "Tesla Android (2nd generation) includes a Real Time Clock module.\n\nThis ensures time is preserved across reboots even if your device is offline (this improves boot time, since incorrect time can lead to SSL errors when loading the page).",
+                "Tesla Android (2nd generation) includes a Real Time Clock module.\n\nThis ensures time is preserved across reboots even if your device is offline (this improves boot time, since incorrect time can lead to SSL errors when loading the page).",
           ),
         ],
       ),

@@ -11,21 +11,22 @@ class UpdateButton extends StatelessWidget with Logger {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<OTAUpdateCubit, OTAUpdateState>(
-        builder: (context, state) {
-      if (state is OTAUpdateStateAvailable) {
-        return IconButton(
-          color: Colors.amber,
-          onPressed: () {
-            BlocProvider.of<OTAUpdateCubit>(context).launchUpdater();
-          },
-          icon: const Icon(
-            Icons.download_rounded,
-            size: TADimens.statusBarIconSize,
-          ),
-        );
-      } else {
-        return const SizedBox();
-      }
-    });
+      builder: (context, state) {
+        if (state is OTAUpdateStateAvailable) {
+          return IconButton(
+            color: Colors.amber,
+            onPressed: () {
+              BlocProvider.of<OTAUpdateCubit>(context).launchUpdater();
+            },
+            icon: const Icon(
+              Icons.download_rounded,
+              size: TADimens.statusBarIconSize,
+            ),
+          );
+        } else {
+          return const SizedBox();
+        }
+      },
+    );
   }
 }

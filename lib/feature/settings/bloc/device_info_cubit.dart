@@ -5,30 +5,20 @@ import 'package:tesla_android/feature/settings/bloc/device_info_state.dart';
 import 'package:tesla_android/feature/settings/repository/device_info_repository.dart';
 
 @injectable
-class DeviceInfoCubit extends Cubit<DeviceInfoState>
-    with Logger {
+class DeviceInfoCubit extends Cubit<DeviceInfoState> with Logger {
   final DeviceInfoRepository _repository;
 
-  DeviceInfoCubit(this._repository)
-      : super(DeviceInfoStateInitial());
+  DeviceInfoCubit(this._repository) : super(DeviceInfoStateInitial());
 
   void fetchConfiguration() async {
     if (!isClosed) emit(DeviceInfoStateLoading());
     try {
       final healthState = await _repository.getDeviceInfo();
-      emit(
-        DeviceInfoStateLoaded(
-            deviceInfo: healthState),
-      );
+      emit(DeviceInfoStateLoaded(deviceInfo: healthState));
     } catch (exception, stacktrace) {
-      logException(
-        exception: exception,
-        stackTrace: stacktrace,
-      );
+      logException(exception: exception, stackTrace: stacktrace);
       if (!isClosed) {
-        emit(
-          DeviceInfoStateError(),
-        );
+        emit(DeviceInfoStateError());
       }
     }
   }

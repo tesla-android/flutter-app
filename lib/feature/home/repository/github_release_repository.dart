@@ -8,10 +8,7 @@ class GitHubReleaseRepository {
   final GitHubService _service;
   final DeviceInfoService _deviceInfoService;
 
-  GitHubReleaseRepository(
-    this._service,
-    this._deviceInfoService,
-  );
+  GitHubReleaseRepository(this._service, this._deviceInfoService);
 
   Future<GitHubRelease> getLatestRelease() {
     return _service.getLatestRelease();

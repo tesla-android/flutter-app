@@ -15,11 +15,9 @@ class ReleaseNotesStateLoaded extends ReleaseNotesState {
   final Version selectedVersion;
   final ChangelogItem selectedChangelogItem;
 
-  ReleaseNotesStateLoaded({
-    required this.releaseNotes,
-  })  : selectedVersion = releaseNotes.versions.first,
-        selectedChangelogItem =
-            releaseNotes.versions.first.changelogItems.first;
+  ReleaseNotesStateLoaded({required this.releaseNotes})
+    : selectedVersion = releaseNotes.versions.first,
+      selectedChangelogItem = releaseNotes.versions.first.changelogItems.first;
 
   ReleaseNotesStateLoaded.withSelection({
     required this.releaseNotes,

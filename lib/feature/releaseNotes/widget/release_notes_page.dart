@@ -20,14 +20,10 @@ class ReleaseNotesPage extends StatelessWidget {
     BlocProvider.of<ReleaseNotesCubit>(context).loadReleaseNotes();
 
     return Scaffold(
-        appBar: TaAppBar(
-          title: TAPage.releaseNotes.title,
-        ),
-        bottomNavigationBar: const TaBottomNavigationBar(
-          currentIndex: 2,
-        ),
-        body: BlocBuilder<ReleaseNotesCubit, ReleaseNotesState>(
-            builder: (context, state) {
+      appBar: TaAppBar(title: TAPage.releaseNotes.title),
+      bottomNavigationBar: const TaBottomNavigationBar(currentIndex: 2),
+      body: BlocBuilder<ReleaseNotesCubit, ReleaseNotesState>(
+        builder: (context, state) {
           if (state is ReleaseNotesStateLoading) {
             return _loadingStateWidget();
           } else if (state is ReleaseNotesStateUnavailable) {
@@ -37,22 +33,25 @@ class ReleaseNotesPage extends StatelessWidget {
           } else {
             return Container();
           }
-        }));
+        },
+      ),
+    );
   }
 
   Widget _loadingStateWidget() {
-    return const Center(
-      child: CircularProgressIndicator(),
-    );
+    return const Center(child: CircularProgressIndicator());
   }
 
   Widget _errorStateWidget() {
     return const Center(
-        child: Text("Error loading release notes. Please try again later."));
+      child: Text("Error loading release notes. Please try again later."),
+    );
   }
 
   Widget _loadedStateWidget(
-      BuildContext context, ReleaseNotesStateLoaded state) {
+    BuildContext context,
+    ReleaseNotesStateLoaded state,
+  ) {
     final ReleaseNotes releaseNotes = state.releaseNotes;
     final Version selectedVersion = state.selectedVersion;
     final ChangelogItem selectedChangelogItem = state.selectedChangelogItem;
@@ -70,8 +69,9 @@ class ReleaseNotesPage extends StatelessWidget {
         ),
         Expanded(
           child: ReleaseNotesChangelogItemDetailsView(
-              changelogItem: selectedChangelogItem),
-        )
+            changelogItem: selectedChangelogItem,
+          ),
+        ),
       ],
     );
   }

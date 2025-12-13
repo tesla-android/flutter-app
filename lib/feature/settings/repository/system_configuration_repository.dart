@@ -37,8 +37,9 @@ class SystemConfigurationRepository {
   }
 
   Future setOfflineModeTeslaFirmwareDownloads(int isEnabledFlag) {
-    return _configurationService
-        .setOfflineModeTeslaFirmwareDownloads(isEnabledFlag);
+    return _configurationService.setOfflineModeTeslaFirmwareDownloads(
+      isEnabledFlag,
+    );
   }
 
   Future setBrowserAudioState(int isEnabledFlag) {
@@ -48,7 +49,7 @@ class SystemConfigurationRepository {
   Future setBrowserAudioVolume(int volume) {
     return _configurationService.setBrowserAudioVolume(volume);
   }
-  
+
   Future setGPSState(int isEnabled) {
     return _configurationService.setGPSState(isEnabled);
   }

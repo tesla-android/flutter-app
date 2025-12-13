@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tesla_android/common/di/ta_locator.dart';
+import 'package:tesla_android/common/ui/components/settings_dropdown.dart';
 import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
 import 'package:tesla_android/feature/display/model/remote_display_state.dart';
 import 'package:tesla_android/feature/settings/bloc/display_configuration_cubit.dart';
 import 'package:tesla_android/feature/settings/bloc/display_configuration_state.dart';
+import 'package:tesla_android/feature/settings/view_model/display_settings_view_model.dart';
 import 'package:tesla_android/feature/settings/widget/settings_section.dart';
 import 'package:tesla_android/feature/settings/widget/settings_tile.dart';
 
@@ -15,6 +16,7 @@ class DisplaySettings extends SettingsSection {
   @override
   Widget body(BuildContext context) {
     final cubit = BlocProvider.of<DisplayConfigurationCubit>(context);
+    final viewModel = DisplaySettingsViewModel();
 
     return BlocBuilder<DisplayConfigurationCubit, DisplayConfigurationState>(
       builder: (context, state) {
@@ -25,7 +27,18 @@ class DisplaySettings extends SettingsSection {
               icon: Icons.texture,
               title: 'Renderer',
               dense: false,
-              trailing: _rendererDropdown(context, cubit, state),
+              trailing: _buildDropdown<DisplayRendererType>(
+                context: context,
+                cubit: cubit,
+                state: state,
+                viewModel: viewModel,
+                getValue: viewModel.getRenderer,
+                items: DisplayRendererType.values,
+                onChanged: (value) {
+                  cubit.setRenderer(value!);
+                  _showConfigurationChangedBanner(context);
+                },
+              ),
             ),
             const Padding(
               padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
@@ -37,7 +50,18 @@ class DisplaySettings extends SettingsSection {
             SettingsTile(
               icon: Icons.display_settings,
               title: 'Resolution',
-              trailing: _resolutionDropdown(context, cubit, state),
+              trailing: _buildDropdown<DisplayResolutionModePreset>(
+                context: context,
+                cubit: cubit,
+                state: state,
+                viewModel: viewModel,
+                getValue: viewModel.getResolutionPreset,
+                items: DisplayResolutionModePreset.values,
+                onChanged: (value) {
+                  cubit.setResolution(value!);
+                  _showConfigurationChangedBanner(context);
+                },
+              ),
             ),
             const Padding(
               padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
@@ -49,7 +73,18 @@ class DisplaySettings extends SettingsSection {
             SettingsTile(
               icon: Icons.photo_size_select_actual_outlined,
               title: 'Image quality',
-              trailing: _qualityDropdown(context, cubit, state),
+              trailing: _buildDropdown<DisplayQualityPreset>(
+                context: context,
+                cubit: cubit,
+                state: state,
+                viewModel: viewModel,
+                getValue: viewModel.getQualityPreset,
+                items: DisplayQualityPreset.values,
+                onChanged: (value) {
+                  cubit.setQuality(value!);
+                  _showConfigurationChangedBanner(context);
+                },
+              ),
             ),
             const Padding(
               padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
@@ -61,7 +96,18 @@ class DisplaySettings extends SettingsSection {
             SettingsTile(
               icon: Icons.monitor,
               title: 'Refresh rate',
-              trailing: _refreshRateDropdown(context, cubit, state),
+              trailing: _buildDropdown<DisplayRefreshRatePreset>(
+                context: context,
+                cubit: cubit,
+                state: state,
+                viewModel: viewModel,
+                getValue: viewModel.getRefreshRate,
+                items: DisplayRefreshRatePreset.values,
+                onChanged: (value) {
+                  cubit.setRefreshRate(value!);
+                  _showConfigurationChangedBanner(context);
+                },
+              ),
             ),
             const Padding(
               padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
@@ -73,7 +119,7 @@ class DisplaySettings extends SettingsSection {
             SettingsTile(
               icon: Icons.photo_size_select_large,
               title: 'Dynamic aspect ratio',
-              trailing: _responsivenessSwitch(context, cubit, state),
+              trailing: _responsivenessSwitch(context, cubit, state, viewModel),
             ),
             const Padding(
               padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
@@ -87,162 +133,54 @@ class DisplaySettings extends SettingsSection {
     );
   }
 
+  /// Generic dropdown builder using view model and reusable component
+  Widget _buildDropdown<T>({
+    required BuildContext context,
+    required DisplayConfigurationCubit cubit,
+    required DisplayConfigurationState state,
+    required DisplaySettingsViewModel viewModel,
+    required T? Function(DisplayConfigurationState) getValue,
+    required List<T> items,
+    required ValueChanged<T?> onChanged,
+  }) {
+    return viewModel.buildStateWidget(
+      state: state,
+      onFetched: () {
+        final value = getValue(state);
+        if (value == null) return const SizedBox.shrink();
+
+        return SettingsDropdown<T>(
+          value: value,
+          items: items,
+          onChanged: onChanged,
+          itemLabel: (item) => (item as dynamic).name(),
+          underlineColor: Theme.of(context).primaryColor,
+        );
+      },
+    );
+  }
+
   Widget _responsivenessSwitch(
     BuildContext context,
     DisplayConfigurationCubit cubit,
     DisplayConfigurationState state,
+    DisplaySettingsViewModel viewModel,
   ) {
-    if (state is DisplayConfigurationStateSettingsFetched) {
-      return Switch(
-        value: state.isResponsive,
-        onChanged: (bool value) {
-          cubit.setResponsiveness(value);
-          _showConfigurationChangedBanner(context);
-        },
-      );
-    } else if (state is DisplayConfigurationStateSettingsUpdateInProgress ||
-        state is DisplayConfigurationStateLoading) {
-      return const CircularProgressIndicator();
-    } else if (state is DisplayConfigurationStateError) {
-      return const Text("Service error");
-    }
-    return const SizedBox.shrink();
-  }
+    return viewModel.buildStateWidget(
+      state: state,
+      onFetched: () {
+        final isResponsive = viewModel.getResponsiveness(state);
+        if (isResponsive == null) return const SizedBox.shrink();
 
-  Widget _resolutionDropdown(
-    BuildContext context,
-    DisplayConfigurationCubit cubit,
-    DisplayConfigurationState state,
-  ) {
-    if (state is DisplayConfigurationStateSettingsFetched) {
-      return DropdownButton<DisplayResolutionModePreset>(
-        value: state.resolutionPreset,
-        icon: const Icon(Icons.arrow_drop_down_outlined),
-        underline: Container(height: 2, color: Theme.of(context).primaryColor),
-        onChanged: (DisplayResolutionModePreset? value) {
-          if (value != null) {
-            cubit.setResolution(value);
+        return Switch(
+          value: isResponsive,
+          onChanged: (bool value) {
+            cubit.setResponsiveness(value);
             _showConfigurationChangedBanner(context);
-          }
-        },
-        items: DisplayResolutionModePreset.values
-            .map<DropdownMenuItem<DisplayResolutionModePreset>>((
-              DisplayResolutionModePreset value,
-            ) {
-              return DropdownMenuItem<DisplayResolutionModePreset>(
-                value: value,
-                child: Text(value.name()),
-              );
-            })
-            .toList(),
-      );
-    } else if (state is DisplayConfigurationStateSettingsUpdateInProgress ||
-        state is DisplayConfigurationStateLoading) {
-      return const CircularProgressIndicator();
-    } else if (state is DisplayConfigurationStateError) {
-      return const Text("Service error");
-    }
-    return const SizedBox.shrink();
-  }
-
-  Widget _qualityDropdown(
-    BuildContext context,
-    DisplayConfigurationCubit cubit,
-    DisplayConfigurationState state,
-  ) {
-    if (state is DisplayConfigurationStateSettingsFetched) {
-      return DropdownButton<DisplayQualityPreset>(
-        value: state.quality,
-        icon: const Icon(Icons.arrow_drop_down_outlined),
-        underline: Container(height: 2, color: Theme.of(context).primaryColor),
-        onChanged: (DisplayQualityPreset? value) {
-          if (value != null) {
-            cubit.setQuality(value);
-            _showConfigurationChangedBanner(context);
-          }
-        },
-        items: DisplayQualityPreset.values.map((value) {
-          return DropdownMenuItem<DisplayQualityPreset>(
-            value: value,
-            child: Text(value.name()),
-          );
-        }).toList(),
-      );
-    } else if (state is DisplayConfigurationStateSettingsUpdateInProgress ||
-        state is DisplayConfigurationStateLoading) {
-      return const CircularProgressIndicator();
-    } else if (state is DisplayConfigurationStateError) {
-      return const Text("Service error");
-    }
-    return const SizedBox.shrink();
-  }
-
-  Widget _refreshRateDropdown(
-    BuildContext context,
-    DisplayConfigurationCubit cubit,
-    DisplayConfigurationState state,
-  ) {
-    if (state is DisplayConfigurationStateSettingsFetched) {
-      return DropdownButton<DisplayRefreshRatePreset>(
-        value: state.refreshRate,
-        icon: const Icon(Icons.arrow_drop_down_outlined),
-        underline: Container(height: 2, color: Theme.of(context).primaryColor),
-        onChanged: (DisplayRefreshRatePreset? value) {
-          if (value != null) {
-            cubit.setRefreshRate(value);
-            _showConfigurationChangedBanner(context);
-          }
-        },
-        items: DisplayRefreshRatePreset.values.map((value) {
-          return DropdownMenuItem<DisplayRefreshRatePreset>(
-            value: value,
-            child: Text(value.name()),
-          );
-        }).toList(),
-      );
-    } else if (state is DisplayConfigurationStateSettingsUpdateInProgress ||
-        state is DisplayConfigurationStateLoading) {
-      return const CircularProgressIndicator();
-    } else if (state is DisplayConfigurationStateError) {
-      return const Text("Service error");
-    }
-    return const SizedBox.shrink();
-  }
-
-  Widget _rendererDropdown(
-    BuildContext context,
-    DisplayConfigurationCubit cubit,
-    DisplayConfigurationState state,
-  ) {
-    if (state is DisplayConfigurationStateSettingsFetched) {
-      return DropdownButton<DisplayRendererType>(
-        value: state.renderer,
-        icon: const Icon(Icons.arrow_drop_down_outlined),
-        underline: Container(height: 2, color: Theme.of(context).primaryColor),
-        onChanged: (DisplayRendererType? value) {
-          if (value != null) {
-            cubit.setRenderer(value);
-            _showConfigurationChangedBanner(context);
-          }
-        },
-        items: DisplayRendererType.values
-            .map<DropdownMenuItem<DisplayRendererType>>((
-              DisplayRendererType value,
-            ) {
-              return DropdownMenuItem<DisplayRendererType>(
-                value: value,
-                child: Text(value.name()),
-              );
-            })
-            .toList(),
-      );
-    } else if (state is DisplayConfigurationStateSettingsUpdateInProgress ||
-        state is DisplayConfigurationStateLoading) {
-      return const CircularProgressIndicator();
-    } else if (state is DisplayConfigurationStateError) {
-      return const Text("Service error");
-    }
-    return const SizedBox.shrink();
+          },
+        );
+      },
+    );
   }
 
   void _showConfigurationChangedBanner(BuildContext context) {

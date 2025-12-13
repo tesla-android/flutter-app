@@ -10,22 +10,16 @@ part 'display_service.g.dart';
 @RestApi()
 abstract class DisplayService {
   @factoryMethod
-  factory DisplayService(
-      Dio dio,
-      Flavor flavor,
-      ) =>
-      _DisplayService(
-        dio,
-        baseUrl: flavor.getString("configurationApiBaseUrl"),
-      );
+  factory DisplayService(Dio dio, Flavor flavor) => _DisplayService(
+    dio,
+    baseUrl: flavor.getString("configurationApiBaseUrl"),
+  );
 
   @GET("/displayState")
   @DioResponseType(ResponseType.json)
   Future<RemoteDisplayState> getDisplayState();
 
   @POST("/displayState")
-  @Headers({
-    "Content-Type": "application/json",
-  })
+  @Headers({"Content-Type": "application/json"})
   Future updateDisplayConfiguration(@Body() RemoteDisplayState configuration);
 }

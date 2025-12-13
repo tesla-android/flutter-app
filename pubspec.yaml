@@ -6,8 +6,8 @@ publish_to: 'none'
 version: 2025.46.1
 
 environment:
-  flutter: "3.35.0"
-  sdk: "3.9.0"
+  flutter: ">=3.35.0"
+  sdk: ">=3.9.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -39,6 +39,8 @@ dev_dependencies:
   build_runner: 2.7.1
   injectable_generator: 2.8.1
   retrofit_generator: 10.0.5
+  mockito: ^5.4.4
+  bloc_test: ^10.0.0
 
 flutter:
   assets:

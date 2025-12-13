@@ -38,13 +38,8 @@ class ReleaseNotesChangelogItemCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(changelogItem.title, style: textTheme.labelLarge),
-              const SizedBox(
-                height: TADimens.PADDING_XS_VALUE,
-              ),
-              Text(
-                changelogItem.shortDescription,
-                style: textTheme.bodySmall,
-              ),
+              const SizedBox(height: TADimens.PADDING_XS_VALUE),
+              Text(changelogItem.shortDescription, style: textTheme.bodySmall),
             ],
           ),
         ),
@@ -60,7 +55,7 @@ class ReleaseNotesChangelogItemCard extends StatelessWidget {
     if (isDark) {
       return isActive ? themeCardColor : Colors.transparent;
     } else {
-      return isActive ? themeCardColor.withOpacity(0.75) : themeCardColor;
+      return isActive ? Colors.white.withValues(alpha: 0.5) : themeCardColor;
     }
   }
 }

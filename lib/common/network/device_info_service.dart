@@ -10,14 +10,10 @@ part 'device_info_service.g.dart';
 @RestApi()
 abstract class DeviceInfoService {
   @factoryMethod
-  factory DeviceInfoService(
-      Dio dio,
-      Flavor flavor,
-      ) =>
-      _DeviceInfoService(
-        dio,
-        baseUrl: flavor.getString("configurationApiBaseUrl"),
-      );
+  factory DeviceInfoService(Dio dio, Flavor flavor) => _DeviceInfoService(
+    dio,
+    baseUrl: flavor.getString("configurationApiBaseUrl"),
+  );
 
   @GET("/deviceInfo")
   @DioResponseType(ResponseType.json)

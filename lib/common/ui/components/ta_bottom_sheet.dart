@@ -4,11 +4,7 @@ class TABottomSheet extends StatelessWidget {
   final String title;
   final Widget body;
 
-  const TABottomSheet({
-    super.key,
-    required this.title,
-    required this.body,
-  });
+  const TABottomSheet({super.key, required this.title, required this.body});
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +26,8 @@ class TABottomSheet extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15),
       child: Center(
-          child: Container(
-        width: 100,
-        height: 4,
-        color: Colors.grey.shade500,
-      )),
+        child: Container(width: 100, height: 4, color: Colors.grey.shade500),
+      ),
     );
   }
 
@@ -44,23 +37,17 @@ class TABottomSheet extends StatelessWidget {
       child: Stack(
         children: [
           Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 40,
-              ),
-              child: Center(
-                child: Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              )),
+            padding: const EdgeInsets.symmetric(vertical: 40),
+            child: Center(
+              child: Text(title, style: Theme.of(context).textTheme.titleLarge),
+            ),
+          ),
           Positioned(
-              left: 0,
-              bottom: 0,
-              right: 0,
-              child: Container(
-                height: 1,
-                color: Colors.grey.shade500,
-              ))
+            left: 0,
+            bottom: 0,
+            right: 0,
+            child: Container(height: 1, color: Colors.grey.shade500),
+          ),
         ],
       ),
     );

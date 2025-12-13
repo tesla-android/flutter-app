@@ -6,12 +6,10 @@ class DeviceInfoStateInitial extends DeviceInfoState {}
 
 class DeviceInfoStateLoading extends DeviceInfoState {}
 
-class DeviceInfoStateLoaded
-    extends DeviceInfoState {
+class DeviceInfoStateLoaded extends DeviceInfoState {
   final DeviceInfo deviceInfo;
 
-  DeviceInfoStateLoaded({
-    required this.deviceInfo,
-  });
+  DeviceInfoStateLoaded({required this.deviceInfo});
 }
+
 class DeviceInfoStateError extends DeviceInfoState {}

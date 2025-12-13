@@ -1,18 +1,19 @@
-import 'dart:js_interop';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:tesla_android/common/utils/logger.dart';
 import 'package:tesla_android/feature/touchscreen/model/virtual_touchscreen_slot_state.dart';
 import 'package:tesla_android/feature/touchscreen/model/virtual_touchscreen_command.dart';
-import 'package:web/web.dart' as web;
+import 'package:tesla_android/feature/touchscreen/service/message_sender.dart';
 
 @injectable
 class TouchscreenCubit extends Cubit<bool> with Logger {
   final List<VirtualTouchscreenSlotState> slotsState =
       VirtualTouchscreenSlotState.generateSlots();
-  TouchscreenCubit() : super(false);
+
+  final MessageSender _messageSender;
+
+  TouchscreenCubit(this._messageSender) : super(false);
 
   @override
   Future<void> close() {
@@ -21,41 +22,59 @@ class TouchscreenCubit extends Cubit<bool> with Logger {
   }
 
   void handlePointerDownEvent(
-      PointerDownEvent event, BoxConstraints constraints, Size touchscreenSize) {
-    final scaledPointerPosition =
-        _scalePointerPosition(event.localPosition, constraints, touchscreenSize);
+    PointerDownEvent event,
+    BoxConstraints constraints,
+    Size touchscreenSize,
+  ) {
+    final scaledPointerPosition = _scalePointerPosition(
+      event.localPosition,
+      constraints,
+      touchscreenSize,
+    );
     final slot = _getFirstUnusedSlot();
     if (slot == null) return;
     slot.trackingId = event.pointer;
     slot.position = scaledPointerPosition;
 
-    log("Pointer down, assigned slot ${slot.slotIndex}, trackingId ${slot.trackingId}");
+    log(
+      "Pointer down, assigned slot ${slot.slotIndex}, trackingId ${slot.trackingId}",
+    );
 
     final command = VirtualTouchScreenCommand(
-        absMtSlot: slot.slotIndex,
-        absMtTrackingId: slot.trackingId,
-        absMtPositionX: slot.position.dx.toInt(),
-        absMtPositionY: slot.position.dy.toInt(),
-        synReport: true);
+      absMtSlot: slot.slotIndex,
+      absMtTrackingId: slot.trackingId,
+      absMtPositionX: slot.position.dx.toInt(),
+      absMtPositionY: slot.position.dy.toInt(),
+      synReport: true,
+    );
 
     sendCommand(command);
   }
 
   void handlePointerMoveEvent(
-      PointerMoveEvent event, BoxConstraints constraints, Size touchscreenSize) {
-    final scaledPointerPosition =
-        _scalePointerPosition(event.localPosition, constraints, touchscreenSize);
+    PointerMoveEvent event,
+    BoxConstraints constraints,
+    Size touchscreenSize,
+  ) {
+    final scaledPointerPosition = _scalePointerPosition(
+      event.localPosition,
+      constraints,
+      touchscreenSize,
+    );
     final slot = _getSlotFromTrackingId(event.pointer);
     if (slot == null) return;
     slot.position = scaledPointerPosition;
 
-    log("Pointer move, matched slot ${slot.slotIndex}, trackingId ${slot.trackingId}");
+    log(
+      "Pointer move, matched slot ${slot.slotIndex}, trackingId ${slot.trackingId}",
+    );
 
     final command = VirtualTouchScreenCommand(
-        absMtSlot: slot.slotIndex,
-        absMtPositionX: slot.position.dx.toInt(),
-        absMtPositionY: slot.position.dy.toInt(),
-        synReport: true);
+      absMtSlot: slot.slotIndex,
+      absMtPositionX: slot.position.dx.toInt(),
+      absMtPositionY: slot.position.dy.toInt(),
+      synReport: true,
+    );
 
     sendCommand(command);
   }
@@ -64,14 +83,17 @@ class TouchscreenCubit extends Cubit<bool> with Logger {
     final slot = _getSlotFromTrackingId(event.pointer);
     if (slot == null) return;
 
-    log("Pointer up, matched slot ${slot.slotIndex}, trackingId ${slot.trackingId}");
+    log(
+      "Pointer up, matched slot ${slot.slotIndex}, trackingId ${slot.trackingId}",
+    );
 
     slot.trackingId = -1;
 
     final command = VirtualTouchScreenCommand(
-        absMtSlot: slot.slotIndex,
-        absMtTrackingId: slot.trackingId,
-        synReport: true);
+      absMtSlot: slot.slotIndex,
+      absMtTrackingId: slot.trackingId,
+      synReport: true,
+    );
 
     sendCommand(command);
   }
@@ -94,7 +116,11 @@ class TouchscreenCubit extends Cubit<bool> with Logger {
     return null;
   }
 
-  Offset _scalePointerPosition(Offset position, BoxConstraints constraints, Size touchscreenSize) {
+  Offset _scalePointerPosition(
+    Offset position,
+    BoxConstraints constraints,
+    Size touchscreenSize,
+  ) {
     final scaleX = touchscreenSize.width / constraints.maxWidth;
     final scaleY = touchscreenSize.height / constraints.maxHeight;
 
@@ -113,8 +139,12 @@ class TouchscreenCubit extends Cubit<bool> with Logger {
   void resetTouchScreen() {
     List<VirtualTouchScreenCommand> commands = [];
     for (final slot in VirtualTouchscreenSlotState.generateSlots()) {
-      commands.add(VirtualTouchScreenCommand(
-          absMtSlot: slot.slotIndex, absMtTrackingId: slot.trackingId));
+      commands.add(
+        VirtualTouchScreenCommand(
+          absMtSlot: slot.slotIndex,
+          absMtTrackingId: slot.trackingId,
+        ),
+      );
     }
     sendCommands(commands: commands);
   }
@@ -126,10 +156,10 @@ class TouchscreenCubit extends Cubit<bool> with Logger {
     for (final command in commands) {
       message += command.build();
     }
-    web.window.postMessage(message.toJS, '*'.toJS);
+    _messageSender.postMessage(message, '*');
   }
 
   void sendCommand(VirtualTouchScreenCommand command) {
-    web.window.postMessage(command.build().toJS, '*'.toJS);
+    _messageSender.postMessage(command.build(), '*');
   }
 }

@@ -24,6 +24,9 @@ import 'package:tesla_android/common/network/device_info_service.dart' as _i723;
 import 'package:tesla_android/common/network/display_service.dart' as _i856;
 import 'package:tesla_android/common/network/github_service.dart' as _i10;
 import 'package:tesla_android/common/network/health_service.dart' as _i483;
+import 'package:tesla_android/common/service/audio_service.dart' as _i204;
+import 'package:tesla_android/common/service/dialog_service.dart' as _i651;
+import 'package:tesla_android/common/service/window_service.dart' as _i570;
 import 'package:tesla_android/feature/connectivityCheck/cubit/connectivity_check_cubit.dart'
     as _i747;
 import 'package:tesla_android/feature/display/cubit/display_cubit.dart' as _i14;
@@ -54,6 +57,8 @@ import 'package:tesla_android/feature/settings/repository/system_configuration_r
     as _i608;
 import 'package:tesla_android/feature/touchscreen/cubit/touchscreen_cubit.dart'
     as _i680;
+import 'package:tesla_android/feature/touchscreen/service/message_sender.dart'
+    as _i44;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -65,7 +70,6 @@ extension GetItInjectableX on _i174.GetIt {
     final appModule = _$AppModule();
     final networkModule = _$NetworkModule();
     gh.factory<_i557.TAPageFactory>(() => _i557.TAPageFactory());
-    gh.factory<_i680.TouchscreenCubit>(() => _i680.TouchscreenCubit());
     gh.factory<_i841.ReleaseNotesRepository>(
       () => _i841.ReleaseNotesRepository(),
     );
@@ -74,7 +78,11 @@ extension GetItInjectableX on _i174.GetIt {
       () => appModule.sharedPreferences,
       preResolve: true,
     );
+    gh.singleton<_i570.WindowService>(() => appModule.windowService);
+    gh.singleton<_i44.MessageSender>(() => appModule.messageSender);
+    gh.singleton<_i204.AudioService>(() => appModule.audioService);
     gh.singleton<_i361.Dio>(() => networkModule.dio);
+    gh.singleton<_i651.DialogService>(() => _i651.DialogService());
     gh.lazySingleton<_i409.GlobalKey<_i409.NavigatorState>>(
       () => appModule.navigatorKey,
     );
@@ -97,12 +105,6 @@ extension GetItInjectableX on _i174.GetIt {
       () =>
           _i608.SystemConfigurationRepository(gh<_i302.ConfigurationService>()),
     );
-    gh.factory<_i365.SystemConfigurationCubit>(
-      () => _i365.SystemConfigurationCubit(
-        gh<_i608.SystemConfigurationRepository>(),
-        gh<_i409.GlobalKey<_i409.NavigatorState>>(),
-      ),
-    );
     gh.factory<_i865.GitHubReleaseRepository>(
       () => _i865.GitHubReleaseRepository(
         gh<_i10.GitHubService>(),
@@ -120,6 +122,11 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i608.SystemConfigurationRepository>(),
       ),
     );
+    gh.factory<_i365.SystemConfigurationCubit>(
+      () => _i365.SystemConfigurationCubit(
+        gh<_i608.SystemConfigurationRepository>(),
+      ),
+    );
     gh.factory<_i825.AudioConfigurationCubit>(
       () => _i825.AudioConfigurationCubit(
         gh<_i608.SystemConfigurationRepository>(),
@@ -127,6 +134,15 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i708.DeviceInfoRepository>(
       () => _i708.DeviceInfoRepository(gh<_i723.DeviceInfoService>()),
+    );
+    gh.factory<_i680.TouchscreenCubit>(
+      () => _i680.TouchscreenCubit(gh<_i44.MessageSender>()),
+    );
+    gh.factory<_i747.ConnectivityCheckCubit>(
+      () => _i747.ConnectivityCheckCubit(
+        gh<_i483.HealthService>(),
+        gh<_i570.WindowService>(),
+      ),
     );
     gh.factory<_i271.DisplayRepository>(
       () => _i271.DisplayRepository(
@@ -137,21 +153,17 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i399.ReleaseNotesCubit>(
       () => _i399.ReleaseNotesCubit(gh<_i841.ReleaseNotesRepository>()),
     );
-    gh.factory<_i747.ConnectivityCheckCubit>(
-      () => _i747.ConnectivityCheckCubit(gh<_i483.HealthService>()),
-    );
     gh.factory<_i588.RearDisplayConfigurationCubit>(
       () => _i588.RearDisplayConfigurationCubit(gh<_i271.DisplayRepository>()),
     );
     gh.factory<_i685.DisplayConfigurationCubit>(
       () => _i685.DisplayConfigurationCubit(gh<_i271.DisplayRepository>()),
     );
+    gh.factory<_i14.DisplayCubit>(
+      () => _i14.DisplayCubit(gh<_i271.DisplayRepository>()),
+    );
     gh.factory<_i1064.DeviceInfoCubit>(
       () => _i1064.DeviceInfoCubit(gh<_i708.DeviceInfoRepository>()),
-    );
-    gh.factory<_i14.DisplayCubit>(
-      () =>
-          _i14.DisplayCubit(gh<_i271.DisplayRepository>(), gh<_i544.Flavor>()),
     );
     return this;
   }

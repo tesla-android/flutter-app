@@ -13,10 +13,7 @@ class TaBottomNavigationBar extends StatelessWidget with Logger {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(Icons.android),
-          label: 'Android OS',
-        ),
+        BottomNavigationBarItem(icon: Icon(Icons.android), label: 'Android OS'),
         BottomNavigationBarItem(
           icon: Icon(Icons.info_outlined),
           label: 'About',
@@ -26,20 +23,22 @@ class TaBottomNavigationBar extends StatelessWidget with Logger {
           label: 'Release Notes',
         ),
         BottomNavigationBarItem(
-            icon: Icon(Icons.monetization_on), label: "Donations"),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.settings),
-          label: 'Settings',
+          icon: Icon(Icons.monetization_on),
+          label: "Donations",
         ),
+        BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
       ],
       currentIndex: currentIndex,
       onTap: (index) {
         final page = _getPageForIndex(index);
-        if(page == null) {
+        if (page == null) {
           return;
         }
         TANavigator.pushReplacement(
-            context: context, page: page, animated: index == 0);
+          context: context,
+          page: page,
+          animated: index == 0,
+        );
       },
     );
   }

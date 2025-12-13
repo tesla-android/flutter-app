@@ -8,10 +8,7 @@ class Version {
   final String versionName;
   final List<ChangelogItem> changelogItems;
 
-  const Version({
-    required this.versionName,
-    required this.changelogItems,
-  });
+  const Version({required this.versionName, required this.changelogItems});
 
   factory Version.fromJson(Map<String, dynamic> json) =>
       _$VersionFromJson(json);

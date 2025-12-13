@@ -1,4 +1,3 @@
-
 abstract class RearDisplayConfigurationState {}
 
 class RearDisplayConfigurationStateInitial

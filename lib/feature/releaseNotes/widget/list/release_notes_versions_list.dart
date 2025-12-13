@@ -25,10 +25,7 @@ class ReleaseNotesVersionList extends StatelessWidget {
     );
   }
 
-  Widget _versionItemBuilder(
-    BuildContext context,
-    int index,
-  ) {
+  Widget _versionItemBuilder(BuildContext context, int index) {
     final version = versions[index];
     final textTheme = Theme.of(context).textTheme;
     return Column(
@@ -37,10 +34,7 @@ class ReleaseNotesVersionList extends StatelessWidget {
       children: [
         Padding(
           padding: TADimens.basePaddingVertical,
-          child: Text(
-            version.versionName,
-            style: textTheme.titleMedium,
-          ),
+          child: Text(version.versionName, style: textTheme.titleMedium),
         ),
         ...version.changelogItems.map(
           (e) => ReleaseNotesChangelogItemCard(

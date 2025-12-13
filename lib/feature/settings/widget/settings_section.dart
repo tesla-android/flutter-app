@@ -6,11 +6,7 @@ abstract class SettingsSection extends StatelessWidget {
   final String name;
   final IconData icon;
 
-  const SettingsSection({
-    super.key,
-    required this.name,
-    required this.icon,
-  });
+  const SettingsSection({super.key, required this.name, required this.icon});
 
   @nonVirtual
   @override
@@ -18,9 +14,7 @@ abstract class SettingsSection extends StatelessWidget {
     return SingleChildScrollView(
       child: Scrollbar(
         child: Padding(
-          padding: const EdgeInsets.all(
-            TADimens.baseContentMargin,
-          ),
+          padding: const EdgeInsets.all(TADimens.baseContentMargin),
           child: Center(
             child: Container(
               constraints: const BoxConstraints(
@@ -37,9 +31,7 @@ abstract class SettingsSection extends StatelessWidget {
   Widget body(BuildContext context);
 
   Widget get divider => const Padding(
-        padding: EdgeInsets.symmetric(
-          vertical: TADimens.baseContentMargin,
-        ),
-        child: Divider(),
-      );
+    padding: EdgeInsets.symmetric(vertical: TADimens.baseContentMargin),
+    child: Divider(),
+  );
 }

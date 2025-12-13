@@ -82,13 +82,17 @@ class RearDisplayConfigurationCubit extends Cubit<RearDisplayConfigurationState>
   }
 
   void _emitCurrentConfig() async {
+    if (isClosed) return;
+    final isCurrentDisplayPrimary = await _repository.isPrimaryDisplay();
     if (!isClosed) {
-      final isCurrentDisplayPrimary = await _repository.isPrimaryDisplay();
-      emit(RearDisplayConfigurationStateSettingsFetched(
-        isRearDisplayEnabled: _currentConfig!.isRearDisplayEnabled == 1,
-        isRearDisplayPrioritised: _currentConfig!.isRearDisplayPrioritised == 1,
-        isCurrentDisplayPrimary: isCurrentDisplayPrimary ?? true,
-      ));
+      emit(
+        RearDisplayConfigurationStateSettingsFetched(
+          isRearDisplayEnabled: _currentConfig!.isRearDisplayEnabled == 1,
+          isRearDisplayPrioritised:
+              _currentConfig!.isRearDisplayPrioritised == 1,
+          isCurrentDisplayPrimary: isCurrentDisplayPrimary ?? true,
+        ),
+      );
     }
   }
 }

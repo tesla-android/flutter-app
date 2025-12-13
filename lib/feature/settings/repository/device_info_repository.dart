@@ -8,7 +8,7 @@ class DeviceInfoRepository {
 
   DeviceInfoRepository(this._service);
 
-  Future<DeviceInfo> getDeviceInfo(){
+  Future<DeviceInfo> getDeviceInfo() {
     return _service.getDeviceInfo();
   }
 }

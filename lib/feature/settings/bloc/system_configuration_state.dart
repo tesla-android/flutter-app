@@ -10,9 +10,7 @@ class SystemConfigurationStateLoading extends SystemConfigurationState {}
 class SystemConfigurationStateSettingsFetched extends SystemConfigurationState {
   final SystemConfigurationResponseBody currentConfiguration;
 
-  SystemConfigurationStateSettingsFetched({
-    required this.currentConfiguration,
-  });
+  SystemConfigurationStateSettingsFetched({required this.currentConfiguration});
 }
 
 class SystemConfigurationStateSettingsFetchingError
@@ -43,22 +41,25 @@ class SystemConfigurationStateSettingsModified
     bool? isOfflineModeEnabled,
     bool? isOfflineModeTelemetryEnabled,
     bool? isOfflineModeTeslaFirmwareDownloadsEnabled,
-  })  : newBandType = newBandType ?? currentConfiguration.currentSoftApBandType,
-        isSoftApEnabled = isSoftApEnabled ??
-            (currentConfiguration.isEnabledFlag == 1 ? true : false),
-        isOfflineModeEnabled = isOfflineModeEnabled ??
-            (currentConfiguration.isOfflineModeEnabledFlag == 1 ? true : false),
-        isOfflineModeTelemetryEnabled = isOfflineModeTelemetryEnabled ??
-            (currentConfiguration.isOfflineModeTelemetryEnabledFlag == 1
-                ? true
-                : false),
-        isOfflineModeTeslaFirmwareDownloadsEnabled =
-            isOfflineModeTeslaFirmwareDownloadsEnabled ??
-                (currentConfiguration
-                            .isOfflineModeTeslaFirmwareDownloadsEnabledFlag ==
-                        1
-                    ? true
-                    : false);
+  }) : newBandType = newBandType ?? currentConfiguration.currentSoftApBandType,
+       isSoftApEnabled =
+           isSoftApEnabled ??
+           (currentConfiguration.isEnabledFlag == 1 ? true : false),
+       isOfflineModeEnabled =
+           isOfflineModeEnabled ??
+           (currentConfiguration.isOfflineModeEnabledFlag == 1 ? true : false),
+       isOfflineModeTelemetryEnabled =
+           isOfflineModeTelemetryEnabled ??
+           (currentConfiguration.isOfflineModeTelemetryEnabledFlag == 1
+               ? true
+               : false),
+       isOfflineModeTeslaFirmwareDownloadsEnabled =
+           isOfflineModeTeslaFirmwareDownloadsEnabled ??
+           (currentConfiguration
+                       .isOfflineModeTeslaFirmwareDownloadsEnabledFlag ==
+                   1
+               ? true
+               : false);
 
   SystemConfigurationStateSettingsModified copyWith({
     SystemConfigurationResponseBody? currentConfiguration,
@@ -69,24 +70,23 @@ class SystemConfigurationStateSettingsModified
     bool? isOfflineModeTeslaFirmwareDownloadsEnabled,
   }) {
     return SystemConfigurationStateSettingsModified(
-        currentConfiguration: currentConfiguration ?? this.currentConfiguration,
-        newBandType: newBandType ?? this.newBandType,
-        isSoftApEnabled: isSoftApEnabled ?? this.isSoftApEnabled,
-        isOfflineModeEnabled: isOfflineModeEnabled ?? this.isOfflineModeEnabled,
-        isOfflineModeTelemetryEnabled:
-            isOfflineModeTelemetryEnabled ?? this.isOfflineModeTelemetryEnabled,
-        isOfflineModeTeslaFirmwareDownloadsEnabled:
-            isOfflineModeTeslaFirmwareDownloadsEnabled ??
-                this.isOfflineModeTeslaFirmwareDownloadsEnabled);
+      currentConfiguration: currentConfiguration ?? this.currentConfiguration,
+      newBandType: newBandType ?? this.newBandType,
+      isSoftApEnabled: isSoftApEnabled ?? this.isSoftApEnabled,
+      isOfflineModeEnabled: isOfflineModeEnabled ?? this.isOfflineModeEnabled,
+      isOfflineModeTelemetryEnabled:
+          isOfflineModeTelemetryEnabled ?? this.isOfflineModeTelemetryEnabled,
+      isOfflineModeTeslaFirmwareDownloadsEnabled:
+          isOfflineModeTeslaFirmwareDownloadsEnabled ??
+          this.isOfflineModeTeslaFirmwareDownloadsEnabled,
+    );
   }
 }
 
 class SystemConfigurationStateSettingsSaved extends SystemConfigurationState {
   final SystemConfigurationResponseBody currentConfiguration;
 
-  SystemConfigurationStateSettingsSaved({
-    required this.currentConfiguration,
-  });
+  SystemConfigurationStateSettingsSaved({required this.currentConfiguration});
 }
 
 class SystemConfigurationStateSettingsSavingFailedError

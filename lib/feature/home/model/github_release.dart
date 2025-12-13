@@ -7,9 +7,7 @@ part 'github_release.g.dart';
 class GitHubRelease extends Equatable {
   final String name;
 
-  const GitHubRelease({
-    required this.name,
-  });
+  const GitHubRelease({required this.name});
 
   factory GitHubRelease.fromJson(Map<String, dynamic> json) =>
       _$GitHubReleaseFromJson(json);
@@ -17,7 +15,5 @@ class GitHubRelease extends Equatable {
   Map<String, dynamic> toJson() => _$GitHubReleaseToJson(this);
 
   @override
-  List<Object?> get props => [
-        name,
-      ];
+  List<Object?> get props => [name];
 }

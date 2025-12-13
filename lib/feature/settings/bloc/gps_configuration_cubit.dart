@@ -9,7 +9,7 @@ class GPSConfigurationCubit extends Cubit<GPSConfigurationState> with Logger {
   final SystemConfigurationRepository _configurationRepository;
 
   GPSConfigurationCubit(this._configurationRepository)
-      : super(GPSConfigurationStateInitial());
+    : super(GPSConfigurationStateInitial());
 
   Future fetchConfiguration() async {
     if (!isClosed) emit(GPSConfigurationStateLoading());
@@ -17,17 +17,13 @@ class GPSConfigurationCubit extends Cubit<GPSConfigurationState> with Logger {
       final configuration = await _configurationRepository.getConfiguration();
       emit(
         GPSConfigurationStateLoaded(
-            isGPSEnabled: configuration.isGPSEnabled == 1),
+          isGPSEnabled: configuration.isGPSEnabled == 1,
+        ),
       );
     } catch (exception, stacktrace) {
-      logException(
-        exception: exception,
-        stackTrace: stacktrace,
-      );
+      logException(exception: exception, stackTrace: stacktrace);
       if (!isClosed) {
-        emit(
-          GPSConfigurationStateError(),
-        );
+        emit(GPSConfigurationStateError());
       }
     }
   }
@@ -38,10 +34,7 @@ class GPSConfigurationCubit extends Cubit<GPSConfigurationState> with Logger {
       await _configurationRepository.setGPSState(newState == true ? 1 : 0);
       emit(GPSConfigurationStateLoaded(isGPSEnabled: newState));
     } catch (exception, stacktrace) {
-      logException(
-        exception: exception,
-        stackTrace: stacktrace,
-      );
+      logException(exception: exception, stackTrace: stacktrace);
       emit(GPSConfigurationStateError());
     }
   }

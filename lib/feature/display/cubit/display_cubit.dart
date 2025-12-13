@@ -3,38 +3,32 @@ import 'dart:math' as math;
 
 import 'dart:ui' hide window;
 
-import 'package:flavor/flavor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:tesla_android/common/network/base_websocket_transport.dart';
 import 'package:tesla_android/common/utils/logger.dart';
 import 'package:tesla_android/feature/display/cubit/display_state.dart';
 import 'package:tesla_android/feature/display/model/remote_display_state.dart';
 import 'package:tesla_android/feature/display/repository/display_repository.dart';
 
 @injectable
+@injectable
 class DisplayCubit extends Cubit<DisplayState> with Logger {
   final DisplayRepository _repository;
-  final Flavor _flavor;
 
-  DisplayCubit(this._repository, this._flavor) : super(DisplayStateInitial());
+  DisplayCubit(this._repository) : super(DisplayStateInitial());
 
-  BaseWebsocketTransport? activeTransport;
-
-  StreamSubscription? _transportStreamSubscription;
   Timer? _resizeCoolDownTimer;
   static const Duration _coolDownDuration = Duration(seconds: 1);
 
   @override
   Future<void> close() {
     _resizeCoolDownTimer?.cancel();
-    _transportStreamSubscription?.cancel();
     log("close");
     return super.close();
   }
 
-  void resizeDisplay({required Size viewSize}) {
+  Future<void> resizeDisplay({required Size viewSize}) async {
     if (state is DisplayStateResizeInProgress) {
       log(
         "Display resize can't happen now (state == DisplayStateResizeInProgress)",
@@ -49,21 +43,23 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
         return;
       }
     }
-    _startResize(viewSize: viewSize);
+    await _startResize(viewSize: viewSize);
   }
 
-  void onWindowSizeChanged(Size updatedSize) {
+  Future<void> onWindowSizeChanged(Size updatedSize) async {
     log('`physicalSize`: $updatedSize');
-    _startResize(viewSize: updatedSize);
+    await _startResize(viewSize: updatedSize);
   }
 
-  void onDisplayTypeSelectionFinished({required bool isPrimaryDisplay}) {
+  Future<void> onDisplayTypeSelectionFinished({
+    required bool isPrimaryDisplay,
+  }) async {
     emit(DisplayStateDisplayTypeSelectionFinished());
     _repository.setDisplayType(isPrimaryDisplay);
-    _startResize();
+    await _startResize();
   }
 
-  void _startResize({Size viewSize = Size.zero}) async {
+  Future<void> _startResize({Size viewSize = Size.zero}) async {
     if (state is DisplayStateResizeCoolDown) {
       final currentState = state as DisplayStateResizeCoolDown;
       if (currentState.viewSize == viewSize) {
@@ -212,6 +208,8 @@ class DisplayCubit extends Cubit<DisplayState> with Logger {
         logException(exception: exception, stackTrace: stacktrace);
       }
     } else {
+      _resizeCoolDownTimer?.cancel();
+      _resizeCoolDownTimer = null;
       log("Unable to send resize request. Invalid state, no pending resize");
     }
   }

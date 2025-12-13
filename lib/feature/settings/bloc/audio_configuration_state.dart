@@ -4,8 +4,7 @@ class AudioConfigurationStateInitial extends AudioConfigurationState {}
 
 class AudioConfigurationStateLoading extends AudioConfigurationState {}
 
-class AudioConfigurationStateSettingsFetched
-    extends AudioConfigurationState {
+class AudioConfigurationStateSettingsFetched extends AudioConfigurationState {
   final bool isEnabled;
   final int volume;
 

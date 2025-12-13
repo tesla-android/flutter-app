@@ -29,10 +29,7 @@ class SystemConfigurationResponseBody {
     defaultValue: 100,
   )
   final int browserAudioVolume;
-  @JsonKey(
-    name: "persist.tesla-android.gps.is_active",
-    defaultValue: 1,
-  )
+  @JsonKey(name: "persist.tesla-android.gps.is_active", defaultValue: 1)
   final int isGPSEnabled;
 
   SystemConfigurationResponseBody({
@@ -53,6 +50,38 @@ class SystemConfigurationResponseBody {
 
   Map<String, dynamic> toJson() =>
       _$SystemConfigurationResponseBodyToJson(this);
+
+  SystemConfigurationResponseBody copyWith({
+    int? bandType,
+    int? channel,
+    int? channelWidth,
+    int? isEnabledFlag,
+    int? isOfflineModeEnabledFlag,
+    int? isOfflineModeTelemetryEnabledFlag,
+    int? isOfflineModeTeslaFirmwareDownloadsEnabledFlag,
+    int? browserAudioIsEnabled,
+    int? browserAudioVolume,
+    int? isGPSEnabled,
+  }) {
+    return SystemConfigurationResponseBody(
+      bandType: bandType ?? this.bandType,
+      channel: channel ?? this.channel,
+      channelWidth: channelWidth ?? this.channelWidth,
+      isEnabledFlag: isEnabledFlag ?? this.isEnabledFlag,
+      isOfflineModeEnabledFlag:
+          isOfflineModeEnabledFlag ?? this.isOfflineModeEnabledFlag,
+      isOfflineModeTelemetryEnabledFlag:
+          isOfflineModeTelemetryEnabledFlag ??
+          this.isOfflineModeTelemetryEnabledFlag,
+      isOfflineModeTeslaFirmwareDownloadsEnabledFlag:
+          isOfflineModeTeslaFirmwareDownloadsEnabledFlag ??
+          this.isOfflineModeTeslaFirmwareDownloadsEnabledFlag,
+      browserAudioIsEnabled:
+          browserAudioIsEnabled ?? this.browserAudioIsEnabled,
+      browserAudioVolume: browserAudioVolume ?? this.browserAudioVolume,
+      isGPSEnabled: isGPSEnabled ?? this.isGPSEnabled,
+    );
+  }
 
   SoftApBandType get currentSoftApBandType =>
       SoftApBandType.matchBandTypeFromConfig(
