@@ -22,10 +22,7 @@ class SettingsTile extends StatelessWidget {
       leading: Icon(icon),
       title: Text(title),
       subtitle: subtitle != null ? Text(subtitle!) : const SizedBox.shrink(),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [trailing],
-      ),
+      trailing: Row(mainAxisSize: MainAxisSize.min, children: [trailing]),
     );
   }
 }

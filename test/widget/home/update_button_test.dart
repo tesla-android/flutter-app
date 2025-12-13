@@ -41,9 +41,7 @@ void main() {
   testWidgets('UpdateButton renders button when state is Available', (
     WidgetTester tester,
   ) async {
-    when(
-      mockOTAUpdateCubit.state,
-    ).thenReturn(OTAUpdateStateAvailable());
+    when(mockOTAUpdateCubit.state).thenReturn(OTAUpdateStateAvailable());
 
     await tester.pumpWidget(buildTestWidget());
 

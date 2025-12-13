@@ -11,7 +11,9 @@ enum TestEnum {
 
 void main() {
   group('SettingsDropdown', () {
-    testWidgets('renders correctly with given items', (WidgetTester tester) async {
+    testWidgets('renders correctly with given items', (
+      WidgetTester tester,
+    ) async {
       TestEnum? selectedValue = TestEnum.optionA;
 
       await tester.pumpWidget(
@@ -49,16 +51,16 @@ void main() {
     });
 
     test('DisplayRendererTypeExt extension works', () {
-       // Valid enum with name() method
-       expect(TestEnum.optionA.displayName(), 'optionA');
-       
-       // Plain object
-       final obj = Object();
-       // The extension is on Object, so any object has .displayName()
-       // But wait, the extension is defined in the file but not exported? 
-       // It seems to be accessible if imported.
-       
-       expect(obj.displayName(), obj.toString());
+      // Valid enum with name() method
+      expect(TestEnum.optionA.displayName(), 'optionA');
+
+      // Plain object
+      final obj = Object();
+      // The extension is on Object, so any object has .displayName()
+      // But wait, the extension is defined in the file but not exported?
+      // It seems to be accessible if imported.
+
+      expect(obj.displayName(), obj.toString());
     });
   });
 }

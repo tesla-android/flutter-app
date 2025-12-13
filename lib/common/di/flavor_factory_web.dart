@@ -6,7 +6,8 @@ import 'package:web/web.dart';
 Flavor createFlavor() {
   // Check for mock mode via URL parameter: ?mock=true
   // OR via Dart environment variable: --dart-define=MOCK_MODE=true
-  final isMockMode = window.location.search.contains('mock=true') ||
+  final isMockMode =
+      window.location.search.contains('mock=true') ||
       const bool.fromEnvironment('MOCK_MODE', defaultValue: false);
 
   if (isMockMode) {
@@ -23,8 +24,7 @@ Flavor createFlavor() {
         'touchscreenWebSocket':
             '$webSocketProtocol$mockBackendDomain/sockets/touchscreen',
         'gpsWebSocket': '$webSocketProtocol$mockBackendDomain/sockets/gps',
-        'audioWebSocket':
-            '$webSocketProtocol$mockBackendDomain/sockets/audio',
+        'audioWebSocket': '$webSocketProtocol$mockBackendDomain/sockets/audio',
         'displayWebSocket':
             '$webSocketProtocol$mockBackendDomain/sockets/display',
         'configurationApiBaseUrl': '$httpProtocol$mockBackendDomain/api',
