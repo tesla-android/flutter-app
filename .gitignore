@@ -46,3 +46,23 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 .fvm/flutter_sdk
+
+# Coverage
+coverage/
+
+# Test output and debug files
+*.txt
+*_output*.log
+*_failures*.log
+
+# Python (mock backend)
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.egg-info/
+venv/
+.env
+
+# Android
+**/android/local.properties

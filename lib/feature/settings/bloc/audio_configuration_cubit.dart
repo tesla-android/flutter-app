@@ -10,7 +10,7 @@ class AudioConfigurationCubit extends Cubit<AudioConfigurationState>
   final SystemConfigurationRepository _repository;
 
   AudioConfigurationCubit(this._repository)
-      : super(AudioConfigurationStateInitial());
+    : super(AudioConfigurationStateInitial());
 
   Future fetchConfiguration() async {
     if (!isClosed) emit(AudioConfigurationStateLoading());
@@ -18,18 +18,14 @@ class AudioConfigurationCubit extends Cubit<AudioConfigurationState>
       final configuration = await _repository.getConfiguration();
       emit(
         AudioConfigurationStateSettingsFetched(
-            isEnabled: configuration.browserAudioIsEnabled == 1,
-            volume: configuration.browserAudioVolume),
+          isEnabled: configuration.browserAudioIsEnabled == 1,
+          volume: configuration.browserAudioVolume,
+        ),
       );
     } catch (exception, stacktrace) {
-      logException(
-        exception: exception,
-        stackTrace: stacktrace,
-      );
+      logException(exception: exception, stackTrace: stacktrace);
       if (!isClosed) {
-        emit(
-          AudioConfigurationStateError(),
-        );
+        emit(AudioConfigurationStateError());
       }
     }
   }
@@ -42,12 +38,13 @@ class AudioConfigurationCubit extends Cubit<AudioConfigurationState>
       if (!isClosed) {
         emit(
           AudioConfigurationStateSettingsFetched(
-              isEnabled: true, volume: newVolume),
+            isEnabled: true,
+            volume: newVolume,
+          ),
         );
       }
     } catch (exception, stackTrace) {
-      logException(
-          exception: exception, stackTrace: stackTrace);
+      logException(exception: exception, stackTrace: stackTrace);
       if (!isClosed) emit(AudioConfigurationStateError());
     }
   }
@@ -60,12 +57,13 @@ class AudioConfigurationCubit extends Cubit<AudioConfigurationState>
       if (!isClosed) {
         emit(
           AudioConfigurationStateSettingsFetched(
-              isEnabled: isEnabled, volume: 100),
+            isEnabled: isEnabled,
+            volume: 100,
+          ),
         );
       }
     } catch (exception, stackTrace) {
-      logException(
-          exception: exception, stackTrace: stackTrace);
+      logException(exception: exception, stackTrace: stackTrace);
       if (!isClosed) emit(AudioConfigurationStateError());
     }
   }

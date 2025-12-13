@@ -96,10 +96,17 @@
     if (!displayRendererAdded) {
       var rendererScript = document.createElement('script');
       rendererScript.src = renderer + '.js';
+      rendererScript.onload = function() {
+        initDisplaySocket(url, binaryType);
+      };
       document.head.appendChild(rendererScript);
       displayRendererAdded = true;
+    } else {
+      initDisplaySocket(url, binaryType);
     }
+  }
 
+  function initDisplaySocket(url, binaryType) {
     displaySocket = new ReconnectingWebSocket(url, null, { binaryType: binaryType });
 
     displaySocket.onopen = () => log("Display: Websocket connection established");
@@ -107,7 +114,11 @@
     displaySocket.onerror = error => log("Display: " + error);
 
     displaySocket.onmessage = (event) => {
-      drawDisplayFrame(event.data);
+      if (typeof drawDisplayFrame === "function") {
+         drawDisplayFrame(event.data);
+      } else {
+         log("Error: drawDisplayFrame not defined yet");
+      }
     };
   }
 

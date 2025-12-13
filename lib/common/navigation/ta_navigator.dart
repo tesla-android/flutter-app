@@ -7,10 +7,7 @@ import 'package:tesla_android/common/navigation/ta_page_type.dart';
 class TANavigator {
   static TAPageFactory get _pageFactory => getIt<TAPageFactory>();
 
-  static Future push({
-    required BuildContext context,
-    required TAPage page,
-  }) {
+  static Future push({required BuildContext context, required TAPage page}) {
     switch (page.type) {
       case TAPageType.standard:
         return Navigator.of(context).pushNamed(page.route);
@@ -31,13 +28,15 @@ class TANavigator {
     );
   }
 
-  static void pushReplacement(
-      {required BuildContext context,
-      required TAPage page,
-      bool animated = true}) {
+  static void pushReplacement({
+    required BuildContext context,
+    required TAPage page,
+    bool animated = true,
+  }) {
     if (page.type != TAPageType.standard) {
       throw UnsupportedError(
-          "only regular pages can be used in pushReplacement");
+        "only regular pages can be used in pushReplacement",
+      );
     }
     if (animated) {
       Navigator.of(context).pushReplacementNamed(page.route);
@@ -49,15 +48,13 @@ class TANavigator {
           },
           transitionDuration: Duration.zero,
           reverseTransitionDuration: Duration.zero,
-          settings: RouteSettings(name: page.route)
+          settings: RouteSettings(name: page.route),
         ),
       );
     }
   }
 
-  static void pop({
-    required BuildContext context,
-  }) {
+  static void pop({required BuildContext context}) {
     Navigator.of(context).pop();
   }
 }

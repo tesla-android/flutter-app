@@ -17,19 +17,19 @@ class OTAUpdateCubit extends Cubit<OTAUpdateState> with Logger {
   final GitHubReleaseRepository _repository;
   final SharedPreferences _sharedPreferences;
 
-  OTAUpdateCubit(
-      this._repository,
-      this._sharedPreferences,
-      ) : super(OTAUpdateStateInitial());
+  OTAUpdateCubit(this._repository, this._sharedPreferences)
+    : super(OTAUpdateStateInitial());
 
   Future<void> checkForUpdates() async {
-    final lastCheckedTimestamp = _sharedPreferences.getInt(_lastCheckedKey) ?? 0;
+    final lastCheckedTimestamp =
+        _sharedPreferences.getInt(_lastCheckedKey) ?? 0;
     final currentTime = DateTime.now().millisecondsSinceEpoch;
 
     final packageInfo = await PackageInfo.fromPlatform();
     final storedVersion = _sharedPreferences.getString(_lastVersionKey) ?? '';
 
-    if (currentTime - lastCheckedTimestamp < 6 * 60 * 60 * 1000 && storedVersion == packageInfo.version) {
+    if (currentTime - lastCheckedTimestamp < 6 * 60 * 60 * 1000 &&
+        storedVersion == packageInfo.version) {
       if (_sharedPreferences.getBool(_updateAvailableKey) == true) {
         emit(OTAUpdateStateAvailable());
       } else {
@@ -40,8 +40,10 @@ class OTAUpdateCubit extends Cubit<OTAUpdateState> with Logger {
 
     try {
       final latestVersion = await _repository.getLatestRelease();
-      final areUpdatesAvailable =
-      _checkIfUpdateIsAvailable(packageInfo.version, latestVersion.name);
+      final areUpdatesAvailable = _checkIfUpdateIsAvailable(
+        packageInfo.version,
+        latestVersion.name,
+      );
 
       _sharedPreferences.setBool(_updateAvailableKey, areUpdatesAvailable);
       _sharedPreferences.setInt(_lastCheckedKey, currentTime);
@@ -53,10 +55,7 @@ class OTAUpdateCubit extends Cubit<OTAUpdateState> with Logger {
         emit(OTAUpdateStateNotAvailable());
       }
     } catch (exception, stacktrace) {
-      logException(
-        exception: exception,
-        stackTrace: stacktrace,
-      );
+      logException(exception: exception, stackTrace: stacktrace);
       await Future.delayed(const Duration(minutes: 5), () {
         checkForUpdates();
       });
@@ -64,7 +63,7 @@ class OTAUpdateCubit extends Cubit<OTAUpdateState> with Logger {
   }
 
   void launchUpdater() {
-     _repository.openUpdater();
+    _repository.openUpdater();
   }
 
   bool _checkIfUpdateIsAvailable(String currentVersion, String latestRelease) {

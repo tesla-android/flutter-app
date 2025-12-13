@@ -1,39 +1,33 @@
 import 'package:flavor/flavor.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart' hide Environment;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:web/web.dart';
+import 'package:tesla_android/common/di/flavor_factory.dart';
+import 'package:tesla_android/common/service/audio_service.dart';
+import 'package:tesla_android/common/service/audio_service_factory.dart';
+import 'package:tesla_android/feature/touchscreen/service/message_sender.dart';
+import 'package:tesla_android/common/service/window_service.dart';
+import 'package:tesla_android/common/service/window_service_factory.dart';
+import 'package:tesla_android/feature/touchscreen/service/message_sender_factory.dart';
 
 @module
 abstract class AppModule {
   @singleton
-  Flavor get provideFlavor {
-    const defaultDomain = "device.teslaandroid.com";
-    final isLocalHost = window.location.hostname.contains("localhost");
-    final domain = isLocalHost ? defaultDomain : window.location.hostname;
-    final isSSL = window.location.protocol.contains("https") || kDebugMode;
-    final httpProtocol = isSSL ? "https://" : "http://";
-    final webSocketProtocol = isSSL ? "wss://" : "ws://";
-    return Flavor.create(
-      isLocalHost ? Environment.dev : Environment.production,
-      color: isLocalHost ? Colors.green : Colors.red,
-      properties: {
-        'isSSL': isSSL,
-        'touchscreenWebSocket': '$webSocketProtocol$domain/sockets/touchscreen',
-        'gpsWebSocket': '$webSocketProtocol$domain/sockets/gps',
-        'audioWebSocket': '$webSocketProtocol$domain/sockets/audio',
-        'displayWebSocket': '$webSocketProtocol$domain/sockets/display',
-        //'displayWebSocket': '$httpProtocol$domain/stream',
-        'configurationApiBaseUrl': '$httpProtocol$domain/api',
-      },
-    );
-  }
+  Flavor get provideFlavor => FlavorFactory.create();
 
   @singleton
   @preResolve
   Future<SharedPreferences> get sharedPreferences =>
       SharedPreferences.getInstance();
+
+  @singleton
+  WindowService get windowService => WindowServiceFactory.create();
+
+  @singleton
+  MessageSender get messageSender => MessageSenderFactory.create();
+
+  @singleton
+  AudioService get audioService => AudioServiceFactory.create();
 
   @lazySingleton
   GlobalKey<NavigatorState> get navigatorKey => GlobalKey<NavigatorState>();

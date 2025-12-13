@@ -13,7 +13,7 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
   RemoteDisplayState? _currentConfig;
 
   DisplayConfigurationCubit(this._repository)
-      : super(DisplayConfigurationStateInitial());
+    : super(DisplayConfigurationStateInitial());
 
   void fetchConfiguration() async {
     if (!isClosed) emit(DisplayConfigurationStateLoading());
@@ -21,14 +21,9 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
       _currentConfig = await _repository.getDisplayState();
       _emitCurrentConfig();
     } catch (exception, stacktrace) {
-      logException(
-        exception: exception,
-        stackTrace: stacktrace,
-      );
+      logException(exception: exception, stackTrace: stacktrace);
       if (!isClosed) {
-        emit(
-          DisplayConfigurationStateError(),
-        );
+        emit(DisplayConfigurationStateError());
       }
     }
   }
@@ -126,13 +121,15 @@ class DisplayConfigurationCubit extends Cubit<DisplayConfigurationState>
 
   void _emitCurrentConfig() {
     if (!isClosed) {
-      emit(DisplayConfigurationStateSettingsFetched(
-        resolutionPreset: _currentConfig!.resolutionPreset,
-        renderer: _currentConfig!.renderer,
-        isResponsive: _currentConfig!.isResponsive == 1,
-        refreshRate: _currentConfig!.refreshRate,
-        quality: _currentConfig!.quality,
-      ));
+      emit(
+        DisplayConfigurationStateSettingsFetched(
+          resolutionPreset: _currentConfig!.resolutionPreset,
+          renderer: _currentConfig!.renderer,
+          isResponsive: _currentConfig!.isResponsive == 1,
+          refreshRate: _currentConfig!.refreshRate,
+          quality: _currentConfig!.quality,
+        ),
+      );
     }
   }
 }

@@ -1,22 +1,7 @@
 enum SoftApBandType {
-  band2_4GHz(
-    name: "2.4 GHz",
-    band: 1,
-    channel: 6,
-    channelWidth: 2,
-  ),
-  band5GHz36(
-    name: "5 GHZ - Channel 36",
-    band: 2,
-    channel: 36,
-    channelWidth: 3,
-  ),
-  band5GHz44(
-    name: "5 GHZ - Channel 44",
-    band: 2,
-    channel: 44,
-    channelWidth: 3,
-  ),
+  band2_4GHz(name: "2.4 GHz", band: 1, channel: 6, channelWidth: 2),
+  band5GHz36(name: "5 GHZ - Channel 36", band: 2, channel: 36, channelWidth: 3),
+  band5GHz44(name: "5 GHZ - Channel 44", band: 2, channel: 44, channelWidth: 3),
   band5GHz149(
     name: "5 GHZ - Channel 149",
     band: 2,
@@ -45,10 +30,11 @@ enum SoftApBandType {
   final int channelWidth;
   final String name;
 
-  static SoftApBandType matchBandTypeFromConfig(
-      {required band,
-      required channel,
-      required channelWidth}) {
+  static SoftApBandType matchBandTypeFromConfig({
+    required int band,
+    required int channel,
+    required int channelWidth,
+  }) {
     if (band == 1) {
       return SoftApBandType.band2_4GHz;
     }

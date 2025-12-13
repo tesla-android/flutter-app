@@ -21,9 +21,5 @@ class ChangelogItem extends Equatable {
   Map<String, dynamic> toJson() => _$ChangelogItemToJson(this);
 
   @override
-  List<Object?> get props => [
-        title,
-        shortDescription,
-        descriptionMarkdown,
-      ];
+  List<Object?> get props => [title, shortDescription, descriptionMarkdown];
 }

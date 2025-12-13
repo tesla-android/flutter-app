@@ -11,9 +11,7 @@ class DonationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TaAppBar(
-        title: TAPage.donations.title,
-      ),
+      appBar: TaAppBar(title: TAPage.donations.title),
       bottomNavigationBar: const TaBottomNavigationBar(currentIndex: 3),
       body: Center(
         child: Column(
@@ -26,16 +24,14 @@ class DonationPage extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ),
-            const SizedBox(
-              height: TADimens.baseContentMargin,
-            ),
+            const SizedBox(height: TADimens.baseContentMargin),
             SizedBox(
               width: TADimens.donationQRSize,
               height: TADimens.donationQRSize,
               child: QrImageView(
                 data: "https://teslaandroid.com/donations",
                 version: QrVersions.auto,
-              )
+              ),
             ),
           ],
         ),

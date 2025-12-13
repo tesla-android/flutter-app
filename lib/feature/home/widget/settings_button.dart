@@ -12,15 +12,9 @@ class SettingsButton extends StatelessWidget with Logger {
     return IconButton(
       color: Colors.white,
       onPressed: () {
-        TANavigator.pushReplacement(
-          context: context,
-          page: TAPage.about,
-        );
+        TANavigator.pushReplacement(context: context, page: TAPage.about);
       },
-      icon: const Icon(
-        Icons.settings,
-        size: TADimens.statusBarIconSize,
-      ),
+      icon: const Icon(Icons.settings, size: TADimens.statusBarIconSize),
     );
   }
 }

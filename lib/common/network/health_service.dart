@@ -9,14 +9,8 @@ part 'health_service.g.dart';
 @RestApi()
 abstract class HealthService {
   @factoryMethod
-  factory HealthService(
-      Dio dio,
-      Flavor flavor,
-      ) =>
-      _HealthService(
-        dio,
-        baseUrl: flavor.getString("configurationApiBaseUrl"),
-      );
+  factory HealthService(Dio dio, Flavor flavor) =>
+      _HealthService(dio, baseUrl: flavor.getString("configurationApiBaseUrl"));
 
   @GET("/health")
   Future getHealthCheck();

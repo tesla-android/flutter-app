@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tesla_android/common/ui/components/settings_switch.dart';
 import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
 import 'package:tesla_android/feature/settings/bloc/rear_display_configuration_cubit.dart';
 import 'package:tesla_android/feature/settings/bloc/rear_display_configuration_state.dart';
+import 'package:tesla_android/feature/settings/view_model/rear_display_settings_view_model.dart';
 import 'package:tesla_android/feature/settings/widget/settings_section.dart';
 import 'package:tesla_android/feature/settings/widget/settings_tile.dart';
 
@@ -13,6 +15,7 @@ class RearDisplaySettings extends SettingsSection {
   @override
   Widget body(BuildContext context) {
     final cubit = BlocProvider.of<RearDisplayConfigurationCubit>(context);
+    final viewModel = RearDisplaySettingsViewModel();
 
     return BlocBuilder<
       RearDisplayConfigurationCubit,
@@ -25,16 +28,29 @@ class RearDisplaySettings extends SettingsSection {
             SettingsTile(
               icon: Icons.monitor,
               title: 'Rear Display Support',
-              trailing: _rearDisplayStateSwitch(context, cubit, state),
+              trailing: viewModel.buildStateWidget(
+                state: state,
+                onFetched: () {
+                  final isEnabled = viewModel.getRearDisplayEnabled(state);
+                  if (isEnabled == null) return const SizedBox.shrink();
+
+                  return SettingsSwitch(
+                    value: isEnabled,
+                    onChanged: (value) {
+                      cubit.setRearDisplayState(value);
+                    },
+                  );
+                },
+              ),
             ),
             const Padding(
               padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
               child: Text(
-                'Enable if your vehicle is equipped with a factory rear display.\n\n'
-                'Supported models:\n\n'
-                '- Model 3 (2023+ / “Highland”)\n'
-                '- Model Y (2025+ / “Juniper”)\n'
-                '- Model S/X (2021+)\n'
+                'Enable if your vehicle is equipped with a factory rear display.\\n\\n'
+                'Supported models:\\n\\n'
+                '- Model 3 (2023+ / "Highland")\\n'
+                '- Model Y (2025+ / "Juniper")\\n'
+                '- Model S/X (2021+)\\n'
                 '- Cybertruck',
               ),
             ),
@@ -44,7 +60,20 @@ class RearDisplaySettings extends SettingsSection {
               SettingsTile(
                 icon: Icons.screenshot_monitor,
                 title: 'Primary Display',
-                trailing: _isPrimaryDisplaySwitch(context, cubit, state),
+                trailing: viewModel.buildStateWidget(
+                  state: state,
+                  onFetched: () {
+                    final isPrimary = viewModel.getCurrentDisplayPrimary(state);
+                    if (isPrimary == null) return const SizedBox.shrink();
+
+                    return SettingsSwitch(
+                      value: isPrimary,
+                      onChanged: (value) {
+                        cubit.setDisplayType(isCurrentDisplayPrimary: value);
+                      },
+                    );
+                  },
+                ),
               ),
               const Padding(
                 padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
@@ -56,7 +85,22 @@ class RearDisplaySettings extends SettingsSection {
               SettingsTile(
                 icon: Icons.aspect_ratio,
                 title: 'Rear Display Priority',
-                trailing: _rearDisplayPrioritySwitch(context, cubit, state),
+                trailing: viewModel.buildStateWidget(
+                  state: state,
+                  onFetched: () {
+                    final isPrioritised = viewModel.getRearDisplayPrioritised(
+                      state,
+                    );
+                    if (isPrioritised == null) return const SizedBox.shrink();
+
+                    return SettingsSwitch(
+                      value: isPrioritised,
+                      onChanged: (value) {
+                        cubit.setRearDisplayPrioritization(value);
+                      },
+                    );
+                  },
+                ),
               ),
               const Padding(
                 padding: EdgeInsets.all(TADimens.PADDING_S_VALUE),
@@ -69,68 +113,5 @@ class RearDisplaySettings extends SettingsSection {
         );
       },
     );
-  }
-
-  Widget _rearDisplayStateSwitch(
-    BuildContext context,
-    RearDisplayConfigurationCubit cubit,
-    RearDisplayConfigurationState state,
-  ) {
-    if (state is RearDisplayConfigurationStateSettingsFetched) {
-      return Switch(
-        value: state.isRearDisplayEnabled,
-        onChanged: (bool value) {
-          cubit.setRearDisplayState(value);
-        },
-      );
-    } else if (state is RearDisplayConfigurationStateSettingsUpdateInProgress ||
-        state is RearDisplayConfigurationStateLoading) {
-      return const CircularProgressIndicator();
-    } else if (state is RearDisplayConfigurationStateError) {
-      return const Text("Service error");
-    }
-    return const SizedBox.shrink();
-  }
-
-  Widget _rearDisplayPrioritySwitch(
-    BuildContext context,
-    RearDisplayConfigurationCubit cubit,
-    RearDisplayConfigurationState state,
-  ) {
-    if (state is RearDisplayConfigurationStateSettingsFetched) {
-      return Switch(
-        value: state.isRearDisplayPrioritised,
-        onChanged: (bool value) {
-          cubit.setRearDisplayPrioritization(value);
-        },
-      );
-    } else if (state is RearDisplayConfigurationStateSettingsUpdateInProgress ||
-        state is RearDisplayConfigurationStateLoading) {
-      return const CircularProgressIndicator();
-    } else if (state is RearDisplayConfigurationStateError) {
-      return const Text("Service error");
-    }
-    return const SizedBox.shrink();
-  }
-
-  Widget _isPrimaryDisplaySwitch(
-      BuildContext context,
-      RearDisplayConfigurationCubit cubit,
-      RearDisplayConfigurationState state,
-      ) {
-    if (state is RearDisplayConfigurationStateSettingsFetched) {
-      return Switch(
-        value: state.isCurrentDisplayPrimary,
-        onChanged: (bool value) {
-          cubit.setDisplayType(isCurrentDisplayPrimary: value);
-        },
-      );
-    } else if (state is RearDisplayConfigurationStateSettingsUpdateInProgress ||
-        state is RearDisplayConfigurationStateLoading) {
-      return const CircularProgressIndicator();
-    } else if (state is RearDisplayConfigurationStateError) {
-      return const Text("Service error");
-    }
-    return const SizedBox.shrink();
   }
 }

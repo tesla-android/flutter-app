@@ -5,11 +5,7 @@ class TAPage {
   final String route;
   final TAPageType type;
 
-  const TAPage({
-    required this.title,
-    required this.route,
-    required this.type,
-  });
+  const TAPage({required this.title, required this.route, required this.type});
 
   static const empty = TAPage(
     title: "Empty",

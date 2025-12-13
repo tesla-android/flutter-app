@@ -1,0 +1,53 @@
+name: Test Suite
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+          
+      - name: Install dependencies
+        run: flutter pub get
+        
+      - name: Run code generation
+        run: flutter packages pub run build_runner build --delete-conflicting-outputs
+        
+      - name: Verify formatting
+        run: dart format --output=none --set-exit-if-changed lib/ test/
+        
+      - name: Analyze code
+        run: flutter analyze --no-fatal-infos
+        
+      - name: Run tests
+        run: flutter test --coverage
+        
+      - name: Check test coverage
+        run: |
+          # Parse coverage and report
+          LINES=$(grep -oP '(?<=LF:)\d+' coverage/lcov.info | awk '{s+=$1} END {print s}')
+          HITS=$(grep -oP '(?<=LH:)\d+' coverage/lcov.info | awk '{s+=$1} END {print s}')
+          COVERAGE=$(echo "scale=1; $HITS * 100 / $LINES" | bc)
+          echo "## Coverage Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Coverage**: $COVERAGE% ($HITS / $LINES lines)" >> $GITHUB_STEP_SUMMARY
+          
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: coverage/lcov.info
+          retention-days: 5

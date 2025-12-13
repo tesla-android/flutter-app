@@ -7,9 +7,7 @@ part 'release_notes.g.dart';
 class ReleaseNotes {
   final List<Version> versions;
 
-  const ReleaseNotes({
-    required this.versions,
-  });
+  const ReleaseNotes({required this.versions});
 
   factory ReleaseNotes.fromJson(Map<String, dynamic> json) =>
       _$ReleaseNotesFromJson(json);

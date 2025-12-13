@@ -30,7 +30,7 @@ class DeviceInfo extends Equatable {
     required this.isModemDetected,
     required this.releaseType,
     required this.otaUrl,
-    required this.isGPSEnabled
+    required this.isGPSEnabled,
   });
 
   factory DeviceInfo.fromJson(Map<String, dynamic> json) =>
@@ -40,15 +40,15 @@ class DeviceInfo extends Equatable {
 
   @override
   List<Object?> get props => [
-        cpuTemperature,
-        serialNumber,
-        deviceModel,
-        isModemDetected,
-        isCarPlayDetected,
-        releaseType,
-        otaUrl,
-        isGPSEnabled,
-      ];
+    cpuTemperature,
+    serialNumber,
+    deviceModel,
+    isModemDetected,
+    isCarPlayDetected,
+    releaseType,
+    otaUrl,
+    isGPSEnabled,
+  ];
 }
 
 extension DeviceNameExtension on DeviceInfo {

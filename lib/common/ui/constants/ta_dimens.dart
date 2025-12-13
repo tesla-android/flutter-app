@@ -25,12 +25,18 @@ class TADimens {
   static const PADDING_XXL = EdgeInsets.all(PADDING_XXL_VALUE);
   static const PADDING_XXXL = EdgeInsets.all(PADDING_XXXL_VALUE);
 
-  static const VERTICAL_PADDING_S =
-  EdgeInsets.only(top: PADDING_S_VALUE, bottom: PADDING_S_VALUE);
-  static const VERTICAL_PADDING =
-  EdgeInsets.only(top: PADDING_VALUE, bottom: PADDING_VALUE);
-  static const VERTICAL_PADDING_L =
-  EdgeInsets.only(top: PADDING_L_VALUE, bottom: PADDING_L_VALUE);
+  static const VERTICAL_PADDING_S = EdgeInsets.only(
+    top: PADDING_S_VALUE,
+    bottom: PADDING_S_VALUE,
+  );
+  static const VERTICAL_PADDING = EdgeInsets.only(
+    top: PADDING_VALUE,
+    bottom: PADDING_VALUE,
+  );
+  static const VERTICAL_PADDING_L = EdgeInsets.only(
+    top: PADDING_L_VALUE,
+    bottom: PADDING_L_VALUE,
+  );
 
   static const ROUND_BORDER_RADIUS_XXS = 8.0;
   static const ROUND_BORDER_RADIUS_XS = 10.0;
@@ -52,16 +58,20 @@ class TADimens {
   static const halfBaseContentMargin = 8.0;
 
   static const halfBasePadding = EdgeInsets.all(halfBaseContentMargin);
-  static const halfBasePaddingHorizontal =
-      EdgeInsets.symmetric(horizontal: halfBaseContentMargin);
-  static const halfBasePaddingVertical =
-      EdgeInsets.symmetric(vertical: halfBaseContentMargin);
+  static const halfBasePaddingHorizontal = EdgeInsets.symmetric(
+    horizontal: halfBaseContentMargin,
+  );
+  static const halfBasePaddingVertical = EdgeInsets.symmetric(
+    vertical: halfBaseContentMargin,
+  );
 
   static const basePadding = EdgeInsets.all(baseContentMargin);
-  static const basePaddingHorizontal =
-      EdgeInsets.symmetric(horizontal: baseContentMargin);
-  static const basePaddingVertical =
-      EdgeInsets.symmetric(vertical: baseContentMargin);
+  static const basePaddingHorizontal = EdgeInsets.symmetric(
+    horizontal: baseContentMargin,
+  );
+  static const basePaddingVertical = EdgeInsets.symmetric(
+    vertical: baseContentMargin,
+  );
 
   static const splashPageLogoHeight = 200.0;
   static const splashPageRadius = 25.0;

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:tesla_android/common/service/audio_service.dart';
 import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
-import 'package:tesla_android/common/utils/audio_api.dart';
 import 'package:tesla_android/common/utils/logger.dart';
 import 'package:tesla_android/feature/settings/bloc/audio_configuration_cubit.dart';
 
@@ -17,12 +18,13 @@ class AudioButton extends StatefulWidget {
 class _AudioButtonState extends State<AudioButton> with Logger {
   String _state = 'stopped';
   VoidCallback? _removeListener;
+  final AudioService _audioService = GetIt.I<AudioService>();
 
   @override
   void initState() {
     super.initState();
     _readInitialState();
-    _removeListener = addAudioStateListener((s) {
+    _removeListener = _audioService.addAudioStateListener((s) {
       if (!mounted) return;
       setState(() => _state = s);
     });
@@ -36,7 +38,7 @@ class _AudioButtonState extends State<AudioButton> with Logger {
 
   void _readInitialState() {
     try {
-      _state = getAudioState();
+      _state = _audioService.getAudioState();
     } catch (_) {
       _state = 'stopped';
     }
@@ -44,10 +46,10 @@ class _AudioButtonState extends State<AudioButton> with Logger {
 
   void _onPressed() {
     if (_state == 'playing') {
-      stopAudio();
+      _audioService.stopAudio();
       setState(() => _state = 'stopped');
     } else {
-      startAudioFromGesture();
+      _audioService.startAudioFromGesture();
       setState(() => _state = 'playing');
     }
   }
@@ -60,7 +62,8 @@ class _AudioButtonState extends State<AudioButton> with Logger {
       bloc: BlocProvider.of<AudioConfigurationCubit>(context)
         ..fetchConfiguration(),
       builder: (context, audioState) {
-        if (audioState is AudioConfigurationStateSettingsFetched && audioState.isEnabled) {
+        if (audioState is AudioConfigurationStateSettingsFetched &&
+            audioState.isEnabled) {
           return IconButton(
             color: Colors.white,
             onPressed: _onPressed,

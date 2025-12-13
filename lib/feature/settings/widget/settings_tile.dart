@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tesla_android/common/ui/constants/ta_dimens.dart';
 
 class SettingsTile extends StatelessWidget {
   final IconData icon;
@@ -23,15 +22,7 @@ class SettingsTile extends StatelessWidget {
       leading: Icon(icon),
       title: Text(title),
       subtitle: subtitle != null ? Text(subtitle!) : const SizedBox.shrink(),
-      trailing: SizedBox(
-          width: dense ? TADimens.settingsTileTrailingWidthDense : TADimens
-              .settingsTileTrailingWidth,
-          child: Row(
-            children: [
-              const Spacer(),
-              trailing,
-            ],
-          )),
+      trailing: Row(mainAxisSize: MainAxisSize.min, children: [trailing]),
     );
   }
 }

@@ -45,7 +45,9 @@ class HomePage extends StatelessWidget {
                               builder: (context, state) {
                                 if (state is DisplayStateNormal) {
                                   return AspectRatio(
-                                    aspectRatio: state.adjustedSize.width / state.adjustedSize.height,
+                                    aspectRatio:
+                                        state.adjustedSize.width /
+                                        state.adjustedSize.height,
                                     child: Stack(
                                       fit: StackFit.expand,
                                       children: [
@@ -55,7 +57,9 @@ class HomePage extends StatelessWidget {
                                           type: state.rendererType,
                                         ),
                                         PointerInterceptor(
-                                          child: TouchScreenView(displaySize: state.adjustedSize),
+                                          child: TouchScreenView(
+                                            displaySize: state.adjustedSize,
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -73,7 +77,7 @@ class HomePage extends StatelessWidget {
                         top: 0,
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.8),
+                            color: Colors.black.withValues(alpha: 0.5),
                             borderRadius: const BorderRadius.only(
                               bottomLeft: Radius.circular(
                                 TADimens.ROUND_BORDER_RADIUS,
@@ -81,7 +85,11 @@ class HomePage extends StatelessWidget {
                             ),
                           ),
                           child: const Row(
-                            children: [AudioButton(), UpdateButton(), SettingsButton()],
+                            children: [
+                              AudioButton(),
+                              UpdateButton(),
+                              SettingsButton(),
+                            ],
                           ),
                         ),
                       ),

@@ -11,39 +11,42 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: TaAppBar(
-          title: TAPage.about.title,
-        ),
-        body: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: TADimens.splashPageLogoHeight,
-                height: TADimens.splashPageLogoHeight,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(TADimens.splashPageRadius),
-                  child: Image.asset("images/png/tesla-android-logo.png"),
-                ),
+      appBar: TaAppBar(title: TAPage.about.title),
+      body: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: TADimens.splashPageLogoHeight,
+              height: TADimens.splashPageLogoHeight,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(TADimens.splashPageRadius),
+                child: Image.asset("images/png/tesla-android-logo.png"),
               ),
-              const SizedBox(
-                height: TADimens.PADDING_VALUE,
-              ),
-              const Text("Version", style: TextStyle(fontWeight: FontWeight.bold)),
-              const SizedBox(
-                height: TADimens.PADDING_S_VALUE,
-              ),
-              FutureBuilder<PackageInfo>(future: PackageInfo.fromPlatform(), builder: (_, snapshot){
+            ),
+            const SizedBox(height: TADimens.PADDING_VALUE),
+            const Text(
+              "Version",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: TADimens.PADDING_S_VALUE),
+            FutureBuilder<PackageInfo>(
+              future: PackageInfo.fromPlatform(),
+              builder: (_, snapshot) {
                 return Text(snapshot.data?.version ?? '');
-              }),
-              const SizedBox(
-                height: TADimens.PADDING_XXL_VALUE,
-              ),
-              const Text("Tesla Android (2nd generation) hardware is now available.\nRetrofits are available for 1st generation devices.\nMore details on https://teslaandroid.com", style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
-            ],
-          ),
+              },
+            ),
+            const SizedBox(height: TADimens.PADDING_XXL_VALUE),
+            const Text(
+              "Tesla Android (2nd generation) hardware is now available.\nRetrofits are available for 1st generation devices.\nMore details on https://teslaandroid.com",
+              style: TextStyle(fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
-        bottomNavigationBar: const TaBottomNavigationBar(currentIndex: 1));
+      ),
+      bottomNavigationBar: const TaBottomNavigationBar(currentIndex: 1),
+    );
   }
 }
