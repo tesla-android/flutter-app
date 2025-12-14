@@ -6,14 +6,14 @@ publish_to: 'none'
 version: 2025.51.1
 
 environment:
-  flutter: "3.35.0"
-  sdk: "3.9.0"
+  flutter: "3.27.4"
+  sdk: "3.6.2"
 
 dependencies:
   flutter:
     sdk: flutter
   dio: 5.9.0
-  retrofit: 4.7.2
+  retrofit: 4.6.0
   pointer_interceptor: 0.10.1+2
   get_it: 8.2.0
   injectable: 2.5.1
@@ -23,8 +23,8 @@ dependencies:
   shared_preferences: 2.5.3
   flutter_markdown: 0.7.7+1
   qr_flutter: 4.1.0
-  logger: 2.6.1
-  json_serializable: 6.11.1
+  logger: 2.5.0
+  json_serializable: 6.9.5
   package_info_plus: 8.3.1
   url_launcher: 6.3.2
   equatable: 2.0.7
@@ -35,10 +35,10 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: 6.0.0
-  build_runner: 2.7.1
-  injectable_generator: 2.8.1
-  retrofit_generator: 10.0.5
+  flutter_lints: 5.0.0
+  build_runner: 2.4.15
+  injectable_generator: 2.7.0
+  retrofit_generator: 9.6.0
 
 flutter:
   assets:
