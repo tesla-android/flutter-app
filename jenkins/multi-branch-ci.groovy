@@ -53,7 +53,7 @@ pipeline {
                 script {
                     SENTRY_RELEASE = 'flutter-app-ci-' + getCurrentBranch()  + '-' + getCommitSha()
                 }
-                sh('fvm flutter build web --no-web-resources-cdn')
+                sh('fvm flutter build web --web-renderer html --no-web-resources-cdn')
             }
         }
         stage('Prepare artifacts') {

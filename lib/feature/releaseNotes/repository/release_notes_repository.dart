@@ -8,6 +8,35 @@ class ReleaseNotesRepository {
   static const ReleaseNotes _releaseNotes = ReleaseNotes(
     versions: [
       Version(
+        versionName: "2026.1.1",
+        changelogItems: [
+          ChangelogItem(
+            title: "Flutter App",
+            shortDescription: "Performance improvements",
+            descriptionMarkdown:
+                "Frontend changes resulted in approximately a 60% reduction in runtime RAM usage, improving stability on MCU 2.",
+          ),
+          ChangelogItem(
+            title: "Fan profile",
+            shortDescription: "Hardware improvements",
+            descriptionMarkdown:
+            	"Fan profile has been adjusted on the Tesla Android Hardware, it will now enable at 55 celsius instead of 50.",
+          ),
+          ChangelogItem(
+            title: "Web Server",    
+            shortDescription: "Usability improvements",
+            descriptionMarkdown:
+            	"Caching of static resources has been tweaked and should be less aggressive (no need to clear cache after future updates).",
+          ),
+          ChangelogItem(
+            title: "Networking", 
+            shortDescription: "Performance improvements",
+            descriptionMarkdown:
+            	"TCP socket buffer limits have been increased in order to improve download throughput.",
+          ),
+        ],
+      ),
+      Version(
         versionName: "2025.46.1",
         changelogItems: [
           ChangelogItem(
