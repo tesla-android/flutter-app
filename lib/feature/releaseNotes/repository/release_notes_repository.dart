@@ -8,6 +8,17 @@ class ReleaseNotesRepository {
   static const ReleaseNotes _releaseNotes = ReleaseNotes(
     versions: [
       Version(
+        versionName: "2026.3.1",
+        changelogItems: [
+          ChangelogItem(
+            title: "NVMe Endurance",
+            shortDescription: "Stability improvements",
+            descriptionMarkdown:
+            "This version improves NVMe reliability by reducing write caching that could have resulted in a corrupt filesystem on power loss.",
+          ),
+        ],
+      ),
+      Version(
         versionName: "2026.1.1",
         changelogItems: [
           ChangelogItem(
