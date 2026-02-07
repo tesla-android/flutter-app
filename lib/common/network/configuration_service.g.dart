@@ -2,8 +2,6 @@
 
 part of 'configuration_service.dart';
 
-// dart format off
-
 // **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
@@ -27,11 +25,11 @@ class _ConfigurationService implements ConfigurationService {
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<SystemConfigurationResponseBody>(
       Options(
-            method: 'GET',
-            headers: _headers,
-            extra: _extra,
-            responseType: ResponseType.json,
-          )
+        method: 'GET',
+        headers: _headers,
+        extra: _extra,
+        responseType: ResponseType.json,
+      )
           .compose(
             _dio.options,
             '/configuration',
@@ -60,11 +58,11 @@ class _ConfigurationService implements ConfigurationService {
     final _data = band;
     final _options = _setStreamType<dynamic>(
       Options(
-            method: 'POST',
-            headers: _headers,
-            extra: _extra,
-            contentType: 'text/plain',
-          )
+        method: 'POST',
+        headers: _headers,
+        extra: _extra,
+        contentType: 'text/plain',
+      )
           .compose(
             _dio.options,
             '/softApBand',
@@ -87,11 +85,11 @@ class _ConfigurationService implements ConfigurationService {
     final _data = channel;
     final _options = _setStreamType<dynamic>(
       Options(
-            method: 'POST',
-            headers: _headers,
-            extra: _extra,
-            contentType: 'text/plain',
-          )
+        method: 'POST',
+        headers: _headers,
+        extra: _extra,
+        contentType: 'text/plain',
+      )
           .compose(
             _dio.options,
             '/softApChannel',
@@ -114,11 +112,11 @@ class _ConfigurationService implements ConfigurationService {
     final _data = channelWidth;
     final _options = _setStreamType<dynamic>(
       Options(
-            method: 'POST',
-            headers: _headers,
-            extra: _extra,
-            contentType: 'text/plain',
-          )
+        method: 'POST',
+        headers: _headers,
+        extra: _extra,
+        contentType: 'text/plain',
+      )
           .compose(
             _dio.options,
             '/softApChannelWidth',
@@ -141,11 +139,11 @@ class _ConfigurationService implements ConfigurationService {
     final _data = isEnabledFlag;
     final _options = _setStreamType<dynamic>(
       Options(
-            method: 'POST',
-            headers: _headers,
-            extra: _extra,
-            contentType: 'text/plain',
-          )
+        method: 'POST',
+        headers: _headers,
+        extra: _extra,
+        contentType: 'text/plain',
+      )
           .compose(
             _dio.options,
             '/softApState',
@@ -168,11 +166,11 @@ class _ConfigurationService implements ConfigurationService {
     final _data = isEnabledFlag;
     final _options = _setStreamType<dynamic>(
       Options(
-            method: 'POST',
-            headers: _headers,
-            extra: _extra,
-            contentType: 'text/plain',
-          )
+        method: 'POST',
+        headers: _headers,
+        extra: _extra,
+        contentType: 'text/plain',
+      )
           .compose(
             _dio.options,
             '/offlineModeState',
@@ -195,11 +193,11 @@ class _ConfigurationService implements ConfigurationService {
     final _data = isEnabledFlag;
     final _options = _setStreamType<dynamic>(
       Options(
-            method: 'POST',
-            headers: _headers,
-            extra: _extra,
-            contentType: 'text/plain',
-          )
+        method: 'POST',
+        headers: _headers,
+        extra: _extra,
+        contentType: 'text/plain',
+      )
           .compose(
             _dio.options,
             '/offlineModeTelemetryState',
@@ -224,11 +222,11 @@ class _ConfigurationService implements ConfigurationService {
     final _data = isEnabledFlag;
     final _options = _setStreamType<dynamic>(
       Options(
-            method: 'POST',
-            headers: _headers,
-            extra: _extra,
-            contentType: 'text/plain',
-          )
+        method: 'POST',
+        headers: _headers,
+        extra: _extra,
+        contentType: 'text/plain',
+      )
           .compose(
             _dio.options,
             '/offlineModeTeslaFirmwareDownloads',
@@ -251,11 +249,11 @@ class _ConfigurationService implements ConfigurationService {
     final _data = isEnabledFlag;
     final _options = _setStreamType<dynamic>(
       Options(
-            method: 'POST',
-            headers: _headers,
-            extra: _extra,
-            contentType: 'text/plain',
-          )
+        method: 'POST',
+        headers: _headers,
+        extra: _extra,
+        contentType: 'text/plain',
+      )
           .compose(
             _dio.options,
             '/browserAudioState',
@@ -278,11 +276,11 @@ class _ConfigurationService implements ConfigurationService {
     final _data = volume;
     final _options = _setStreamType<dynamic>(
       Options(
-            method: 'POST',
-            headers: _headers,
-            extra: _extra,
-            contentType: 'text/plain',
-          )
+        method: 'POST',
+        headers: _headers,
+        extra: _extra,
+        contentType: 'text/plain',
+      )
           .compose(
             _dio.options,
             '/browserAudioVolume',
@@ -305,11 +303,11 @@ class _ConfigurationService implements ConfigurationService {
     final _data = state;
     final _options = _setStreamType<dynamic>(
       Options(
-            method: 'POST',
-            headers: _headers,
-            extra: _extra,
-            contentType: 'text/plain',
-          )
+        method: 'POST',
+        headers: _headers,
+        extra: _extra,
+        contentType: 'text/plain',
+      )
           .compose(
             _dio.options,
             '/gpsState',
@@ -350,5 +348,3 @@ class _ConfigurationService implements ConfigurationService {
     return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }
-
-// dart format on

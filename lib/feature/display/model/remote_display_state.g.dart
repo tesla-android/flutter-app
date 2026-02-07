@@ -12,23 +12,18 @@ RemoteDisplayState _$RemoteDisplayStateFromJson(Map<String, dynamic> json) =>
       height: (json['height'] as num).toInt(),
       density: (json['density'] as num).toInt(),
       resolutionPreset: $enumDecode(
-        _$DisplayResolutionModePresetEnumMap,
-        json['resolutionPreset'],
-      ),
+          _$DisplayResolutionModePresetEnumMap, json['resolutionPreset']),
       renderer:
           $enumDecodeNullable(_$DisplayRendererTypeEnumMap, json['renderer']) ??
-          DisplayRendererType.mjpeg,
+              DisplayRendererType.mjpeg,
       isResponsive: (json['isResponsive'] as num?)?.toInt() ?? 1,
       isH264: (json['isH264'] as num?)?.toInt() ?? 0,
-      refreshRate:
-          $enumDecodeNullable(
-            _$DisplayRefreshRatePresetEnumMap,
-            json['refreshRate'],
-          ) ??
+      refreshRate: $enumDecodeNullable(
+              _$DisplayRefreshRatePresetEnumMap, json['refreshRate']) ??
           DisplayRefreshRatePreset.refresh30hz,
       quality:
           $enumDecodeNullable(_$DisplayQualityPresetEnumMap, json['quality']) ??
-          DisplayQualityPreset.quality90,
+              DisplayQualityPreset.quality90,
       isRearDisplayEnabled:
           (json['isRearDisplayEnabled'] as num?)?.toInt() ?? 0,
       isRearDisplayPrioritised:

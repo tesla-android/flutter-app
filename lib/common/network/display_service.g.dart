@@ -2,8 +2,6 @@
 
 part of 'display_service.dart';
 
-// dart format off
-
 // **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
@@ -27,11 +25,11 @@ class _DisplayService implements DisplayService {
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<RemoteDisplayState>(
       Options(
-            method: 'GET',
-            headers: _headers,
-            extra: _extra,
-            responseType: ResponseType.json,
-          )
+        method: 'GET',
+        headers: _headers,
+        extra: _extra,
+        responseType: ResponseType.json,
+      )
           .compose(
             _dio.options,
             '/displayState',
@@ -63,11 +61,11 @@ class _DisplayService implements DisplayService {
     _data.addAll(configuration.toJson());
     final _options = _setStreamType<dynamic>(
       Options(
-            method: 'POST',
-            headers: _headers,
-            extra: _extra,
-            contentType: 'application/json',
-          )
+        method: 'POST',
+        headers: _headers,
+        extra: _extra,
+        contentType: 'application/json',
+      )
           .compose(
             _dio.options,
             '/displayState',
@@ -108,5 +106,3 @@ class _DisplayService implements DisplayService {
     return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }
-
-// dart format on

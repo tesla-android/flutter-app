@@ -2,8 +2,6 @@
 
 part of 'device_info_service.dart';
 
-// dart format off
-
 // **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
@@ -27,11 +25,11 @@ class _DeviceInfoService implements DeviceInfoService {
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<DeviceInfo>(
       Options(
-            method: 'GET',
-            headers: _headers,
-            extra: _extra,
-            responseType: ResponseType.json,
-          )
+        method: 'GET',
+        headers: _headers,
+        extra: _extra,
+        responseType: ResponseType.json,
+      )
           .compose(
             _dio.options,
             '/deviceInfo',
@@ -99,5 +97,3 @@ class _DeviceInfoService implements DeviceInfoService {
     return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }
-
-// dart format on

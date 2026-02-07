@@ -2,8 +2,6 @@
 
 part of 'github_service.dart';
 
-// dart format off
-
 // **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
@@ -74,5 +72,3 @@ class _GitHubService implements GitHubService {
     return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }
-
-// dart format on

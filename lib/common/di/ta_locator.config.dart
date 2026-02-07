@@ -56,19 +56,22 @@ import 'package:tesla_android/feature/touchscreen/cubit/touchscreen_cubit.dart'
     as _i680;
 
 extension GetItInjectableX on _i174.GetIt {
-  // initializes the registration of main-scope dependencies inside of GetIt
+// initializes the registration of main-scope dependencies inside of GetIt
   Future<_i174.GetIt> init({
     String? environment,
     _i526.EnvironmentFilter? environmentFilter,
   }) async {
-    final gh = _i526.GetItHelper(this, environment, environmentFilter);
+    final gh = _i526.GetItHelper(
+      this,
+      environment,
+      environmentFilter,
+    );
     final appModule = _$AppModule();
     final networkModule = _$NetworkModule();
     gh.factory<_i557.TAPageFactory>(() => _i557.TAPageFactory());
     gh.factory<_i680.TouchscreenCubit>(() => _i680.TouchscreenCubit());
     gh.factory<_i841.ReleaseNotesRepository>(
-      () => _i841.ReleaseNotesRepository(),
-    );
+        () => _i841.ReleaseNotesRepository());
     gh.singleton<_i544.Flavor>(() => appModule.provideFlavor);
     await gh.singletonAsync<_i460.SharedPreferences>(
       () => appModule.sharedPreferences,
@@ -76,83 +79,68 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.singleton<_i361.Dio>(() => networkModule.dio);
     gh.lazySingleton<_i409.GlobalKey<_i409.NavigatorState>>(
-      () => appModule.navigatorKey,
-    );
-    gh.factory<_i302.ConfigurationService>(
-      () => _i302.ConfigurationService.new(gh<_i361.Dio>(), gh<_i544.Flavor>()),
-    );
-    gh.factory<_i483.HealthService>(
-      () => _i483.HealthService.new(gh<_i361.Dio>(), gh<_i544.Flavor>()),
-    );
-    gh.factory<_i723.DeviceInfoService>(
-      () => _i723.DeviceInfoService.new(gh<_i361.Dio>(), gh<_i544.Flavor>()),
-    );
-    gh.factory<_i10.GitHubService>(
-      () => _i10.GitHubService.new(gh<_i361.Dio>(), gh<_i544.Flavor>()),
-    );
-    gh.factory<_i856.DisplayService>(
-      () => _i856.DisplayService.new(gh<_i361.Dio>(), gh<_i544.Flavor>()),
-    );
-    gh.factory<_i608.SystemConfigurationRepository>(
-      () =>
-          _i608.SystemConfigurationRepository(gh<_i302.ConfigurationService>()),
-    );
+        () => appModule.navigatorKey);
+    gh.factory<_i302.ConfigurationService>(() => _i302.ConfigurationService(
+          gh<_i361.Dio>(),
+          gh<_i544.Flavor>(),
+        ));
+    gh.factory<_i483.HealthService>(() => _i483.HealthService(
+          gh<_i361.Dio>(),
+          gh<_i544.Flavor>(),
+        ));
+    gh.factory<_i723.DeviceInfoService>(() => _i723.DeviceInfoService(
+          gh<_i361.Dio>(),
+          gh<_i544.Flavor>(),
+        ));
+    gh.factory<_i10.GitHubService>(() => _i10.GitHubService(
+          gh<_i361.Dio>(),
+          gh<_i544.Flavor>(),
+        ));
+    gh.factory<_i856.DisplayService>(() => _i856.DisplayService(
+          gh<_i361.Dio>(),
+          gh<_i544.Flavor>(),
+        ));
+    gh.factory<_i608.SystemConfigurationRepository>(() =>
+        _i608.SystemConfigurationRepository(gh<_i302.ConfigurationService>()));
     gh.factory<_i365.SystemConfigurationCubit>(
-      () => _i365.SystemConfigurationCubit(
-        gh<_i608.SystemConfigurationRepository>(),
-        gh<_i409.GlobalKey<_i409.NavigatorState>>(),
-      ),
-    );
+        () => _i365.SystemConfigurationCubit(
+              gh<_i608.SystemConfigurationRepository>(),
+              gh<_i409.GlobalKey<_i409.NavigatorState>>(),
+            ));
     gh.factory<_i865.GitHubReleaseRepository>(
-      () => _i865.GitHubReleaseRepository(
-        gh<_i10.GitHubService>(),
-        gh<_i723.DeviceInfoService>(),
-      ),
-    );
-    gh.factory<_i68.OTAUpdateCubit>(
-      () => _i68.OTAUpdateCubit(
-        gh<_i865.GitHubReleaseRepository>(),
-        gh<_i460.SharedPreferences>(),
-      ),
-    );
-    gh.factory<_i713.GPSConfigurationCubit>(
-      () => _i713.GPSConfigurationCubit(
-        gh<_i608.SystemConfigurationRepository>(),
-      ),
-    );
-    gh.factory<_i825.AudioConfigurationCubit>(
-      () => _i825.AudioConfigurationCubit(
-        gh<_i608.SystemConfigurationRepository>(),
-      ),
-    );
+        () => _i865.GitHubReleaseRepository(
+              gh<_i10.GitHubService>(),
+              gh<_i723.DeviceInfoService>(),
+            ));
+    gh.factory<_i68.OTAUpdateCubit>(() => _i68.OTAUpdateCubit(
+          gh<_i865.GitHubReleaseRepository>(),
+          gh<_i460.SharedPreferences>(),
+        ));
+    gh.factory<_i713.GPSConfigurationCubit>(() =>
+        _i713.GPSConfigurationCubit(gh<_i608.SystemConfigurationRepository>()));
+    gh.factory<_i825.AudioConfigurationCubit>(() =>
+        _i825.AudioConfigurationCubit(
+            gh<_i608.SystemConfigurationRepository>()));
     gh.factory<_i708.DeviceInfoRepository>(
-      () => _i708.DeviceInfoRepository(gh<_i723.DeviceInfoService>()),
-    );
-    gh.factory<_i271.DisplayRepository>(
-      () => _i271.DisplayRepository(
-        gh<_i856.DisplayService>(),
-        gh<_i460.SharedPreferences>(),
-      ),
-    );
+        () => _i708.DeviceInfoRepository(gh<_i723.DeviceInfoService>()));
+    gh.factory<_i271.DisplayRepository>(() => _i271.DisplayRepository(
+          gh<_i856.DisplayService>(),
+          gh<_i460.SharedPreferences>(),
+        ));
     gh.factory<_i399.ReleaseNotesCubit>(
-      () => _i399.ReleaseNotesCubit(gh<_i841.ReleaseNotesRepository>()),
-    );
+        () => _i399.ReleaseNotesCubit(gh<_i841.ReleaseNotesRepository>()));
     gh.factory<_i747.ConnectivityCheckCubit>(
-      () => _i747.ConnectivityCheckCubit(gh<_i483.HealthService>()),
-    );
-    gh.factory<_i588.RearDisplayConfigurationCubit>(
-      () => _i588.RearDisplayConfigurationCubit(gh<_i271.DisplayRepository>()),
-    );
+        () => _i747.ConnectivityCheckCubit(gh<_i483.HealthService>()));
+    gh.factory<_i588.RearDisplayConfigurationCubit>(() =>
+        _i588.RearDisplayConfigurationCubit(gh<_i271.DisplayRepository>()));
     gh.factory<_i685.DisplayConfigurationCubit>(
-      () => _i685.DisplayConfigurationCubit(gh<_i271.DisplayRepository>()),
-    );
+        () => _i685.DisplayConfigurationCubit(gh<_i271.DisplayRepository>()));
     gh.factory<_i1064.DeviceInfoCubit>(
-      () => _i1064.DeviceInfoCubit(gh<_i708.DeviceInfoRepository>()),
-    );
-    gh.factory<_i14.DisplayCubit>(
-      () =>
-          _i14.DisplayCubit(gh<_i271.DisplayRepository>(), gh<_i544.Flavor>()),
-    );
+        () => _i1064.DeviceInfoCubit(gh<_i708.DeviceInfoRepository>()));
+    gh.factory<_i14.DisplayCubit>(() => _i14.DisplayCubit(
+          gh<_i271.DisplayRepository>(),
+          gh<_i544.Flavor>(),
+        ));
     return this;
   }
 }

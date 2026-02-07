@@ -8,6 +8,23 @@ class ReleaseNotesRepository {
   static const ReleaseNotes _releaseNotes = ReleaseNotes(
     versions: [
       Version(
+        versionName: "2026.6.1",
+        changelogItems: [
+          ChangelogItem(
+            title: "Frontend Beta",
+            shortDescription: "Performance improvements",
+            descriptionMarkdown:
+            "You can now access the beta Tesla Android frontend app at https://device.teslaandroid.com/beta. The new app uses much less memory and consumes less resources.",
+          ),
+          ChangelogItem(
+            title: "Bluetooth Audio",
+            shortDescription: "Stability improvements",
+            descriptionMarkdown:
+            "BT Audio shouldn't interfere with Browser Audio anymore, if you intend to pair your car with the device via BT make sure to disable Browser Audio first.",
+          ),
+        ],
+      ),
+      Version(
         versionName: "2026.3.1",
         changelogItems: [
           ChangelogItem(

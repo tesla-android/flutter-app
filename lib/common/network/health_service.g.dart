@@ -2,8 +2,6 @@
 
 part of 'health_service.dart';
 
-// dart format off
-
 // **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
@@ -67,5 +65,3 @@ class _HealthService implements HealthService {
     return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }
-
-// dart format on
